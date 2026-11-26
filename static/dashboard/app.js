@@ -6,6 +6,7 @@ const title = document.getElementById('page-title');
 const toast = document.getElementById('toast');
 const projectChip = document.getElementById('project-chip');
 const connectionLabel = document.getElementById('connection-label');
+const refreshButton = document.getElementById('refresh');
 const secondaryView = document.getElementById('secondary-view');
 const overviewNodes = [...document.querySelectorAll('.metrics,.content-grid,.table-panel')];
 let dialogOpener = null;
@@ -266,9 +267,19 @@ document.getElementById('record-dialog-related').addEventListener('click', (even
   openRecordDetails(nextView, record);
 });
 
-document.getElementById('refresh').addEventListener('click', async () => {
-  await loadContext();
-  notify('Workspace context refreshed. Procurement data remains in preview mode.');
+refreshButton.addEventListener('click', async () => {
+  if (refreshButton.disabled) return;
+  refreshButton.disabled = true;
+  refreshButton.setAttribute('aria-busy', 'true');
+  try {
+    const refreshed = await loadContext();
+    notify(refreshed
+      ? 'Workspace context refreshed. Procurement data remains in preview mode.'
+      : 'Could not refresh Jira context. Reopen this app inside Jira and try again.');
+  } finally {
+    refreshButton.disabled = false;
+    refreshButton.removeAttribute('aria-busy');
+  }
 });
 
 async function loadContext() {
@@ -288,10 +299,12 @@ async function loadContext() {
     if (projectKey) projectChip.textContent = `Jira project · ${projectKey}`;
     const project = await invoke('getProjectContext');
     if (project?.projectKey) projectChip.textContent = `Jira project · ${project.projectKey}`;
+    return true;
   } catch (error) {
     connectionLabel.textContent = 'Open inside Jira to connect';
     connectionLabel.dataset.state = 'warning';
     console.info('Forge/Jira context is unavailable outside Forge.', error);
+    return false;
   }
 }
 
