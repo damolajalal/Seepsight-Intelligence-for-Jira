@@ -4,6 +4,10 @@ Last updated: 2026-11-26
 
 This register is separate from the existing Seepsight platform's master issue register.
 
+## Active Forge app scope
+
+The current phase is the standalone Jira Forge experience. API deployment, Cloud Run, Firebase account linking, and live procurement data are deliberately paused until explicitly approved.
+
 ## Implemented in repository
 
 - [x] Correct repository initialised and main branch verified.
@@ -14,59 +18,49 @@ This register is separate from the existing Seepsight platform's master issue re
 - [x] Responsive, accessible client-side filtering for preview tables.
 - [x] Sample-only action completion interaction.
 - [x] Clear sample-data labels.
-- [x] GitHub Actions workflow added for Node.js 24, production dependency audit, unit tests, Custom UI bundling, and Forge lint.
+- [x] GitHub Actions workflow for Node.js 24, production dependency audit, unit tests, and both Custom UI bundles.
+- [x] Forge CI is isolated from the paused Python API scaffold.
+
+## Next Forge app work
+
+- [ ] Improve investigation and finding detail experiences using clearly labelled sample data.
+- [ ] Add issue-panel evidence and action preview states.
+- [ ] Add empty, loading, error, and narrow-screen states.
+- [ ] Add UI-focused tests for navigation, filtering, and sample-only actions.
+- [ ] Review keyboard navigation, focus states, and accessible labels.
+- [ ] Review app presentation and demo flow for Codegeist.
 
 ## Blocked on Atlassian environment
 
 - [ ] Create a scoped Atlassian Forge API token (never commit or share it).
 - [ ] Forge CLI authentication.
 - [ ] Register app and replace placeholder app ID.
-- [x] Confirm CI can install dependencies and generate both UI bundles.
-- [ ] Confirm the latest GitHub Actions run passes Node and Python jobs after the backend changes.
-- [ ] Optionally add `FORGE_EMAIL` and `FORGE_API_TOKEN` as GitHub Actions secrets to enable authenticated Forge lint; otherwise run lint after logging in locally.
+- [ ] Run authenticated Forge lint.
 - [ ] Deploy to development environment.
 - [ ] Install on Jira Cloud development/demo site.
 - [ ] Verify project page and issue panel in Jira.
 
-## Integration backlog
+## Paused integration work
 
-- [x] Inspect the existing Seepsight repository; no documented public HTTP API was identified in its Streamlit entry point/README.
-- [x] Confirm the existing Seepsight tenant model uses Firebase UID and Firestore company membership; document secure Atlassian-to-Firebase account linking (`docs/IDENTITY_LINKING_DESIGN.md`).
-- [x] Draft the proposed secure Seepsight-to-Jira API contract and tenant-isolation requirements (`docs/SEEPSIGHT_INTEGRATION_CONTRACT.md`).
-- [x] Inspect and document verified Firestore tenant, analysis, findings, dataset, case-path, and audit-event structures (`docs/EXISTING_SEEPSIGHT_DATA_MODEL.md`).
-- [x] Confirm the existing Firestore access helper is Streamlit-session-dependent and must not be reused as standalone API authentication.
-- [x] Select Atlassian Forge Remote FIT verification as the Forge-to-API authentication direction and document account-linking safeguards (`docs/FORGE_REMOTE_AUTH_DECISION.md`).
-- [x] Add an isolated FastAPI backend scaffold with Cloud Run container definition, Firebase Admin/Firestore tenant revalidation, and health/context routes (`backend/`).
-- [x] Add Forge FIT validation against Atlassian JWKS, issuer, expected app audience, and trusted app ID.
-- [x] Add Python CI tests for FIT validation, Firestore tenant isolation, pairing-code hashing/redemption/replay rejection, and safe analysis summaries.
-- [x] Add authenticated Seepsight sidebar pairing-code issuance (10-minute expiry, SHA-256 storage, 60-second issuance cooldown) in the existing Seepsight repository.
-- [x] Add API-side transactional pairing-code redemption, active membership revalidation, and link revocation endpoints.
-- [x] Add read-only company overview and completed-analysis summary endpoints with minimal audit events.
-- [x] Add the composite Firestore index required for bounded, newest-first completed-analysis listing (`firestore.indexes.json`).
-- [x] Add restricted CORS support for Jira tenant and Forge app iframe origins used by `requestRemote`.
-- [x] Document Cloud Run deployment, runtime identity, Forge Remote setup, and Firestore pairing-code TTL cleanup (`backend/DEPLOYMENT.md`).
-- [x] Include optional Atlassian impersonation actor identity in link and read audit records.
-- [ ] Wire the Jira Custom UI pairing-code entry and disconnect controls to the deployed Forge Remote.
-- [ ] Deploy the API to Cloud Run with a runtime service identity and verified HTTPS hostname.
-- [x] Select Forge Remote FIT verification as the Forge-to-API authentication direction and add its validator scaffold.
-- [ ] Configure the Forge Remote endpoint after a real API hostname and registered Forge app ID exist.
-- [ ] Complete end-to-end account linking after Forge Remote deployment and Jira UI wiring; no live pairing has been performed.
-- [ ] Normalise detector-specific finding dictionaries into a versioned, bounded API response schema; raw finding payloads are intentionally not exposed yet.
-- [ ] Inspect the actual case/action field schema before implementing case or action endpoints.
-- [ ] Add Forge backend egress allowlist for the confirmed Seepsight API host.
-- [ ] Connect verified findings, exposure values, supplier records, and investigation data.
-- [ ] Add evidence references and traceability for every AI explanation.
-- [ ] Add Jira issue creation/comment/action workflows with user confirmation.
-- [ ] Integrate Gemini server-side; never place credentials in browser code.
-- [x] Research current Forge Rovo Agent/Action capabilities and document a secure evidence-first integration plan (`docs/ROVO_INTEGRATION_PLAN.md`).
-- [ ] Implement Rovo Agent and read-only actions after the Seepsight API and tenant permission model are available.
-- [ ] Evaluate Teamwork Graph access and usefulness.
+The following source/design work exists for a future integration phase, but it is not part of the active Forge UI milestone:
+
+- [x] Inspect existing Seepsight repository and document the current data/tenant model.
+- [x] Draft the secure integration contract and identity-linking design.
+- [x] Add an isolated FastAPI backend scaffold and related tests.
+- [x] Add pairing-code issuance source in the existing Seepsight repository.
+- [x] Add API-side pairing redemption, revocation, and read-only summary source.
+- [x] Document the proposed Cloud Run deployment and Forge Remote authentication.
+- [ ] Deploy the API or configure a Forge Remote.
+- [ ] Connect Jira UI to Firebase, BigQuery, Gemini, NVIDIA NIM, or production procurement records.
+- [ ] Implement Rovo actions that depend on live Seepsight data.
+
+No API deployment or live account linking is being performed in this phase.
 
 ## Known limitations / risks
 
-- The Forge app is source-scaffolded but not deployed or runtime-tested. The separate FastAPI service has source and CI tests, including pairing and safe analysis-summary tests, but it is not deployed or connected to production Firestore. CI is configured to run Node unit tests, both Custom UI builds, and Python backend tests. Forge lint remains conditional on optional GitHub Actions secrets because the CLI requires Atlassian authentication.
+- The Forge app is source-scaffolded but not deployed or runtime-tested in Jira.
 - The app ID in `manifest.yml` is intentionally a placeholder until Forge registration.
-- UI JavaScript bundles are generated during CI by `npm run build:ui`; generated bundles are not committed to the repository.
-- All displayed figures and records are illustrative sample content.
-- No live Jira-to-Seepsight production connection is active. The existing Seepsight Firebase/Firestore app can now issue pairing codes, and the separate API has source endpoints, but no Cloud Run deployment, Forge Remote, live account link, or production procurement-data connection exists. Gemini, BigQuery, NVIDIA NIM, and Rovo are not connected to the Jira app.
-- A production dependency audit found 9 transitive advisories in the current Forge dependency tree (5 high, 4 moderate). The audit did not identify a safe non-breaking automatic fix; do not run `npm audit fix --force` blindly. Track and reassess these upstream advisories before release.
+- UI JavaScript bundles are generated during CI by `npm run build:ui`; generated bundles are not committed.
+- All displayed figures and records are illustrative sample content. Sample action completion changes only the local preview state.
+- No live Jira-to-Seepsight production connection is active. Gemini, BigQuery, NVIDIA NIM, and Rovo are not connected to the Jira app.
+- A production dependency audit found 9 transitive advisories in the current Forge dependency tree (5 high, 4 moderate). The audit remains informational and should be reassessed before release; do not run `npm audit fix --force` blindly.
