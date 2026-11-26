@@ -4,16 +4,19 @@
   "private": true,
   "description": "Evidence-first procurement risk and action intelligence embedded in Jira.",
   "scripts": {
+    "build:ui": "esbuild static/dashboard/app.js --bundle --outfile=static/dashboard/app.bundle.js --format=iife && esbuild static/issue-panel/app.js --bundle --outfile=static/issue-panel/app.bundle.js --format=iife",
     "lint": "eslint src",
     "test": "node --test",
     "start": "forge tunnel"
   },
   "dependencies": {
-    "@forge/api": "^7.0.0",
-    "@forge/resolver": "^1.6.0"
+    "@forge/api": "latest",
+    "@forge/bridge": "latest",
+    "@forge/resolver": "latest"
   },
   "devDependencies": {
     "@forge/cli": "latest",
-    "eslint": "^9.0.0"
+    "esbuild": "latest",
+    "eslint": "latest"
   }
 }
