@@ -31,5 +31,8 @@ jobs:
       - name: Build Custom UI bundles
         run: npm run build:ui
 
+      - name: Disable Forge CLI usage analytics in CI
+        run: npx forge settings set usage-analytics false
+
       - name: Validate Forge manifest
         run: npm run lint
