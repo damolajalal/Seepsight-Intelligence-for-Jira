@@ -46,4 +46,5 @@ This register is separate from the existing Seepsight platform's master issue re
 - UI bundle files are generated locally by `npm run build:ui`; the committed build folders currently contain HTML/CSS only.
 - All displayed figures and records are illustrative sample content.
 - No Seepsight, Gemini, BigQuery, Firebase, NVIDIA NIM, or Rovo connection is active. The existing Seepsight app is Streamlit-based; a supported API must be implemented before Forge can connect safely.
-- Node dependency installation and Forge lint have not been run in this environment.
+- A production dependency audit found 9 transitive advisories in the current Forge dependency tree (5 high, 4 moderate). The audit did not identify a safe non-breaking automatic fix; do not run `npm audit fix --force` blindly. Track and reassess these upstream advisories before release. CI currently blocks critical-severity findings while retaining the audit output.
+- Forge lint is being validated in CI with the CLI analytics prompt explicitly configured; inspect the latest workflow result before marking it complete.
