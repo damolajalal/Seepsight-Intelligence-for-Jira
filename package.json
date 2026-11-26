@@ -6,7 +6,7 @@
   "scripts": {
     "build:ui": "node scripts/build-ui.mjs",
     "lint": "forge lint",
-    "test": "node --test",
+    "test": "node --test test/*.test.mjs",
     "start": "forge tunnel",
     "test:browser": "playwright test"
   },
