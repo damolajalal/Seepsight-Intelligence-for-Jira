@@ -42,6 +42,7 @@ def _audit_read(
         "actor_type": "atlassian",
         "atlassian_cloud_id": identity.cloud_id,
         "atlassian_account_id": identity.account_id,
+        "atlassian_actor_account_id": identity.actor_account_id,
         "atlassian_installation_id": identity.installation_id,
         "created_at": firestore.SERVER_TIMESTAMP,
         "metadata": metadata,
