@@ -5,6 +5,8 @@ import { pathToFileURL } from 'node:url';
 const dashboardUrl = pathToFileURL(resolve('static/dashboard/build/index.html')).href;
 
 test.beforeEach(async ({ page }) => {
+  page.on('pageerror', (error) => console.log('BROWSER PAGE ERROR:', error.message));
+  page.on('console', (message) => { if (message.type() === 'error') console.log('BROWSER CONSOLE ERROR:', message.text()); });
   await page.goto(dashboardUrl);
 });
 
