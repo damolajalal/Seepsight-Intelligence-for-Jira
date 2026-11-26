@@ -64,3 +64,8 @@ The identity-linking flow between Atlassian accounts and Seepsight's existing Fi
 5. Add grounded Gemini explanations and assess Rovo integration.
 6. Evaluate Teamwork Graph feasibility and access.
 7. Complete mobile, permission, security, and end-to-end demo testing for Codegeist 2026.
+
+
+## Separate Jira API service
+
+The [backend API scaffold](backend/README.md) documents the FastAPI service, Forge FIT validation, Firebase tenant revalidation, tests, and deployment gates. It is not deployed or connected to Jira yet.
