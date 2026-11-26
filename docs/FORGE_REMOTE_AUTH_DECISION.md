@@ -59,4 +59,4 @@ Pairing codes must be rate-limited, expire quickly, be single-use, and never app
 - Atlassian [calling a remote from a Forge frontend](https://developer.atlassian.com/platform/forge/remote/calling-from-frontend/) and [requestRemote API](https://developer.atlassian.com/platform/forge/apis-reference/ui-api-bridge/requestRemote/) — direct FIT-authenticated browser-to-remote requests.
 - Google Cloud [Cloud Run service-to-service authentication](https://docs.cloud.google.com/run/docs/authenticating/service-to-service) — Cloud Run IAM ID token model and runtime identity.
 
-This decision does not mean the remote, API, pairing flow, or deployment has been implemented.
+The pairing-code issuer and API redemption/revocation routes now exist in source. The Forge Remote hostname, manifest configuration, Jira UI controls, and Cloud Run deployment are still outstanding.
