@@ -24,3 +24,30 @@
 @media(max-width:420px){.record-dialog{padding:16px}.record-dialog-fields{grid-template-columns:1fr}}
 
 .record-dialog-related-section{margin-top:20px}.record-dialog-related-section h3{font-size:11px;color:#9aadb9;font-weight:650;margin:0 0 9px}.record-dialog-related{display:grid;grid-template-columns:1fr 1fr;gap:8px}.related-record{display:grid;gap:5px;text-align:left;padding:11px;background:#0d1720;border:1px solid #263743;border-radius:8px;color:#dce6eb;cursor:pointer;min-width:0}.related-record:hover,.related-record:focus-visible{border-color:#55d5ac;outline:none}.related-record span{font-size:9px;color:#70cdb0;text-transform:uppercase;letter-spacing:.7px}.related-record b{font-size:11px;overflow-wrap:anywhere}.related-record small{font-size:9px;color:#718696}@media(max-width:420px){.record-dialog-related{grid-template-columns:1fr}}
+
+
+/* Keyboard, search and dialog accessibility */
+:where(button,a,input,[tabindex]):focus-visible{outline:2px solid #70dfbd;outline-offset:3px}
+.table-tools{display:flex;align-items:center;gap:10px;min-width:0}
+.table-search{width:min(220px,45vw);background:#0d1720;border:1px solid #30414e;border-radius:6px;color:#edf3f7;padding:8px 10px;font:inherit;font-size:11px}
+.table-search::placeholder{color:#718696}
+.result-count{color:#8fa2b1;font-size:10px;white-space:nowrap}
+.empty-state{padding:26px 12px;text-align:center;color:#9aadb9;background:#0e1821;border:1px dashed #30414e;border-radius:7px;font-size:11px}
+.record-dialog{width:min(620px,calc(100vw - 28px));max-height:min(82vh,760px);overflow:auto;margin:auto;padding:22px;background:#111b25;color:#edf3f7;border:1px solid #344653;border-radius:12px;box-shadow:0 24px 80px #0009}
+.record-dialog::backdrop{background:#050a10c9;backdrop-filter:blur(3px)}
+.record-dialog-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px}
+.record-dialog-head h2{font-size:18px;margin:7px 0 0}
+.dialog-close{width:34px;height:34px;border:1px solid #30414e;border-radius:7px;background:#17232e;color:#dce6eb;font-size:22px;line-height:1;cursor:pointer}
+.record-dialog-summary{color:#9aadb9;font-size:12px;line-height:1.65;margin:17px 0}
+.record-dialog-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.record-field{display:grid;gap:6px;padding:12px;background:#0e1821;border:1px solid #263743;border-radius:7px;min-width:0}
+.record-field span{color:#78909e;font-size:9px;text-transform:uppercase;letter-spacing:.8px}
+.record-field b{color:#dce6eb;font-size:11px;overflow-wrap:anywhere}
+.record-dialog-related-section{margin-top:20px}
+.record-dialog-related-section h3{font-size:12px;margin:0 0 10px}
+.record-dialog-related{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.related-record{display:grid;gap:5px;text-align:left;padding:11px;background:#14232a;border:1px solid #2a4546;border-radius:7px;color:#dce6eb;cursor:pointer}
+.related-record span,.related-record small{font-size:9px;color:#8eb9ad}
+.related-record b{font-size:11px}
+.record-dialog-note{margin:18px 0 0;color:#718696;font-size:9px;line-height:1.5}
+@media(max-width:520px){.table-tools{align-items:flex-end;flex-direction:column;gap:6px}.table-search{width:min(180px,42vw)}.record-dialog{padding:16px}.record-dialog-fields,.record-dialog-related{grid-template-columns:1fr}}
