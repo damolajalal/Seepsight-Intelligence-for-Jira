@@ -1,5 +1,6 @@
 import { view, invoke } from '@forge/bridge';
 import { getRelatedRecords } from './workflow-links.mjs';
+import { filterRecords, getVisibleRecordCount } from './table-utils.mjs';
 
 const title = document.getElementById('page-title');
 const toast = document.getElementById('toast');
@@ -134,13 +135,11 @@ function renderTable(viewName) {
   const tableRows = [...secondaryView.querySelectorAll('tbody tr')];
   const resultCount = resultCountNode;
   searchInput.addEventListener('input', () => {
-    const query = searchInput.value.trim().toLocaleLowerCase();
-    let visible = 0;
-    tableRows.forEach((row) => {
-      const matches = row.textContent.toLocaleLowerCase().includes(query);
-      row.hidden = !matches;
-      if (matches) visible += 1;
+    const filtered = filterRecords(rows, searchInput.value);
+    filtered.forEach(({ index, matches }) => {
+      tableRows[index].hidden = !matches;
     });
+    const visible = getVisibleRecordCount(filtered);
     resultCount.textContent = `${visible} of ${rows.length} records`;
     emptyState.hidden = visible !== 0;
   });
