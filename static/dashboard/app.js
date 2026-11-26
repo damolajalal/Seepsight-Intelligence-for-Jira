@@ -47,7 +47,7 @@ function renderTable(viewName) {
     suppliers: ['REFERENCE','SUPPLIER','OPEN ITEMS','EXPOSURE','STATUS'],
     actions: ['REFERENCE','ACTION','OWNER','DUE','STATUS']
   }[viewName];
-  const header = headings.map((heading) => `<th>${heading}</th>`).join('');
+  const header = [...headings, 'DETAILS'].map((heading) => `<th>${heading}</th>`).join('');
   const body = rows.map((row, index) => {
     const cells = row.map((cell, cellIndex) => {
       if (cellIndex === 3 && viewName !== 'actions') {
@@ -59,7 +59,8 @@ function renderTable(viewName) {
     const action = viewName === 'actions'
       ? `<td><button class="row-action" data-complete="${index}">Mark complete</button></td>`
       : '';
-    return `<tr>${cells}${action}</tr>`;
+    const detail = `<td><button class="detail-action" data-detail="${index}" aria-label="View details for ${row[0]}">View</button></td>`;
+    return `<tr>${cells}${action}${detail}</tr>`;
   }).join('');
   const actionHeader = viewName === 'actions' ? '<th>UPDATE</th>' : '';
   secondaryView.innerHTML = `
@@ -82,6 +83,9 @@ function renderTable(viewName) {
     resultCount.textContent = `${visible} of ${rows.length} records`;
     emptyState.hidden = visible !== 0;
   });
+  secondaryView.querySelectorAll('[data-detail]').forEach((button) => {
+    button.addEventListener('click', () => openRecordDetails(viewName, rows[Number(button.dataset.detail)]));
+  });
   secondaryView.querySelectorAll('[data-complete]').forEach((button) => {
     button.addEventListener('click', () => {
       const row = button.closest('tr');
@@ -90,6 +94,42 @@ function renderTable(viewName) {
       notify('Sample action marked complete in this preview only.');
     });
   });
+}
+
+
+function openRecordDetails(viewName, record) {
+  if (!record) return;
+  const dialog = document.getElementById('record-dialog');
+  const titleNode = document.getElementById('record-dialog-title');
+  const referenceNode = document.getElementById('record-dialog-reference');
+  const summaryNode = document.getElementById('record-dialog-summary');
+  const detailNode = document.getElementById('record-dialog-fields');
+  const descriptions = {
+    investigations: ['Investigation', 'Supplier', 'Risk level', 'Current status'],
+    findings: ['Finding', 'Category', 'Risk level', 'Review status'],
+    suppliers: ['Supplier', 'Open items', 'Exposure', 'Review status'],
+    actions: ['Action', 'Owner', 'Due date', 'Current status']
+  };
+  const fields = descriptions[viewName] || [];
+  titleNode.textContent = record[1];
+  referenceNode.textContent = record[0] + ' · SAMPLE RECORD';
+  summaryNode.textContent = viewName === 'findings'
+    ? 'This sample finding needs supporting source documents and reviewer validation before it can be treated as confirmed.'
+    : viewName === 'actions'
+      ? 'This sample follow-up is shown to demonstrate ownership and due-date tracking. Changes in this preview are not sent to Jira.'
+      : 'This sample record demonstrates how procurement context and review status can be presented alongside Jira work.';
+  detailNode.replaceChildren();
+  fields.forEach((label, index) => {
+    const item = document.createElement('div');
+    item.className = 'record-field';
+    const key = document.createElement('span');
+    key.textContent = label;
+    const value = document.createElement('b');
+    value.textContent = record[index + 1] || '—';
+    item.append(key, value);
+    detailNode.append(item);
+  });
+  dialog.showModal();
 }
 
 function setView(nextView) {
