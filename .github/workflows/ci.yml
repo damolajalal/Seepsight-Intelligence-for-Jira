@@ -39,6 +39,9 @@ jobs:
       - name: Build complete Custom UI resources
         run: npm run build:ui
 
+      - name: Build UI with deterministic Forge bridge fixture for browser tests
+        run: npm run build:ui:test
+
       - name: Install Chromium for browser tests
         run: npx playwright install --with-deps chromium
 
