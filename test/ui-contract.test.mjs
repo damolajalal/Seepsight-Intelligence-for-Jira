@@ -13,7 +13,12 @@ test('dashboard exposes labelled navigation and current-page state', async () =>
   }
 });
 
-test('dashboard refresh control has an explicit accessible name', async () => {\n  const html = await read('../static/dashboard/index.html');\n  assert.match(html, /id=\"refresh\" type=\"button\" aria-label=\"Refresh Jira project context\"/);\n});\n\ntest('dashboard record dialog has an accessible name and close control', async () => {
+test('dashboard refresh control has an explicit accessible name', async () => {
+  const html = await read('../static/dashboard/index.html');
+  assert.match(html, /id="refresh" type="button" aria-label="Refresh Jira project context"/);
+});
+
+test('dashboard record dialog has an accessible name and close control', async () => {
   const html = await read('../static/dashboard/index.html');
   assert.match(html, /<dialog id="record-dialog"[^>]*aria-labelledby="record-dialog-title"/);
   assert.match(html, /id="record-dialog-title"/);
