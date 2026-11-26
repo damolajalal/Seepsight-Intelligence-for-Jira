@@ -57,7 +57,7 @@ This register is separate from the existing Seepsight platform's master issue re
 
 ## Known limitations / risks
 
-- The Forge app is source-scaffolded but not deployed or runtime-tested. The separate FastAPI service has source and CI tests, but it is not deployed or connected to production Firestore. CI runs unit tests and builds both Custom UI bundles. Forge lint is conditional on optional GitHub Actions secrets because the CLI requires Atlassian authentication.
+- The Forge app is source-scaffolded but not deployed or runtime-tested. The separate FastAPI service has source and CI tests, but it is not deployed or connected to production Firestore. CI runs Node unit tests, both Custom UI builds, and Python backend tests; Forge lint remains conditional on optional GitHub Actions secrets. Forge lint is conditional on optional GitHub Actions secrets because the CLI requires Atlassian authentication.
 - The app ID in `manifest.yml` is intentionally a placeholder until Forge registration.
 - UI JavaScript bundles are generated during CI by `npm run build:ui`; generated bundles are not committed to the repository.
 - All displayed figures and records are illustrative sample content.
