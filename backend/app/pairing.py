@@ -99,6 +99,8 @@ def redeem_pairing_code(
         member_email = str(member.get("email") or "").strip().lower()
         if not user_email or user_email != member_email:
             raise PairingError("The Seepsight company membership could not be verified.")
+        if str(pairing.get("email") or "").strip().lower() != user_email:
+            raise PairingError("The pairing code is invalid or expired.")
 
         try:
             firebase_user = firebase_auth.get_user(uid)
