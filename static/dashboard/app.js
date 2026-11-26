@@ -3,6 +3,7 @@ import { view, invoke } from '@forge/bridge';
 const title = document.getElementById('page-title');
 const toast = document.getElementById('toast');
 const projectChip = document.getElementById('project-chip');
+const connectionLabel = document.getElementById('connection-label');
 const secondaryView = document.getElementById('secondary-view');
 const overviewNodes = [...document.querySelectorAll('.metrics,.content-grid,.table-panel')];
 const labels = { overview: 'Overview', investigations: 'Investigations', findings: 'Findings', suppliers: 'Suppliers', actions: 'Actions' };
@@ -97,14 +98,26 @@ document.getElementById('refresh').addEventListener('click', async () => {
 });
 
 async function loadContext() {
+  connectionLabel.textContent = 'Checking Forge connection…';
+  connectionLabel.dataset.state = 'checking';
   try {
+    const health = await invoke('getHealth');
+    if (health?.status === 'scaffold') {
+      connectionLabel.textContent = 'Forge connected · integrations pending';
+      connectionLabel.dataset.state = 'connected';
+    } else {
+      connectionLabel.textContent = 'Forge status unavailable';
+      connectionLabel.dataset.state = 'warning';
+    }
     const context = await view.getContext();
     const projectKey = context?.extension?.project?.key;
     if (projectKey) projectChip.textContent = `Jira project · ${projectKey}`;
     const project = await invoke('getProjectContext');
     if (project?.projectKey) projectChip.textContent = `Jira project · ${project.projectKey}`;
   } catch (error) {
-    console.info('Jira project context is unavailable outside Forge.', error);
+    connectionLabel.textContent = 'Open inside Jira to connect';
+    connectionLabel.dataset.state = 'warning';
+    console.info('Forge/Jira context is unavailable outside Forge.', error);
   }
 }
 
