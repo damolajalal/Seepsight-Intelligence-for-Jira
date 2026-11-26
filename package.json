@@ -1,0 +1,19 @@
+{
+  "name": "seepsight-intelligence-for-jira",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Evidence-first procurement risk and action intelligence embedded in Jira.",
+  "scripts": {
+    "lint": "eslint src",
+    "test": "node --test",
+    "start": "forge tunnel"
+  },
+  "dependencies": {
+    "@forge/api": "^7.0.0",
+    "@forge/resolver": "^1.6.0"
+  },
+  "devDependencies": {
+    "@forge/cli": "latest",
+    "eslint": "^9.0.0"
+  }
+}
