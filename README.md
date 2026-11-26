@@ -42,7 +42,7 @@ For a demo development site, Forge provides a CLI provisioning flow. Traditional
 
 ## Seepsight backend integration
 
-The existing Seepsight repository is currently a Streamlit application; no documented public HTTP API has been confirmed for this Jira app. The proposed secure API, evidence contract, tenant isolation, and decisions required before connecting are documented in [the integration contract](docs/SEEPSIGHT_INTEGRATION_CONTRACT.md and the [verified existing Firestore data model](docs/EXISTING_SEEPSIGHT_DATA_MODEL.md)). The Jira app remains in sample-data preview mode until that backend interface is implemented and approved.
+The existing Seepsight repository is currently a Streamlit application; no documented public HTTP API has been confirmed for this Jira app. The proposed secure API, evidence contract, tenant isolation, and decisions required before connecting are documented in [the integration contract](docs/SEEPSIGHT_INTEGRATION_CONTRACT.md and the [verified existing Firestore data model](docs/EXISTING_SEEPSIGHT_DATA_MODEL.md), and [Forge Remote authentication decision](docs/FORGE_REMOTE_AUTH_DECISION.md)). The Jira app remains in sample-data preview mode until that backend interface is implemented and approved.
 
 The identity-linking flow between Atlassian accounts and Seepsight's existing Firebase/Firestore company memberships is specified in [the identity-linking design](docs/IDENTITY_LINKING_DESIGN.md). The Rovo Agent and action approach is documented in [the Rovo integration plan](docs/ROVO_INTEGRATION_PLAN.md); Rovo modules remain disabled until the backend and permission model are ready.
 
