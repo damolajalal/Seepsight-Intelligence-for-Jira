@@ -27,7 +27,7 @@ app = FastAPI(
 # CORS only controls browser access; FIT validation remains mandatory.
 app.add_middleware(
     CORSMiddleware,
-    allow_origin_regex=r"^https://[a-zA-Z0-9-]+\.atlassian\.net$",
+    allow_origin_regex=r"^https://([a-zA-Z0-9-]+\.atlassian\.net|[a-zA-Z0-9-]+\.apps\.atlassian\.net)$",
     allow_credentials=False,
     allow_methods=["GET", "POST", "DELETE", "OPTIONS"],
     allow_headers=["Authorization", "Content-Type"],
