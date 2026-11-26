@@ -7,11 +7,11 @@ resolver.define('getHealth', async () => ({
   status: 'scaffold',
   product: 'Seepsight Intelligence for Jira',
   integrations: {
-    jira: 'available-through-forge-context',
-    seepsight: 'not-connected',
-    gemini: 'not-connected',
+    jira: 'forge-resolver',
+    seepsight: 'not-configured',
+    gemini: 'not-configured',
     rovo: 'not-configured',
-    nvidia: 'not-connected'
+    nvidia: 'not-configured'
   }
 }));
 
