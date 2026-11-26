@@ -18,17 +18,12 @@ modules:
 resources:
   - key: dashboard
     path: static/dashboard
-    tunnel:
-      port: 3000
   - key: issue-panel
     path: static/issue-panel
-    tunnel:
-      port: 3001
 app:
-  id: ari:cloud:ecosystem::app/00000000-0000-0000-0000-000000000000
+  id: "<your app id>"
   runtime:
     name: nodejs24.x
 permissions:
   scopes:
     - read:jira-work
-    - write:jira-work
