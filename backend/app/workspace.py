@@ -83,7 +83,8 @@ def list_analyses(db: Any, membership: dict, identity: Any, limit: int = 20) -> 
     snapshots = (
         company_ref.collection("analyses")
         .where("results_status", "==", "complete")
-        .limit(100)
+        .order_by("updated_at", direction=firestore.Query.DESCENDING)
+        .limit(limit)
         .stream()
     )
 
@@ -93,8 +94,7 @@ def list_analyses(db: Any, membership: dict, identity: Any, limit: int = 20) -> 
         if summary:
             analyses.append(summary)
 
-    analyses.sort(key=lambda item: item.get("updated_at") or "", reverse=True)
-    selected = analyses[:limit]
+    selected = analyses
 
     _audit_read(
         company_ref,
