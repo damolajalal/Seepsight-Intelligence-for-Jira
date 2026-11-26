@@ -33,7 +33,13 @@ This register is separate from the existing Seepsight platform's master issue re
 - [x] Inspect the existing Seepsight repository; no documented public HTTP API was identified in its Streamlit entry point/README.
 - [x] Confirm the existing Seepsight tenant model uses Firebase UID and Firestore company membership; document secure Atlassian-to-Firebase account linking (`docs/IDENTITY_LINKING_DESIGN.md`).
 - [x] Draft the proposed secure Seepsight-to-Jira API contract and tenant-isolation requirements (`docs/SEEPSIGHT_INTEGRATION_CONTRACT.md`).
-- [ ] Choose backend hosting and Forge-to-API authentication; implement account linking and the actual Seepsight API/tenant mapping.
+- [x] Inspect and document verified Firestore tenant, analysis, findings, dataset, case-path, and audit-event structures (`docs/EXISTING_SEEPSIGHT_DATA_MODEL.md`).
+- [x] Confirm the existing Firestore access helper is Streamlit-session-dependent and must not be reused as standalone API authentication.
+- [ ] Implement a separate Cloud Run API (recommended; not yet deployed) with Firebase Admin initialised through Cloud Run service identity / Application Default Credentials.
+- [ ] Choose and implement a production-safe Forge-to-API request authentication mechanism; no secret or remote is configured yet.
+- [ ] Implement single-use Atlassian-to-Firebase account linking and live tenant mapping.
+- [ ] Normalise detector-specific finding dictionaries into a versioned, bounded API response schema.
+- [ ] Inspect the actual case/action field schema before implementing case or action endpoints.
 - [ ] Add Forge backend egress allowlist for the confirmed Seepsight API host.
 - [ ] Connect verified findings, exposure values, supplier records, and investigation data.
 - [ ] Add evidence references and traceability for every AI explanation.
