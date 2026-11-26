@@ -1,4 +1,4 @@
-const ISSUE_KEY_PATTERN = /^[A-Z][A-Z0-9_]*-\\d+$/;
+const ISSUE_KEY_PATTERN = /^[A-Z][A-Z0-9_]*-\d+$/;
 
 function safeText(value, fallback, maxLength = 300) {
   if (typeof value !== 'string') return fallback;
