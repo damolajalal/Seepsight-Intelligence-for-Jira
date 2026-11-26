@@ -1,19 +1,10 @@
 import Resolver from '@forge/resolver';
 import { api, route } from '@forge/api';
+import { createHealthPayload } from './health-status.mjs';
 
 const resolver = new Resolver();
 
-resolver.define('getHealth', async () => ({
-  status: 'scaffold',
-  product: 'Seepsight Intelligence for Jira',
-  integrations: {
-    jira: 'forge-resolver',
-    seepsight: 'not-configured',
-    gemini: 'not-configured',
-    rovo: 'not-configured',
-    nvidia: 'not-configured'
-  }
-}));
+resolver.define('getHealth', async () => createHealthPayload());
 
 resolver.define('getProjectContext', async ({ context }) => ({
   cloudId: context?.cloudId ?? null,
