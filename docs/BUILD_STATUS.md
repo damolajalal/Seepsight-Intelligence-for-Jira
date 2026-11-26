@@ -42,6 +42,7 @@ This register is separate from the existing Seepsight platform's master issue re
 - [x] Add authenticated Seepsight sidebar pairing-code issuance (10-minute expiry, SHA-256 storage, 60-second issuance cooldown) in the existing Seepsight repository.
 - [x] Add API-side transactional pairing-code redemption, active membership revalidation, and link revocation endpoints.
 - [x] Add read-only company overview and completed-analysis summary endpoints with minimal audit events.
+- [x] Add the composite Firestore index required for bounded, newest-first completed-analysis listing (`firestore.indexes.json`).
 - [x] Add restricted CORS support for Jira tenant and Forge app iframe origins used by `requestRemote`.
 - [x] Document Cloud Run deployment, runtime identity, Forge Remote setup, and Firestore pairing-code TTL cleanup (`backend/DEPLOYMENT.md`).
 - [x] Include optional Atlassian impersonation actor identity in link and read audit records.
