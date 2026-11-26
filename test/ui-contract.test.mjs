@@ -21,7 +21,7 @@ test('dashboard refresh control has an explicit accessible name', async () => {
 test('related-record navigation keeps the dialog open for a continuous review flow', async () => {
   const app = await read('../static/dashboard/app.js');
   assert.match(app, /if \(!dialog\.open\) dialog\.showModal\(\)/);
-  assert.match(app, /setView\\(nextView\\);\\s*dialogFallbackFocus = document\\.querySelector\\(`\\.nav-item\\[data-view=\\"\\$\\{nextView\\}\\"\\]`\\);\\s*openRecordDetails\\(nextView, record\\);/);
+  assert.match(app, /setView\(nextView\);\s*dialogFallbackFocus = document\.querySelector\(`\.nav-item\[data-view="\$\{nextView\}"\]`\);\s*openRecordDetails\(nextView, record\);/);
   assert.doesNotMatch(app, /record-dialog'\)\.close\(\);\s*setView\(nextView\)/);
 });
 
