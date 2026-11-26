@@ -14,14 +14,13 @@ Implemented in this scaffold:
 
 Not implemented yet:
 
-- Firebase-authenticated pairing-code creation in the Seepsight web app.
-- Atomic one-time pairing-code redemption and link revocation.
-- Actual `_jira_account_links` creation.
+- Jira Custom UI pairing-code entry and disconnect controls.
+- Live end-to-end pairing against deployed Cloud Run and production Firestore.
 - Findings/summary/supplier/case endpoints or detector-specific response normalisation.
 - Company audit-event integration for Jira reads.
 - A configured Forge Remote hostname, Forge manifest remote, app ID, or Cloud Run deployment.
 
-Until pairing is implemented, `GET /api/v1/jira/context` correctly returns 403 for users without an active link.
+Until a Seepsight-issued pairing code is redeemed, `GET /api/v1/jira/context` correctly returns 403 for users without an active link.
 
 ## Local development
 
@@ -60,3 +59,14 @@ The commercial Forge JWKS URL and issuer are configured in `app/forge_auth.py`. 
 Forge sends a signed FIT, not a Google Cloud Run IAM ID token. The Cloud Run service therefore needs an ingress/auth configuration that permits Forge to reach the HTTPS endpoint, while **every protected application route validates the FIT**. Do not treat public network reachability as authorization. The only unauthenticated route in this scaffold is `/healthz`, which returns static non-sensitive liveness information.
 
 Before deployment, review Cloud Run ingress, TLS/domain configuration, rate limits, request size limits, logs, monitoring, and the exact Forge Remote manifest declaration. Do not add the remote hostname to the Forge manifest until the API host is actually deployed and verified.
+
+
+## Account linking endpoints
+
+- `POST /api/v1/jira/link` accepts a short-lived pairing code issued by the authenticated Seepsight sidebar. It validates the Forge FIT, consumes the pairing code transactionally, revalidates the current Firebase user/company/member records, and creates the Atlassian identity link.
+- `DELETE /api/v1/jira/link` revokes the current signed Jira identity link and writes a company audit event.
+- `GET /api/v1/jira/context` returns the linked company display context or 403 when no active link exists.
+
+The existing Seepsight application now contains the pairing-code issuer. See [its linking guide](https://github.com/damolajalal/seepsight/blob/main/docs/JIRA_ACCOUNT_LINKING.md).
+
+These endpoints are source-scaffolded only. They require Cloud Run deployment, Forge Remote configuration, and Jira UI integration before they can be used.
