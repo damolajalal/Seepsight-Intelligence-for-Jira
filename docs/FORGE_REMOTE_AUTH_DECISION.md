@@ -47,7 +47,7 @@ Account linking remains a separate user-consent flow:
 1. User signs in to the existing Seepsight web app with Firebase Authentication.
 2. Seepsight creates a cryptographically random, single-use, short-lived pairing code and stores only a secure hash plus expiry and the authenticated Firebase UID.
 3. User enters the code in the Jira app.
-4. The Forge resolver forwards the code together with its trusted Jira context to the API.
+4. The Custom UI sends the code in the request body using `requestRemote`; it does not send an account ID, Firebase UID, or company ID.
 5. The API validates FIT, consumes the code atomically, re-checks Firebase membership, and stores the link for `cloudId + accountId`.
 6. The UI displays the linked Seepsight company and a disconnect option. Disconnect revokes the mapping and writes an audit event.
 
@@ -56,7 +56,7 @@ Pairing codes must be rate-limited, expire quickly, be single-use, and never app
 ## Source references
 
 - Atlassian [Forge Remote essentials](https://developer.atlassian.com/platform/forge/remote/essentials/) — FIT headers, claims, verification, JWKS, app ID, cloudId, principal, and installation ID.
-- Atlassian [Forge bridge invokeRemote](https://developer.atlassian.com/platform/forge/apis-reference/ui-api-bridge/invokeRemote/) — remote endpoint and request flow.
+- Atlassian [calling a remote from a Forge frontend](https://developer.atlassian.com/platform/forge/remote/calling-from-frontend/) and [requestRemote API](https://developer.atlassian.com/platform/forge/apis-reference/ui-api-bridge/requestRemote/) — direct FIT-authenticated browser-to-remote requests.
 - Google Cloud [Cloud Run service-to-service authentication](https://docs.cloud.google.com/run/docs/authenticating/service-to-service) — Cloud Run IAM ID token model and runtime identity.
 
 This decision does not mean the remote, API, pairing flow, or deployment has been implemented.
