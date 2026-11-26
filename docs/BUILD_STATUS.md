@@ -11,6 +11,7 @@ This register is separate from the existing Seepsight platform's master issue re
 - [x] Custom UI build directories and HTML/CSS entry points.
 - [x] Forge resolver for health, project context, and issue details.
 - [x] Dashboard preview navigation for Overview, Investigations, Findings, Suppliers, and Actions.
+- [x] Responsive, accessible client-side filtering for preview tables.
 - [x] Sample-only action completion interaction.
 - [x] Clear sample-data labels.
 - [x] GitHub Actions workflow added for Node.js 24, production dependency audit, unit tests, Custom UI bundling, and Forge lint.
@@ -21,7 +22,7 @@ This register is separate from the existing Seepsight platform's master issue re
 - [ ] Forge CLI authentication.
 - [ ] Register app and replace placeholder app ID.
 - [x] Confirm CI can install dependencies and generate both UI bundles.
-- [ ] Confirm GitHub Actions passes dependency reporting, tests, and UI build.
+- [ ] Confirm the latest GitHub Actions run passes dependency reporting, tests, and UI build after the table-filter update.
 - [ ] Optionally add `FORGE_EMAIL` and `FORGE_API_TOKEN` as GitHub Actions secrets to enable authenticated Forge lint; otherwise run lint after logging in locally.
 - [ ] Deploy to development environment.
 - [ ] Install on Jira Cloud development/demo site.
