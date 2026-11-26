@@ -22,7 +22,7 @@ This register is separate from the existing Seepsight platform's master issue re
 - [ ] Forge CLI authentication.
 - [ ] Register app and replace placeholder app ID.
 - [x] Confirm CI can install dependencies and generate both UI bundles.
-- [ ] Confirm the latest GitHub Actions run passes dependency reporting, tests, and UI build after the table-filter update.
+- [ ] Confirm the latest GitHub Actions run passes Node and Python jobs after the backend changes.
 - [ ] Optionally add `FORGE_EMAIL` and `FORGE_API_TOKEN` as GitHub Actions secrets to enable authenticated Forge lint; otherwise run lint after logging in locally.
 - [ ] Deploy to development environment.
 - [ ] Install on Jira Cloud development/demo site.
@@ -60,10 +60,9 @@ This register is separate from the existing Seepsight platform's master issue re
 
 ## Known limitations / risks
 
-- The Forge app is source-scaffolded but not deployed or runtime-tested. The separate FastAPI service has source and CI tests, including pairing and safe analysis-summary tests, but it is not deployed or connected to production Firestore. CI runs Node unit tests, both Custom UI builds, and Python backend tests; Forge lint remains conditional on optional GitHub Actions secrets. Forge lint is conditional on optional GitHub Actions secrets because the CLI requires Atlassian authentication.
+- The Forge app is source-scaffolded but not deployed or runtime-tested. The separate FastAPI service has source and CI tests, including pairing and safe analysis-summary tests, but it is not deployed or connected to production Firestore. CI is configured to run Node unit tests, both Custom UI builds, and Python backend tests. Forge lint remains conditional on optional GitHub Actions secrets because the CLI requires Atlassian authentication.
 - The app ID in `manifest.yml` is intentionally a placeholder until Forge registration.
 - UI JavaScript bundles are generated during CI by `npm run build:ui`; generated bundles are not committed to the repository.
 - All displayed figures and records are illustrative sample content.
-- No Seepsight, Gemini, BigQuery, Firebase, NVIDIA NIM, or Rovo connection is active. The existing Seepsight app is Streamlit-based; a supported API must be implemented before Forge can connect safely.
-- A production dependency audit found 9 transitive advisories in the current Forge dependency tree (5 high, 4 moderate). The audit did not identify a safe non-breaking automatic fix; do not run `npm audit fix --force` blindly. Track and reassess these upstream advisories before release. CI currently blocks critical-severity findings while retaining the audit output.
-- The production dependency audit currently reports 9 transitive advisories (5 high, 4 moderate); the CI audit is informational while upstream dependency updates are assessed. Do not apply `npm audit fix --force` without compatibility testing.
+- No live Jira-to-Seepsight production connection is active. The existing Seepsight Firebase/Firestore app can now issue pairing codes, and the separate API has source endpoints, but no Cloud Run deployment, Forge Remote, live account link, or production procurement-data connection exists. Gemini, BigQuery, NVIDIA NIM, and Rovo are not connected to the Jira app.
+- A production dependency audit found 9 transitive advisories in the current Forge dependency tree (5 high, 4 moderate). The audit did not identify a safe non-breaking automatic fix; do not run `npm audit fix --force` blindly. Track and reassess these upstream advisories before release.
