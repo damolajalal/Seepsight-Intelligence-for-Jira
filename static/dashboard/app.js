@@ -48,29 +48,91 @@ function renderTable(viewName) {
     suppliers: ['REFERENCE','SUPPLIER','OPEN ITEMS','EXPOSURE','STATUS'],
     actions: ['REFERENCE','ACTION','OWNER','DUE','STATUS']
   }[viewName];
-  const header = headings.map((heading) => `<th>${heading}</th>`).join('');
-  const body = rows.map((row, index) => {
-    const cells = row.map((cell, cellIndex) => {
+  secondaryView.replaceChildren();
+  const panelHead = document.createElement('div');
+  panelHead.className = 'panel-head';
+  const headingGroup = document.createElement('div');
+  const eyebrow = document.createElement('span');
+  eyebrow.className = 'eyebrow';
+  eyebrow.textContent = 'PREVIEW DATA · NOT LIVE';
+  const heading = document.createElement('h2');
+  heading.textContent = labels[viewName];
+  headingGroup.append(eyebrow, heading);
+  const tools = document.createElement('div');
+  tools.className = 'table-tools';
+  const searchInput = document.createElement('input');
+  searchInput.className = 'table-search';
+  searchInput.type = 'search';
+  searchInput.setAttribute('aria-label', `Filter ${labels[viewName]}`);
+  searchInput.placeholder = 'Filter records…';
+  const resultCountNode = document.createElement('span');
+  resultCountNode.className = 'result-count';
+  resultCountNode.setAttribute('aria-live', 'polite');
+  resultCountNode.textContent = `${rows.length} records`;
+  tools.append(searchInput, resultCountNode);
+  panelHead.append(headingGroup, tools);
+
+  const wrap = document.createElement('div');
+  wrap.className = 'table-wrap';
+  const table = document.createElement('table');
+  const thead = document.createElement('thead');
+  const headerRow = document.createElement('tr');
+  [...headings, ...(viewName === 'actions' ? ['UPDATE'] : []), 'DETAILS'].forEach((label) => {
+    const th = document.createElement('th');
+    th.scope = 'col';
+    th.textContent = label;
+    headerRow.append(th);
+  });
+  thead.append(headerRow);
+  const tbody = document.createElement('tbody');
+  rows.forEach((row, index) => {
+    const tr = document.createElement('tr');
+    row.forEach((cell, cellIndex) => {
+      const td = document.createElement('td');
       if (cellIndex === 3 && viewName !== 'actions') {
-        const riskClass = String(cell).toLowerCase().includes('high') ? 'risk-high' : 'risk-medium';
-        return `<td><span class="${riskClass}">${cell}</span></td>`;
+        const risk = document.createElement('span');
+        risk.className = String(cell).toLowerCase().includes('high') ? 'risk-high' : 'risk-medium';
+        risk.textContent = cell;
+        td.append(risk);
+      } else {
+        td.textContent = cell;
       }
-      return `<td>${cell}</td>`;
-    }).join('');
-    const action = viewName === 'actions'
-      ? `<td><button class="row-action" data-complete="${index}">Mark complete</button></td>`
-      : '';
-    const detail = `<td><button class="detail-action" data-detail="${index}" aria-label="View details for ${row[0]}">View</button></td>`;
-    return `<tr>${cells}${action}${detail}</tr>`;
-  }).join('');
-  const actionHeader = viewName === 'actions' ? '<th>UPDATE</th>' : '';
-  const detailHeader = '<th>DETAILS</th>';
-  secondaryView.innerHTML = `
-    <div class="panel-head"><div><span class="eyebrow">PREVIEW DATA · NOT LIVE</span><h2>${labels[viewName]}</h2></div><div class="table-tools"><input class="table-search" type="search" aria-label="Filter ${labels[viewName]}" placeholder="Filter records…"><span class="result-count">${rows.length} records</span></div></div>
-    <div class="table-wrap"><table><thead><tr>${header}${actionHeader}${detailHeader}</tr></thead><tbody>${body}</tbody></table></div>
-    <p class="empty-state" hidden>No matching sample records.</p>
-    <p class="view-note">These sample records demonstrate the intended workflow. Verified Seepsight records will replace them after the secure backend connection is configured.</p>`;
-  const searchInput = secondaryView.querySelector('.table-search');
+      tr.append(td);
+    });
+    if (viewName === 'actions') {
+      const updateCell = document.createElement('td');
+      const completeButton = document.createElement('button');
+      completeButton.className = 'row-action';
+      completeButton.type = 'button';
+      completeButton.dataset.complete = String(index);
+      completeButton.textContent = 'Mark complete';
+      updateCell.append(completeButton);
+      tr.append(updateCell);
+    }
+    const detailCell = document.createElement('td');
+    const detailButton = document.createElement('button');
+    detailButton.className = 'detail-action';
+    detailButton.type = 'button';
+    detailButton.dataset.detail = String(index);
+    detailButton.setAttribute('aria-label', `View details for ${row[0]}`);
+    detailButton.textContent = 'View';
+    detailCell.append(detailButton);
+    tr.append(detailCell);
+    tbody.append(tr);
+  });
+  table.append(thead, tbody);
+  wrap.append(table);
+  const emptyState = document.createElement('p');
+  emptyState.className = 'empty-state';
+  emptyState.hidden = true;
+  emptyState.setAttribute('role', 'status');
+  emptyState.textContent = 'No matching sample records.';
+  const note = document.createElement('p');
+  note.className = 'view-note';
+  note.textContent = 'These sample records demonstrate the intended workflow. Verified Seepsight records will replace them after the secure backend connection is configured.';
+  secondaryView.append(panelHead, wrap, emptyState, note);
+  const tableRows = [...secondaryView.querySelectorAll('tbody tr')];
+  const resultCount = resultCountNode;
   const tableRows = [...secondaryView.querySelectorAll('tbody tr')];
   const resultCount = secondaryView.querySelector('.result-count');
   const emptyState = secondaryView.querySelector('.empty-state');
@@ -91,7 +153,10 @@ function renderTable(viewName) {
   secondaryView.querySelectorAll('[data-complete]').forEach((button) => {
     button.addEventListener('click', () => {
       const row = button.closest('tr');
-      row.lastElementChild.previousElementSibling.innerHTML = '<span class="status">Completed locally</span>';
+      const status = document.createElement('span');
+      status.className = 'status';
+      status.textContent = 'Completed locally';
+      row.lastElementChild.previousElementSibling.replaceChildren(status);
       button.remove();
       notify('Sample action marked complete in this preview only.');
     });
@@ -158,7 +223,10 @@ function setView(nextView) {
   if (!labels[nextView]) return;
   title.textContent = labels[nextView];
   document.querySelectorAll('.nav-item').forEach((button) => {
-    button.classList.toggle('active', button.dataset.view === nextView);
+    const isCurrent = button.dataset.view === nextView;
+    button.classList.toggle('active', isCurrent);
+    if (isCurrent) button.setAttribute('aria-current', 'page');
+    else button.removeAttribute('aria-current');
   });
   const isOverview = nextView === 'overview';
   overviewNodes.forEach((node) => { node.hidden = !isOverview; });
