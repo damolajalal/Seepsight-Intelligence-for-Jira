@@ -18,6 +18,13 @@ test('dashboard refresh control has an explicit accessible name', async () => {
   assert.match(html, /id="refresh" type="button" aria-label="Refresh Jira project context"/);
 });
 
+test('related-record navigation keeps the dialog open for a continuous review flow', async () => {
+  const app = await read('../static/dashboard/app.js');
+  assert.match(app, /if \(!dialog\.open\) dialog\.showModal\(\)/);
+  assert.match(app, /setView\(nextView\);\s*openRecordDetails\(nextView, record\);/);
+  assert.doesNotMatch(app, /record-dialog'\)\.close\(\);\s*setView\(nextView\)/);
+});
+
 test('dashboard record dialog has an accessible name and close control', async () => {
   const html = await read('../static/dashboard/index.html');
   assert.match(html, /<dialog id="record-dialog"[^>]*aria-labelledby="record-dialog-title"/);
