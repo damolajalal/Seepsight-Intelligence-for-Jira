@@ -214,7 +214,7 @@ function openRecordDetails(viewName, record) {
   });
   const relatedSection = document.getElementById('record-dialog-related-section');
   relatedSection.hidden = relatedRecords.length === 0;
-  dialog.showModal();
+  if (!dialog.open) dialog.showModal();
 }
 
 function setView(nextView) {
@@ -254,7 +254,6 @@ document.getElementById('record-dialog-related').addEventListener('click', (even
   const reference = button.dataset.relatedReference;
   const record = demoRows[nextView]?.find((candidate) => candidate[0] === reference);
   if (!record) return;
-  document.getElementById('record-dialog').close();
   setView(nextView);
   openRecordDetails(nextView, record);
 });
