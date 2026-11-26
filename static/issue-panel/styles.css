@@ -21,10 +21,10 @@ h2{font-size:14px;margin:7px 0 11px}
 .evidence-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-top:1px solid #263540}
 .evidence-row b{display:block;font-size:11px;color:#dce7ec;font-weight:600}
 .evidence-row small{display:block;font-size:9px;color:#78909e;margin-top:5px;line-height:1.5}
-.evidence-state{font-size:9px;color:#e4c17d;background:#342d20;padding:5px 7px;border-radius:5px;white-space:nowrap}
+.evidence-check{display:flex;align-items:center;gap:6px;font-size:9px;color:#9bd9c5;white-space:nowrap}.evidence-check input{width:15px;height:15px;accent-color:#55d6b0;cursor:pointer}.evidence-progress{display:grid;grid-template-columns:minmax(70px,1fr) auto;align-items:center;gap:10px;padding:12px 0 13px;border-top:1px solid #263540}.progress-track{height:6px;background:#263540;border-radius:10px;overflow:hidden}.progress-fill{height:100%;width:0;background:#55d6b0;border-radius:10px;transition:width .2s ease}#evidence-progress{font-size:9px;color:#9aadb9;white-space:nowrap}
 .review-controls{display:flex;align-items:center;gap:11px;flex-wrap:wrap;border-top:1px solid #263540;padding-top:13px;margin-top:3px}
 #review-button{background:#173a34;border:1px solid #2b6656;color:#9be3c8;border-radius:6px;padding:8px 11px;font-size:10px;font-weight:650;cursor:pointer}
-#review-button:hover{background:#20483e}
+#review-button:hover:not(:disabled){background:#20483e}#review-button:disabled{opacity:.45;cursor:not-allowed}
 #review-button:focus-visible{outline:2px solid #65dfb8;outline-offset:2px}
 #review-message{font-size:9px;line-height:1.5;color:#8298a6;flex:1;min-width:180px}
 .next-step p{margin-bottom:0}
