@@ -1,17 +1,20 @@
 import { invoke } from '@forge/bridge';
+import { getEvidenceSummary, toggleEvidence } from './evidence-review.mjs';
 
 const byId = (id) => document.getElementById(id);
+const evidence = [
+  { id: 'purchase-order', name: 'Purchase order', description: 'Illustrative source document · PO reference' },
+  { id: 'delivery-confirmation', name: 'Delivery confirmation', description: 'Illustrative source document · received quantity' },
+  { id: 'goods-received-note', name: 'Goods received note', description: 'Illustrative source document · receiving record' }
+];
+let reviewedEvidence = [];
+let previewReviewed = false;
 
 function setIssueValue(id, value) {
   byId(id).textContent = value || '—';
 }
 
 function renderEvidencePreview() {
-  const evidence = [
-    { name: 'Purchase order', description: 'Illustrative source document · PO reference', state: 'Example required' },
-    { name: 'Delivery confirmation', description: 'Illustrative source document · received quantity', state: 'Example pending' },
-    { name: 'Goods received note', description: 'Illustrative source document · receiving record', state: 'Example pending' }
-  ];
   const list = byId('evidence-list');
   list.replaceChildren();
   evidence.forEach((item) => {
@@ -23,27 +26,51 @@ function renderEvidencePreview() {
     const description = document.createElement('small');
     description.textContent = item.description;
     copy.append(name, description);
-    const status = document.createElement('span');
-    status.className = 'evidence-state';
-    status.textContent = item.state;
-    row.append(copy, status);
+    const label = document.createElement('label');
+    label.className = 'evidence-check';
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.checked = reviewedEvidence.includes(item.id);
+    checkbox.setAttribute('aria-label', `Mark ${item.name} checked in sample review`);
+    checkbox.addEventListener('change', () => {
+      reviewedEvidence = toggleEvidence(reviewedEvidence, item.id);
+      previewReviewed = false;
+      updateReviewSummary();
+      setReviewState();
+    });
+    const state = document.createElement('span');
+    state.textContent = 'Reviewed';
+    label.append(checkbox, state);
+    row.append(copy, label);
     list.append(row);
   });
+  updateReviewSummary();
 }
 
-function setReviewState(reviewed) {
+function updateReviewSummary() {
+  const summary = getEvidenceSummary(evidence, reviewedEvidence);
+  byId('evidence-progress').textContent = `${summary.reviewed} of ${summary.total} documents checked`;
+  byId('evidence-progress-bar').style.width = `${summary.total ? (summary.reviewed / summary.total) * 100 : 0}%`;
+  byId('evidence-progress-bar').setAttribute('aria-valuenow', String(summary.reviewed));
+  byId('evidence-progress-bar').setAttribute('aria-valuemax', String(summary.total));
+  byId('review-button').disabled = !summary.complete;
+}
+
+function setReviewState() {
   const button = byId('review-button');
   const message = byId('review-message');
-  button.textContent = reviewed ? 'Undo local review' : 'Mark preview reviewed';
-  button.setAttribute('aria-pressed', String(reviewed));
-  message.textContent = reviewed
-    ? 'Preview marked reviewed on this screen only. No Jira issue or Seepsight record was changed.'
-    : 'This is a local preview control. It does not update Jira or Seepsight.';
+  button.textContent = previewReviewed ? 'Undo local review' : 'Mark preview reviewed';
+  button.setAttribute('aria-pressed', String(previewReviewed));
+  message.textContent = previewReviewed
+    ? 'All sample documents checked. Preview marked reviewed on this screen only; no Jira issue or Seepsight record was changed.'
+    : 'Check all three sample documents to enable the local review action. Nothing is saved to Jira.';
 }
 
 byId('review-button').addEventListener('click', () => {
-  const reviewed = byId('review-button').getAttribute('aria-pressed') !== 'true';
-  setReviewState(reviewed);
+  const summary = getEvidenceSummary(evidence, reviewedEvidence);
+  if (!summary.complete && !previewReviewed) return;
+  previewReviewed = !previewReviewed;
+  setReviewState();
 });
 
 async function loadIssue() {
@@ -75,5 +102,5 @@ async function loadIssue() {
 }
 
 renderEvidencePreview();
-setReviewState(false);
+setReviewState();
 loadIssue();
