@@ -83,3 +83,8 @@ The existing Firebase Admin client reads Streamlit secrets, and access verificat
 Use a separate Cloud Run API service, leaving the existing Streamlit app unchanged. Start with health, aggregate project summary, and paginated read-only findings. The service should own Firebase Admin initialisation, Atlassian account-link resolution, tenant checks, response normalisation, rate limits, and audit events. Add supplier, case, and write endpoints only after their underlying source schemas and permissions are verified.
 
 This is an architecture recommendation, not an implemented or deployed service. No API hostname, Forge remote, service credential, or live identity link has been configured.
+
+
+## Forge-to-API authentication decision
+
+The selected implementation direction is Atlassian Forge Remote with signed Forge Invocation Token (FIT) verification, rather than a custom shared HMAC credential. The full decision, including trusted resolver context, JWKS validation, tenant checks, Cloud Run notes, and single-use Firebase account pairing, is recorded in [FORGE_REMOTE_AUTH_DECISION.md](FORGE_REMOTE_AUTH_DECISION.md). This is a design decision only; the remote and service are not yet configured.
