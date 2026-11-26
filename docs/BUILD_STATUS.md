@@ -13,7 +13,7 @@ This register is separate from the existing Seepsight platform's master issue re
 - [x] Dashboard preview navigation for Overview, Investigations, Findings, Suppliers, and Actions.
 - [x] Sample-only action completion interaction.
 - [x] Clear sample-data labels.
-- [x] GitHub Actions workflow added for Node.js 24, unit tests, Custom UI bundling, and Forge lint.
+- [x] GitHub Actions workflow added for Node.js 24, production dependency audit, unit tests, Custom UI bundling, and Forge lint.
 
 ## Blocked on Atlassian environment
 
@@ -21,7 +21,7 @@ This register is separate from the existing Seepsight platform's master issue re
 - [ ] Forge CLI authentication.
 - [ ] Register app and replace placeholder app ID.
 - [ ] Install dependencies and generate UI bundles.
-- [ ] Confirm the GitHub Actions validation workflow passes (tests, UI build, and Forge lint).
+- [ ] Confirm the GitHub Actions validation workflow passes (production dependency audit, tests, UI build, and Forge lint).
 - [ ] Deploy to development environment.
 - [ ] Install on Jira Cloud development/demo site.
 - [ ] Verify project page and issue panel in Jira.
