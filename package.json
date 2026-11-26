@@ -4,7 +4,7 @@
   "private": true,
   "description": "Evidence-first procurement risk and action intelligence embedded in Jira.",
   "scripts": {
-    "build:ui": "esbuild static/dashboard/app.js --bundle --outfile=static/dashboard/build/app.bundle.js --format=iife && esbuild static/issue-panel/app.js --bundle --outfile=static/issue-panel/build/app.bundle.js --format=iife",
+    "build:ui": "node scripts/build-ui.mjs",
     "lint": "forge lint",
     "test": "node --test",
     "start": "forge tunnel",
