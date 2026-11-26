@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Seepsight Intelligence</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar">
+      <a class="brand" href="#" aria-label="Seepsight home"><span class="brand-mark">S</span><span>seepsight<small>INTELLIGENCE</small></span></a>
+      <div class="workspace-label">WORKSPACE</div>
+      <nav class="nav" aria-label="Main navigation">
+        <button class="nav-item active" data-view="overview"><span>◫</span> Overview</button>
+        <button class="nav-item" data-view="investigations"><span>⌕</span> Investigations</button>
+        <button class="nav-item" data-view="findings"><span>◈</span> Findings</button>
+        <button class="nav-item" data-view="suppliers"><span>▤</span> Suppliers</button>
+        <button class="nav-item" data-view="actions"><span>✓</span> Actions</button>
+      </nav>
+      <div class="sidebar-bottom"><div class="connection"><i></i><span>Jira app scaffold</span></div><div class="user"><div class="avatar">DB</div><div><b>Workspace</b><small>Procurement intelligence</small></div></div></div>
+    </aside>
+    <main class="main">
+      <header class="topbar"><div><span class="eyebrow">JIRA PROJECT WORKSPACE</span><h1 id="page-title">Overview</h1></div><div class="top-actions"><span class="project-chip" id="project-chip">Project context pending</span><button class="icon-button" id="refresh" title="Refresh view">↻</button></div></header>
+      <section class="notice"><span class="notice-dot"></span><span><b>Preview workspace</b> — figures below are illustrative sample data, not live procurement findings.</span></section>
+      <section id="secondary-view" class="panel table-panel" hidden></section>
+      <section class="metrics">
+        <article class="metric"><div class="metric-label">Potential exposure</div><div class="metric-value">₦48.2M</div><div class="metric-foot">Illustrative portfolio value</div></article>
+        <article class="metric"><div class="metric-label">Open investigations</div><div class="metric-value">12</div><div class="metric-foot">Sample workflow count</div></article>
+        <article class="metric"><div class="metric-label">Evidence gaps</div><div class="metric-value">08</div><div class="metric-foot">Awaiting review</div></article>
+        <article class="metric"><div class="metric-label">Actions overdue</div><div class="metric-value">03</div><div class="metric-foot">Sample action queue</div></article>
+      </section>
+      <section class="content-grid">
+        <article class="panel exposure"><div class="panel-head"><div><span class="eyebrow">RISK MONITORING</span><h2>Exposure trend</h2></div><span class="pill">Sample · 6 months</span></div><div class="chart" aria-label="Illustrative exposure trend"><div class="chart-y"><span>₦50m</span><span>₦35m</span><span>₦20m</span><span>₦5m</span></div><svg viewBox="0 0 620 190" role="img" aria-label="Illustrative rising and falling line chart"><defs><linearGradient id="area" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#54d6b0" stop-opacity=".22"/><stop offset="1" stop-color="#54d6b0" stop-opacity="0"/></linearGradient></defs><path d="M0 145 C55 132 65 115 120 124 S200 83 248 99 S320 45 372 72 S450 58 496 48 S570 64 620 25 L620 190 L0 190Z" fill="url(#area)"/><path d="M0 145 C55 132 65 115 120 124 S200 83 248 99 S320 45 372 72 S450 58 496 48 S570 64 620 25" fill="none" stroke="#54d6b0" stroke-width="3" stroke-linecap="round"/></svg><div class="chart-x"><span>JUN</span><span>JUL</span><span>AUG</span><span>SEP</span><span>OCT</span><span>NOV</span></div></div></article>
+        <article class="panel risk"><div class="panel-head"><div><span class="eyebrow">FINDINGS MIX</span><h2>Risk categories</h2></div></div><div class="donut-wrap"><div class="donut"><div><b>24</b><small>sample findings</small></div></div><div class="legend"><span><i class="c1"></i>Delivery variance <b>42%</b></span><span><i class="c2"></i>Price movement <b>29%</b></span><span><i class="c3"></i>Approval delays <b>17%</b></span><span><i class="c4"></i>Other <b>12%</b></span></div></div></article>
+      </section>
+      <section class="panel table-panel"><div class="panel-head"><div><span class="eyebrow">PRIORITY QUEUE</span><h2>Recent investigations</h2></div><button class="text-button" data-view="investigations">View all →</button></div><div class="table-wrap"><table><thead><tr><th>INVESTIGATION</th><th>SUPPLIER</th><th>RISK</th><th>STATUS</th><th>UPDATED</th></tr></thead><tbody><tr><td><b>Delivery quantity mismatch</b><small>INV-024 · Evidence review</small></td><td>Northstar Supplies</td><td><span class="risk-high">High</span></td><td><span class="status">In review</span></td><td>Today</td></tr><tr><td><b>Unit price variance</b><small>INV-023 · Price monitoring</small></td><td>Greenfield Trading</td><td><span class="risk-medium">Medium</span></td><td><span class="status">Action needed</span></td><td>Yesterday</td></tr><tr><td><b>Approval cycle delay</b><small>INV-021 · Process monitoring</small></td><td>Westline Partners</td><td><span class="risk-high">High</span></td><td><span class="status">Open</span></td><td>2 days ago</td></tr></tbody></table></div></section>
+      <footer>Seepsight Intelligence for Jira <span>Evidence-first procurement intelligence · Preview build</span></footer>
+    </main>
+  </div>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <script src="./app.bundle.js"></script>
+</body>
+</html>
