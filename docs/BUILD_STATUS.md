@@ -39,11 +39,13 @@ This register is separate from the existing Seepsight platform's master issue re
 - [x] Add an isolated FastAPI backend scaffold with Cloud Run container definition, Firebase Admin/Firestore tenant revalidation, and health/context routes (`backend/`).
 - [x] Add Forge FIT validation against Atlassian JWKS, issuer, expected app audience, and trusted app ID.
 - [x] Add Python CI tests for FIT validation and Firestore tenant isolation.
-- [ ] Implement Firebase-authenticated pairing-code creation, atomic redemption, and revocation.
+- [x] Add authenticated Seepsight sidebar pairing-code issuance (10-minute expiry, SHA-256 storage, 60-second issuance cooldown) in the existing Seepsight repository.
+- [x] Add API-side transactional pairing-code redemption, active membership revalidation, and link revocation endpoints.
+- [ ] Wire the Jira Custom UI pairing-code entry and disconnect controls to the deployed Forge Remote.
 - [ ] Deploy the API to Cloud Run with a runtime service identity and verified HTTPS hostname.
 - [x] Select Forge Remote FIT verification as the Forge-to-API authentication direction and add its validator scaffold.
 - [ ] Configure the Forge Remote endpoint after a real API hostname and registered Forge app ID exist.
-- [ ] Implement single-use Atlassian-to-Firebase account linking and live tenant mapping; the API currently denies access when no active link exists.
+- [ ] Complete end-to-end account linking after Forge Remote deployment and Jira UI wiring; no live pairing has been performed.
 - [ ] Normalise detector-specific finding dictionaries into a versioned, bounded API response schema.
 - [ ] Inspect the actual case/action field schema before implementing case or action endpoints.
 - [ ] Add Forge backend egress allowlist for the confirmed Seepsight API host.
