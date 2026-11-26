@@ -63,9 +63,25 @@ function renderTable(viewName) {
   }).join('');
   const actionHeader = viewName === 'actions' ? '<th>UPDATE</th>' : '';
   secondaryView.innerHTML = `
-    <div class="panel-head"><div><span class="eyebrow">PREVIEW DATA · NOT LIVE</span><h2>${labels[viewName]}</h2></div><span class="pill">Illustrative sample</span></div>
+    <div class="panel-head"><div><span class="eyebrow">PREVIEW DATA · NOT LIVE</span><h2>${labels[viewName]}</h2></div><div class="table-tools"><input class="table-search" type="search" aria-label="Filter ${labels[viewName]}" placeholder="Filter records…"><span class="result-count">${rows.length} records</span></div></div>
     <div class="table-wrap"><table><thead><tr>${header}${actionHeader}</tr></thead><tbody>${body}</tbody></table></div>
+    <p class="empty-state" hidden>No matching sample records.</p>
     <p class="view-note">These sample records demonstrate the intended workflow. Verified Seepsight records will replace them after the secure backend connection is configured.</p>`;
+  const searchInput = secondaryView.querySelector('.table-search');
+  const tableRows = [...secondaryView.querySelectorAll('tbody tr')];
+  const resultCount = secondaryView.querySelector('.result-count');
+  const emptyState = secondaryView.querySelector('.empty-state');
+  searchInput.addEventListener('input', () => {
+    const query = searchInput.value.trim().toLocaleLowerCase();
+    let visible = 0;
+    tableRows.forEach((row) => {
+      const matches = row.textContent.toLocaleLowerCase().includes(query);
+      row.hidden = !matches;
+      if (matches) visible += 1;
+    });
+    resultCount.textContent = `${visible} of ${rows.length} records`;
+    emptyState.hidden = visible !== 0;
+  });
   secondaryView.querySelectorAll('[data-complete]').forEach((button) => {
     button.addEventListener('click', () => {
       const row = button.closest('tr');
