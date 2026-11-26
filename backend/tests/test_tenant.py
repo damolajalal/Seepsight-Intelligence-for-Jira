@@ -70,14 +70,14 @@ def valid_db():
         "companies": {
             uid: Document(
                 {"name": "Example Company", "status": "active"},
-                {"members": Collection({
+                {"members": {
                     uid: Document({
                         "uid": uid,
                         "email": "owner@example.com",
                         "role": "owner",
                         "status": "active",
                     })
-                })},
+                }},
             )
         },
     })
