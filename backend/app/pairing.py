@@ -8,7 +8,7 @@ from typing import Any
 
 from google.cloud import firestore
 
-from .tenant import TenantAccessError, link_document_id
+from .tenant import link_document_id
 
 
 class PairingError(Exception):
