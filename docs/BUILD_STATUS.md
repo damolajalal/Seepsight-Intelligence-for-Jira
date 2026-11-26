@@ -30,14 +30,14 @@ The current phase is the standalone Jira Forge experience. API deployment, Cloud
 - [x] Add issue context loading, warning, and error states.
 - [x] Add responsive issue-panel styling and keyboard focus treatment.
 - [ ] Add empty, loading, error, and narrow-screen states.
-- [ ] Add UI-focused tests for navigation, filtering, sample-only actions, and issue-panel review state.
+- [x] Add static UI contract tests for navigation semantics, accessible record dialog, sample-only disclosures, evidence progress semantics, and safe DOM rendering.
 - [x] Add unit tests for evidence review state and completion rules.
 - [x] Add unit tests for sample workflow relationship resolution.
 - [x] Extract dashboard record filtering into pure helpers with unit coverage.
 - [x] Render dashboard table content with safe DOM APIs instead of interpolated HTML.
 - [x] Add accessible current-page navigation state and visible keyboard focus for evidence controls.
 - [x] Add visible keyboard focus across dashboard controls, responsive search layout, and accessible record-dialog focus restoration.
-- [ ] Add browser-level UI tests for DOM interactions (pure filtering, workflow relationships, and review-state helpers have unit coverage).
+- [ ] Add browser-level UI tests for live DOM interactions (static UI contract tests and pure helper tests now provide a baseline; browser execution remains outstanding).
 - [ ] Complete final keyboard navigation, focus, and accessible-label review in a live Jira runtime.
 - [ ] Review app presentation and demo flow for Codegeist.
 
