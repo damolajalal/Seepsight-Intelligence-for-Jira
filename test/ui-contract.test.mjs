@@ -86,3 +86,16 @@ test('dashboard record dialog describes its content and focuses a clear close co
   assert.match(html, /aria-describedby="record-dialog-summary"/);
   assert.match(html, /id="record-dialog-close" type="button" aria-label="Close details" autofocus/);
 });
+
+test('related-record navigation restores focus to the current section after closing', async () => {
+  const app = await read('../static/dashboard/app.js');
+  assert.match(app, /let dialogFallbackFocus = null/);
+  assert.match(app, /const focusTarget = dialogOpener\?\.isConnected \? dialogOpener : dialogFallbackFocus/);
+  assert.match(app, /dialogFallbackFocus = document\.querySelector\(\`.nav-item\[data-view=/);
+  assert.match(app, /else titleNode\.focus\(\)/);
+});
+
+test('record dialog title is a programmatic focus target', async () => {
+  const html = await read('../static/dashboard/index.html');
+  assert.match(html, /id="record-dialog-title" tabindex="-1"/);
+});
