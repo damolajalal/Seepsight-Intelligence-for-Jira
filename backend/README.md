@@ -9,7 +9,7 @@ Implemented in this scaffold:
 - Atlassian Forge Invocation Token (FIT) signature and claim validation.
 - Trusted identity extraction from the signed Jira UI invocation (`cloudId`, `principal`, installation ID).
 - Firebase Authentication and Firestore re-validation of linked users and active company membership.
-- A safe liveness endpoint and linked-account context endpoint.
+- A safe liveness endpoint, linked-account context endpoint, account pairing/revocation routes, and audited overview/analysis summary routes.
 - Audited read-only company overview and completed-analysis summary endpoints with bounded results.
 - Unit tests for FIT claim checks and tenant isolation.
 
@@ -73,3 +73,8 @@ Before deployment, review Cloud Run ingress, TLS/domain configuration, rate limi
 The existing Seepsight application now contains the pairing-code issuer. See [its linking guide](https://github.com/damolajalal/seepsight/blob/main/docs/JIRA_ACCOUNT_LINKING.md).
 
 These endpoints are source-scaffolded only. They require Cloud Run deployment, Forge Remote configuration, and Jira UI integration before they can be used.
+
+
+## Browser-to-remote transport
+
+The intended frontend transport is Atlassian's `requestRemote` bridge API. It sends a signed FIT but bypasses the Forge proxy and does not send Atlassian OAuth tokens. The API therefore has a restricted CORS allowlist for Jira Cloud tenant origins and still requires FIT validation on every protected request. The Forge manifest's `remotes` entry and the frontend call will be added only after the Cloud Run HTTPS hostname is deployed and verified.
