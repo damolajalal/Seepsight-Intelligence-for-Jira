@@ -1,49 +1,52 @@
-# Jira ↔ Seepsight identity linking design
+# Jira ↔ Seepsight identity linking
 
-Status: design proposal; no account-linking flow or API is implemented.
+Status: pairing-code issuance and API redemption/revocation exist in source. The Jira UI controls and deployed end-to-end flow are still pending.
 
-## What the existing Seepsight repository establishes
+## Identity model
 
-The current Seepsight application uses Firebase Authentication identities and Firestore company membership. In the existing code, a Firebase UID is used to resolve the user's company workspace, and active membership is checked before returning the company context.
+The existing Seepsight application uses Firebase Authentication identities and Firestore company membership. A Firebase UID resolves the user's company workspace, and active company membership is checked before returning company context.
 
 Relevant existing modules in `damolajalal/seepsight`:
 - `seepsight/company_store.py`: resolves a Firebase UID to an active company and verifies membership/email.
 - `seepsight/firestore_db.py`: server-side Firebase Admin / Firestore access.
-- `seepsight/auth.py`: existing Firebase Authentication sign-in and account lifecycle.
+- `seepsight/auth.py`: Firebase Authentication sign-in and the authenticated Jira pairing-code panel.
+- `seepsight/jira_linking.py`: secure pairing-code issuance.
 
-The Jira app has a different identity system: Atlassian `cloudId` and `accountId`. A Jira project key or user-supplied company name is not a safe tenant identifier.
+The Jira app has a different identity system: Atlassian `cloudId` and the signed FIT `principal` (account ID). A Jira project key or user-supplied company name is not a safe tenant identifier.
 
-## Required account-linking flow
+## Implemented source flow
 
-1. A user opens Seepsight Intelligence inside Jira and chooses **Connect Seepsight account**.
-2. The user is redirected to the official Seepsight account-linking page and signs in through the existing Firebase Authentication flow.
-3. After verifying the Firebase session and active company membership, the Seepsight backend creates a cryptographically random, single-use pairing code with a short expiry (recommended maximum 5 minutes).
-4. The user returns to Jira and confirms the pairing. The Forge resolver sends the pairing code to the Seepsight backend over TLS.
-5. The backend consumes the code atomically and binds the authenticated Atlassian `cloudId` + `accountId` to the verified Firebase UID + company ID.
-6. The backend records the link, consent timestamp, scopes granted, and audit event. The UI displays the linked company/workspace name.
-7. Every subsequent request rechecks the link is active and the Firebase company membership is still active. Revocation or membership removal invalidates access.
+1. User signs in to Seepsight through the existing Firebase Authentication flow. The app verifies the Firebase ID token, checks revocation and verified email, and re-resolves active company membership.
+2. In the authenticated Seepsight sidebar, the user opens **Connect Seepsight to Jira** and generates a one-time code.
+3. Seepsight creates a cryptographically random code with a 10-minute expiry and a 60-second issuance cooldown. Only its SHA-256 hash is stored in `_jira_pairing_codes`; the raw code is displayed in the authenticated Streamlit session.
+4. The Jira API receives the code in the request body through the planned Custom UI `requestRemote` call. The request's Atlassian identity is extracted from the signed Forge Invocation Token, not from client-supplied fields.
+5. The API atomically consumes the pairing document, verifies its expiry and company binding, rechecks Firebase Authentication and active company membership, and creates the link for `cloudId + principal`.
+6. The API writes a company audit event, including the signed Jira actor and optional admin impersonation actor.
+7. Every protected API request re-resolves the active link and Firebase company membership. Revocation or membership removal invalidates access.
+
+The Jira UI pairing form and live connection status are not yet implemented. No live account link has been created.
 
 ## Security requirements
 
 - Pairing codes are single-use, high entropy, short-lived, rate-limited, and stored hashed.
 - Never accept `company_id`, Firebase UID, or Atlassian account ID from the Custom UI as proof of identity.
-- The Forge resolver obtains Atlassian `cloudId` and `accountId` from trusted Forge context.
-- The Seepsight backend validates the Forge app request using a documented server-to-server authentication method; do not rely on an unsigned account ID header or a browser-supplied tenant ID.
-- The backend performs the mapping and membership lookup server-side for every data request.
+- Validate the Forge FIT against Atlassian JWKS, expected issuer, expected audience, expiry, and trusted Forge app ID.
+- Resolve the Atlassian `cloudId` and `principal` from signed UI-module FIT claims.
+- Recheck Firebase Authentication and current company membership on every protected request.
 - Provide explicit disconnect/revoke functionality and audit the event.
 - Do not reuse a Firebase ID token as a permanent Jira integration secret.
 - Never store Firebase refresh tokens or service-account credentials in Jira issue fields, Custom UI storage, logs, or Git.
 - Avoid sending procurement evidence or personal data to Rovo unless the user is authorised and the specific action needs it.
 
-## Backend integration sequence
+## Backend and deployment sequence
 
-1. Add a dedicated HTTPS API service to the existing Seepsight deployment architecture (or a separately secured service) without changing the current Streamlit UI.
-2. Reuse the existing Firebase Admin and Firestore membership logic server-side; do not duplicate a weaker company lookup.
-3. Implement pairing-code creation, redemption, revocation, and audit records.
-4. Add read-only project summary and findings endpoints that resolve company access from the stored identity link.
-5. Add server-side request authentication between Forge and the API, with key rotation and request replay protection.
-6. Add write endpoints only after read access and audit coverage pass security tests.
+1. Deploy the separate FastAPI service to Cloud Run with a dedicated runtime identity and Firestore/Firebase Authentication access.
+2. Configure the Forge app ID in trusted Cloud Run environment configuration.
+3. Add the verified Cloud Run HTTPS hostname to the Forge `remotes` declaration.
+4. Wire the Jira Custom UI pairing form, connection status, overview, and disconnect controls using `requestRemote`.
+5. Run an end-to-end test with a non-production Seepsight account and Jira development site.
+6. Add findings and evidence endpoints only after detector payloads are normalised and tenant isolation tests pass.
 
-## Open decision
+## Current boundary
 
-Before implementation, choose and verify the hosting target and the Forge-to-backend authentication mechanism. The existing Seepsight repository documents Firebase/Firestore usage and Google Secret Manager support, but that does not by itself prove that a production API endpoint is deployed or that Jira identity linking already exists.
+The existing Streamlit Seepsight app remains separate and unchanged outside its new account-linking panel. The API source is implemented but not deployed. No production Jira-to-Seepsight data connection, API hostname, Forge Remote configuration, or live account link exists.
