@@ -8,6 +8,7 @@ const projectChip = document.getElementById('project-chip');
 const connectionLabel = document.getElementById('connection-label');
 const secondaryView = document.getElementById('secondary-view');
 const overviewNodes = [...document.querySelectorAll('.metrics,.content-grid,.table-panel')];
+let dialogOpener = null;
 const labels = { overview: 'Overview', investigations: 'Investigations', findings: 'Findings', suppliers: 'Suppliers', actions: 'Actions' };
 
 const demoRows = {
@@ -162,6 +163,7 @@ function renderTable(viewName) {
 function openRecordDetails(viewName, record) {
   if (!record) return;
   const dialog = document.getElementById('record-dialog');
+  if (!dialog.open) dialogOpener = document.activeElement;
   const titleNode = document.getElementById('record-dialog-title');
   const referenceNode = document.getElementById('record-dialog-reference');
   const summaryNode = document.getElementById('record-dialog-summary');
@@ -234,8 +236,15 @@ document.querySelectorAll('[data-view]').forEach((button) => {
   button.addEventListener('click', () => setView(button.dataset.view));
 });
 
+const recordDialog = document.getElementById('record-dialog');
+recordDialog.addEventListener('close', () => {
+  if (!recordDialog.open) {
+    if (dialogOpener?.isConnected) dialogOpener.focus();
+    dialogOpener = null;
+  }
+});
 document.getElementById('record-dialog-close').addEventListener('click', () => {
-  document.getElementById('record-dialog').close();
+  recordDialog.close();
 });
 
 document.getElementById('record-dialog-related').addEventListener('click', (event) => {
