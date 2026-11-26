@@ -35,6 +35,7 @@ This register is separate from the existing Seepsight platform's master issue re
 - [x] Draft the proposed secure Seepsight-to-Jira API contract and tenant-isolation requirements (`docs/SEEPSIGHT_INTEGRATION_CONTRACT.md`).
 - [x] Inspect and document verified Firestore tenant, analysis, findings, dataset, case-path, and audit-event structures (`docs/EXISTING_SEEPSIGHT_DATA_MODEL.md`).
 - [x] Confirm the existing Firestore access helper is Streamlit-session-dependent and must not be reused as standalone API authentication.
+- [x] Select Atlassian Forge Remote FIT verification as the Forge-to-API authentication direction and document account-linking safeguards (`docs/FORGE_REMOTE_AUTH_DECISION.md`).
 - [ ] Implement a separate Cloud Run API (recommended; not yet deployed) with Firebase Admin initialised through Cloud Run service identity / Application Default Credentials.
 - [ ] Choose and implement a production-safe Forge-to-API request authentication mechanism; no secret or remote is configured yet.
 - [ ] Implement single-use Atlassian-to-Firebase account linking and live tenant mapping.
