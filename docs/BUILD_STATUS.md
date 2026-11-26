@@ -17,11 +17,12 @@ This register is separate from the existing Seepsight platform's master issue re
 
 ## Blocked on Atlassian environment
 
-- [ ] Atlassian account and Forge API token.
+- [ ] Create a scoped Atlassian Forge API token (never commit or share it).
 - [ ] Forge CLI authentication.
 - [ ] Register app and replace placeholder app ID.
-- [ ] Install dependencies and generate UI bundles.
-- [ ] Confirm the GitHub Actions validation workflow passes (production dependency audit, tests, UI build, and Forge lint).
+- [x] Confirm CI can install dependencies and generate both UI bundles.
+- [ ] Confirm GitHub Actions passes dependency reporting, tests, and UI build.
+- [ ] Optionally add `FORGE_EMAIL` and `FORGE_API_TOKEN` as GitHub Actions secrets to enable authenticated Forge lint; otherwise run lint after logging in locally.
 - [ ] Deploy to development environment.
 - [ ] Install on Jira Cloud development/demo site.
 - [ ] Verify project page and issue panel in Jira.
@@ -41,10 +42,10 @@ This register is separate from the existing Seepsight platform's master issue re
 
 ## Known limitations / risks
 
-- The app is source-scaffolded but not deployed or runtime-tested. Unit tests and build/lint checks are now configured in GitHub Actions; their first run must be inspected before treating them as passing.
+- The app is source-scaffolded but not deployed or runtime-tested. CI runs unit tests and builds both Custom UI bundles. Forge lint is conditional on optional GitHub Actions secrets because the CLI requires Atlassian authentication.
 - The app ID in `manifest.yml` is intentionally a placeholder until Forge registration.
-- UI bundle files are generated locally by `npm run build:ui`; the committed build folders currently contain HTML/CSS only.
+- UI JavaScript bundles are generated during CI by `npm run build:ui`; generated bundles are not committed to the repository.
 - All displayed figures and records are illustrative sample content.
 - No Seepsight, Gemini, BigQuery, Firebase, NVIDIA NIM, or Rovo connection is active. The existing Seepsight app is Streamlit-based; a supported API must be implemented before Forge can connect safely.
 - A production dependency audit found 9 transitive advisories in the current Forge dependency tree (5 high, 4 moderate). The audit did not identify a safe non-breaking automatic fix; do not run `npm audit fix --force` blindly. Track and reassess these upstream advisories before release. CI currently blocks critical-severity findings while retaining the audit output.
-- Forge lint is being validated in CI with the CLI analytics prompt explicitly configured; inspect the latest workflow result before marking it complete.
+- The production dependency audit currently reports 9 transitive advisories (5 high, 4 moderate); the CI audit is informational while upstream dependency updates are assessed. Do not apply `npm audit fix --force` without compatibility testing.
