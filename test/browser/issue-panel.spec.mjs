@@ -5,6 +5,8 @@ import { pathToFileURL } from 'node:url';
 const issuePanelUrl = pathToFileURL(resolve('static/issue-panel/build/index.html')).href;
 
 test('issue panel gates local review until every sample document is checked', async ({ page }) => {
+  page.on('pageerror', (error) => console.log('BROWSER PAGE ERROR:', error.message));
+  page.on('console', (message) => { if (message.type() === 'error') console.log('BROWSER CONSOLE ERROR:', message.text()); });
   await page.goto(issuePanelUrl);
   const reviewButton = page.getByRole('button', { name: 'Mark preview reviewed' });
   await expect(reviewButton).toBeDisabled();
