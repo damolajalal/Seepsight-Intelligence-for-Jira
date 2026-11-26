@@ -36,9 +36,14 @@ This register is separate from the existing Seepsight platform's master issue re
 - [x] Inspect and document verified Firestore tenant, analysis, findings, dataset, case-path, and audit-event structures (`docs/EXISTING_SEEPSIGHT_DATA_MODEL.md`).
 - [x] Confirm the existing Firestore access helper is Streamlit-session-dependent and must not be reused as standalone API authentication.
 - [x] Select Atlassian Forge Remote FIT verification as the Forge-to-API authentication direction and document account-linking safeguards (`docs/FORGE_REMOTE_AUTH_DECISION.md`).
-- [ ] Implement a separate Cloud Run API (recommended; not yet deployed) with Firebase Admin initialised through Cloud Run service identity / Application Default Credentials.
-- [ ] Choose and implement a production-safe Forge-to-API request authentication mechanism; no secret or remote is configured yet.
-- [ ] Implement single-use Atlassian-to-Firebase account linking and live tenant mapping.
+- [x] Add an isolated FastAPI backend scaffold with Cloud Run container definition, Firebase Admin/Firestore tenant revalidation, and health/context routes (`backend/`).
+- [x] Add Forge FIT validation against Atlassian JWKS, issuer, expected app audience, and trusted app ID.
+- [x] Add Python CI tests for FIT validation and Firestore tenant isolation.
+- [ ] Implement Firebase-authenticated pairing-code creation, atomic redemption, and revocation.
+- [ ] Deploy the API to Cloud Run with a runtime service identity and verified HTTPS hostname.
+- [x] Select Forge Remote FIT verification as the Forge-to-API authentication direction and add its validator scaffold.
+- [ ] Configure the Forge Remote endpoint after a real API hostname and registered Forge app ID exist.
+- [ ] Implement single-use Atlassian-to-Firebase account linking and live tenant mapping; the API currently denies access when no active link exists.
 - [ ] Normalise detector-specific finding dictionaries into a versioned, bounded API response schema.
 - [ ] Inspect the actual case/action field schema before implementing case or action endpoints.
 - [ ] Add Forge backend egress allowlist for the confirmed Seepsight API host.
@@ -52,7 +57,7 @@ This register is separate from the existing Seepsight platform's master issue re
 
 ## Known limitations / risks
 
-- The app is source-scaffolded but not deployed or runtime-tested. CI runs unit tests and builds both Custom UI bundles. Forge lint is conditional on optional GitHub Actions secrets because the CLI requires Atlassian authentication.
+- The Forge app is source-scaffolded but not deployed or runtime-tested. The separate FastAPI service has source and CI tests, but it is not deployed or connected to production Firestore. CI runs unit tests and builds both Custom UI bundles. Forge lint is conditional on optional GitHub Actions secrets because the CLI requires Atlassian authentication.
 - The app ID in `manifest.yml` is intentionally a placeholder until Forge registration.
 - UI JavaScript bundles are generated during CI by `npm run build:ui`; generated bundles are not committed to the repository.
 - All displayed figures and records are illustrative sample content.
