@@ -5,25 +5,32 @@ modules:
       resolver:
         function: resolver
       title: Seepsight Intelligence
+      layout: blank
   jira:issuePanel:
     - key: seepsight-issue-panel
       resource: issue-panel
       resolver:
         function: resolver
       title: Seepsight Intelligence
+      viewportSize: medium
       icon: https://developer.atlassian.com/platform/forge/images/icons/issue-panel-icon.svg
   function:
     - key: resolver
       handler: index.handler
 resources:
   - key: dashboard
-    path: static/dashboard
+    path: static/dashboard/build
   - key: issue-panel
-    path: static/issue-panel
+    path: static/issue-panel/build
 app:
   id: "<your app id>"
   runtime:
     name: nodejs24.x
+    memoryMB: 256
+    architecture: arm64
+  compatibility:
+    jira:
+      required: true
 permissions:
   scopes:
     - read:jira-work
