@@ -9,7 +9,8 @@ Status: instructions only. No Cloud Run service has been deployed.
 3. Confirm the Firestore database location and choose a Cloud Run region close to it, subject to your organisation's data-residency requirements.
 4. Create a dedicated Cloud Run runtime service account. Grant only the permissions needed to read/write the Seepsight Firestore collections and look up Firebase Authentication users.
 5. Enable Cloud Run, Cloud Build, Artifact Registry, Firestore, and Firebase Authentication APIs for the selected Google Cloud project.
-6. Configure a Firestore TTL policy for pairing-code documents (see below).
+6. Deploy the composite Firestore index in the repository root (`firestore.indexes.json`) for completed-analysis listing.
+7. Configure a Firestore TTL policy for pairing-code documents (see below).
 
 ## Build and deploy
 
@@ -36,6 +37,10 @@ After deployment:
 4. Configure monitoring, error alerts, request limits, and log redaction. Never log bearer tokens, pairing codes, Firebase tokens, or raw procurement evidence.
 5. Update the Forge `remotes` base URL to the verified HTTPS hostname and deploy the Forge app.
 6. Test pairing with a non-production Seepsight account and a Jira development site before using production data.
+
+## Firestore analysis index
+
+The `GET /api/v1/jira/analyses` endpoint queries the company-scoped `analyses` collection by `results_status == complete` and descending `updated_at`. Deploy the composite index in the repository root (`firestore.indexes.json`) to the same Firebase project before using this endpoint. You can deploy it through your existing Firebase CLI configuration or create the matching composite index in the Firestore console.
 
 ## Firestore pairing-code expiry cleanup
 
