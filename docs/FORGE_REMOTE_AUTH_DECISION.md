@@ -11,14 +11,12 @@ Do not invent a shared HMAC secret between Forge and Cloud Run as the primary pr
 
 ## Request flow
 
-1. A Jira Custom UI calls a Forge resolver.
-2. The resolver obtains trusted invocation context from Forge, including the current `accountId` and Jira `cloudId`. It must ignore any client-supplied account ID, Firebase UID, company ID, or role.
-3. The Forge resolver calls the configured remote using `@forge/api` `invokeRemote`.
-4. Forge attaches the FIT. The remote verifies its signature against Atlassian's JWKS, expected issuer `forge/invocation-token`, expected audience equal to the registered Forge app ID, and expiry/time claims.
-5. The remote additionally checks that the FIT `app.id` matches the app ID configured from a trusted deployment setting.
-6. The remote extracts the Jira `cloudId` from the signed FIT context and receives the `accountId` from the server-side Forge resolver payload. This account ID is trusted only because the only supported route to this endpoint is the Forge resolver, which must derive it from Forge context and never accept it from Custom UI arguments.
-7. The remote resolves the stored link `(cloudId, accountId) -> Firebase UID`, then re-reads `users/{uid}`, `companies/{company_id}`, and `companies/{company_id}/members/{uid}` from Firestore. Both company and member must be active and identity/email fields consistent.
-8. The remote scopes every query by the verified company ID and writes an audit event for the verified actor and Jira installation context.
+1. A Jira Custom UI calls the Forge bridge `invokeRemote` directly. This is a UI-module invocation, so the signed FIT contains the trusted Jira `cloudId` and invoking Atlassian `principal` (account ID).
+2. Forge proxies the request and attaches the FIT. The remote verifies its signature against Atlassian's JWKS, expected issuer `forge/invocation-token`, expected audience equal to the registered Forge app ID, and expiry/time claims.
+3. The remote additionally checks that the FIT `app.id` matches the app ID configured from a trusted deployment setting.
+4. The remote extracts both `cloudId` and `principal` from the signed FIT. It must ignore any client-supplied account ID, Firebase UID, company ID, or role.
+5. The remote resolves the stored link `(cloudId, principal) -> Firebase UID`, then re-reads `users/{uid}`, `companies/{company_id}`, and `companies/{company_id}/members/{uid}` from Firestore. Both company and member must be active and identity/email fields consistent.
+6. The remote scopes every query by the verified company ID and writes an audit event for the verified actor and Jira installation context.
 
 ## Important security constraints
 
@@ -30,7 +28,7 @@ Do not invent a shared HMAC secret between Forge and Cloud Run as the primary pr
 - Bind account links to both `cloudId` and `accountId`; use `installationId` as an installation-level identifier/audit attribute. App reinstall can change installation ID, so account links should not depend solely on it.
 - Re-check Firebase user and membership status on every protected API call. Revocation must take effect without waiting for a cached tenant role.
 - Add rate limits, bounded pagination, request size limits, timeouts, and audit logging.
-- If any route is directly callable from a Custom UI in future, it must independently validate all identity claims and must not trust a body accountId supplied by the browser. Prefer routing sensitive calls through the Forge resolver.
+- If any route is directly callable from a Custom UI in future, it must independently validate all identity claims and must not trust a body accountId supplied by the browser. The current API scaffold expects direct UI-module FITs with a signed `principal` claim. If calls are later moved to a backend Forge function, redesign the identity handoff explicitly because backend-function FIT context differs and may contain only `cloudId`.
 
 ## Cloud Run hosting note
 
