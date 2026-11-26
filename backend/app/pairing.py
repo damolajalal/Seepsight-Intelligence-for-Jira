@@ -169,6 +169,11 @@ def revoke_jira_link(
         if not isinstance(uid, str) or not isinstance(company_id, str):
             raise PairingError("The linked account record is invalid.")
 
+        user_snapshot = db.collection("users").document(uid).get(transaction=txn)
+        user = user_snapshot.to_dict() if user_snapshot.exists else {}
+        if user.get("uid") != uid or user.get("company_id") != company_id:
+            raise PairingError("The linked Seepsight account could not be verified.")
+
         company_ref = db.collection("companies").document(company_id)
         company_snapshot = company_ref.get(transaction=txn)
         if not company_snapshot.exists:
