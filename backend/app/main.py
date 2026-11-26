@@ -5,6 +5,7 @@ from functools import lru_cache
 
 import firebase_admin
 from fastapi import Depends, FastAPI, Header, HTTPException, status
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from firebase_admin import auth as firebase_auth
 from firebase_admin import firestore
@@ -20,6 +21,16 @@ app = FastAPI(
     version="0.1.0",
     docs_url=None,
     redoc_url=None,
+)
+
+# requestRemote calls the API directly from Jira Cloud's browser context.
+# CORS only controls browser access; FIT validation remains mandatory.
+app.add_middleware(
+    CORSMiddleware,
+    allow_origin_regex=r"^https://[a-zA-Z0-9-]+\\.atlassian\\.net$",
+    allow_credentials=False,
+    allow_methods=["GET", "POST", "DELETE", "OPTIONS"],
+    allow_headers=["Authorization", "Content-Type"],
 )
 
 
