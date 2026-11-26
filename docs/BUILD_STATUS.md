@@ -38,7 +38,8 @@ This register is separate from the existing Seepsight platform's master issue re
 - [ ] Add evidence references and traceability for every AI explanation.
 - [ ] Add Jira issue creation/comment/action workflows with user confirmation.
 - [ ] Integrate Gemini server-side; never place credentials in browser code.
-- [ ] Evaluate Rovo agent/action integration and required permissions.
+- [x] Research current Forge Rovo Agent/Action capabilities and document a secure evidence-first integration plan (`docs/ROVO_INTEGRATION_PLAN.md`).
+- [ ] Implement Rovo Agent and read-only actions after the Seepsight API and tenant permission model are available.
 - [ ] Evaluate Teamwork Graph access and usefulness.
 
 ## Known limitations / risks
