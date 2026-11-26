@@ -5,11 +5,13 @@ from functools import lru_cache
 
 import firebase_admin
 from fastapi import Depends, FastAPI, Header, HTTPException, status
+from pydantic import BaseModel, Field
 from firebase_admin import auth as firebase_auth
 from firebase_admin import firestore
 
 from .forge_auth import FitValidationError, ForgeIdentity, validate_forge_token
 from .tenant import TenantAccessError, resolve_active_membership
+from .pairing import PairingError, redeem_pairing_code, revoke_jira_link
 
 
 app = FastAPI(
@@ -82,3 +84,60 @@ def jira_context(
         "role": membership["role"],
         "jira_site": identity.cloud_id,
     }
+
+
+class PairingRequest(BaseModel):
+    code: str = Field(min_length=24, max_length=160)
+
+
+@app.post("/api/v1/jira/link")
+def create_jira_link(
+    payload: PairingRequest,
+    identity: ForgeIdentity = Depends(_identity),
+):
+    """Redeem a Seepsight-issued one-time pairing code for this Jira identity."""
+    try:
+        membership = redeem_pairing_code(
+            _firestore_client(),
+            _firebase_auth_client(),
+            identity.cloud_id,
+            identity.account_id,
+            identity.installation_id,
+            payload.code,
+        )
+    except PairingError as exc:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
+    except Exception as exc:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Account linking is temporarily unavailable.",
+        ) from exc
+
+    return {
+        "linked": True,
+        "company_name": membership["company_name"],
+        "role": membership["role"],
+    }
+
+
+@app.delete("/api/v1/jira/link")
+def delete_jira_link(
+    identity: ForgeIdentity = Depends(_identity),
+):
+    """Disconnect the current Atlassian user from the linked Seepsight account."""
+    try:
+        revoked = revoke_jira_link(
+            _firestore_client(),
+            identity.cloud_id,
+            identity.account_id,
+            identity.installation_id,
+        )
+    except PairingError as exc:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=str(exc)) from exc
+    except Exception as exc:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Account disconnection is temporarily unavailable.",
+        ) from exc
+
+    return {"linked": False, "revoked": revoked}
