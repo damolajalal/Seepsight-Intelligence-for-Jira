@@ -31,8 +31,9 @@ This register is separate from the existing Seepsight platform's master issue re
 ## Integration backlog
 
 - [x] Inspect the existing Seepsight repository; no documented public HTTP API was identified in its Streamlit entry point/README.
+- [x] Confirm the existing Seepsight tenant model uses Firebase UID and Firestore company membership; document secure Atlassian-to-Firebase account linking (`docs/IDENTITY_LINKING_DESIGN.md`).
 - [x] Draft the proposed secure Seepsight-to-Jira API contract and tenant-isolation requirements (`docs/SEEPSIGHT_INTEGRATION_CONTRACT.md`).
-- [ ] Approve and implement the actual Seepsight API, authentication, and tenant mapping.
+- [ ] Choose backend hosting and Forge-to-API authentication; implement account linking and the actual Seepsight API/tenant mapping.
 - [ ] Add Forge backend egress allowlist for the confirmed Seepsight API host.
 - [ ] Connect verified findings, exposure values, supplier records, and investigation data.
 - [ ] Add evidence references and traceability for every AI explanation.
