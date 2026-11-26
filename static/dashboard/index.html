@@ -39,6 +39,15 @@
       <footer>Seepsight Intelligence for Jira <span>Evidence-first procurement intelligence · Preview build</span></footer>
     </main>
   </div>
+  <dialog id="record-dialog" class="record-dialog" aria-labelledby="record-dialog-title">
+    <div class="record-dialog-head">
+      <div><span class="eyebrow" id="record-dialog-reference">SAMPLE RECORD</span><h2 id="record-dialog-title">Record details</h2></div>
+      <button class="dialog-close" id="record-dialog-close" type="button" aria-label="Close details">×</button>
+    </div>
+    <p class="record-dialog-summary" id="record-dialog-summary"></p>
+    <div class="record-dialog-fields" id="record-dialog-fields"></div>
+    <p class="record-dialog-note">Illustrative preview only · No production data or Jira changes are made.</p>
+  </dialog>
   <div id="toast" role="status" aria-live="polite"></div>
   <script src="./app.bundle.js"></script>
 </body>
