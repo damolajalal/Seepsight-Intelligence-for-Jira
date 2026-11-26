@@ -51,3 +51,9 @@
 .related-record b{font-size:11px}
 .record-dialog-note{margin:18px 0 0;color:#718696;font-size:9px;line-height:1.5}
 @media(max-width:520px){.table-tools{align-items:flex-end;flex-direction:column;gap:6px}.table-search{width:min(180px,42vw)}.record-dialog{padding:16px}.record-dialog-fields,.record-dialog-related{grid-template-columns:1fr}}
+
+
+/* Skip navigation for keyboard and assistive-technology users */
+.skip-link{position:fixed;z-index:1000;top:10px;left:10px;transform:translateY(-160%);padding:10px 14px;border-radius:7px;background:#dff8ef;color:#10231e;font-size:12px;font-weight:700;text-decoration:none}
+.skip-link:focus{transform:translateY(0);outline:3px solid #55d5ac;outline-offset:3px}
+#main-content:focus{outline:none}
