@@ -36,7 +36,7 @@ def redeem_pairing_code(
 
     Seepsight must create documents in _jira_pairing_codes using the SHA-256
     hash of a cryptographically random code. The document must include
-    firebase_uid, status='pending', expires_at, and created_at. The raw code
+    firebase_uid, company_id, email, status='pending', expires_at, and created_at. The raw code
     is shown once to the signed-in Seepsight user and must never be stored.
     """
     code_hash = pairing_code_hash(code)
