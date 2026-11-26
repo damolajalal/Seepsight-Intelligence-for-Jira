@@ -39,6 +39,7 @@ The current phase is the standalone Jira Forge experience. API deployment, Cloud
 - [x] Add visible keyboard focus across dashboard controls, responsive search layout, accessible record-dialog focus restoration, an explicit accessible name for the refresh control, and skip navigation to the main landmark.
 - [x] Keep the record-details dialog open when following related records, preserving a continuous keyboard review flow.
 - [x] Associate the record dialog with its summary text and move initial focus to its labelled close control.
+- [x] Keep focus within the dialog when switching related records and restore focus to the current navigation section when closing after a view change.
 - [ ] Add browser-level UI tests for live DOM interactions (static UI contract tests and pure helper tests now provide a baseline; browser execution remains outstanding).
 - [ ] Complete final keyboard navigation, focus, and accessible-label review in a live Jira runtime.
 - [ ] Review app presentation and demo flow for Codegeist.
