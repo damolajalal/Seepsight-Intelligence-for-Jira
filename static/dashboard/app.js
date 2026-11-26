@@ -133,9 +133,6 @@ function renderTable(viewName) {
   secondaryView.append(panelHead, wrap, emptyState, note);
   const tableRows = [...secondaryView.querySelectorAll('tbody tr')];
   const resultCount = resultCountNode;
-  const tableRows = [...secondaryView.querySelectorAll('tbody tr')];
-  const resultCount = secondaryView.querySelector('.result-count');
-  const emptyState = secondaryView.querySelector('.empty-state');
   searchInput.addEventListener('input', () => {
     const query = searchInput.value.trim().toLocaleLowerCase();
     let visible = 0;
