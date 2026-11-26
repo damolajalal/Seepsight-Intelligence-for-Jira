@@ -9,14 +9,15 @@ Implemented in this scaffold:
 - Atlassian Forge Invocation Token (FIT) signature and claim validation.
 - Trusted identity extraction from the signed Jira UI invocation (`cloudId`, `principal`, installation ID).
 - Firebase Authentication and Firestore re-validation of linked users and active company membership.
-- A safe liveness endpoint and a linked-account context endpoint.
+- A safe liveness endpoint and linked-account context endpoint.
+- Audited read-only company overview and completed-analysis summary endpoints with bounded results.
 - Unit tests for FIT claim checks and tenant isolation.
 
 Not implemented yet:
 
 - Jira Custom UI pairing-code entry and disconnect controls.
 - Live end-to-end pairing against deployed Cloud Run and production Firestore.
-- Findings/summary/supplier/case endpoints or detector-specific response normalisation.
+- Detailed findings/supplier/case endpoints or detector-specific finding normalisation.
 - Company audit-event integration for Jira reads.
 - A configured Forge Remote hostname, Forge manifest remote, app ID, or Cloud Run deployment.
 
@@ -66,6 +67,8 @@ Before deployment, review Cloud Run ingress, TLS/domain configuration, rate limi
 - `POST /api/v1/jira/link` accepts a short-lived pairing code issued by the authenticated Seepsight sidebar. It validates the Forge FIT, consumes the pairing code transactionally, revalidates the current Firebase user/company/member records, and creates the Atlassian identity link.
 - `DELETE /api/v1/jira/link` revokes the current signed Jira identity link and writes a company audit event.
 - `GET /api/v1/jira/context` returns the linked company display context or 403 when no active link exists.
+- `GET /api/v1/jira/overview` returns the latest completed analysis summary.
+- `GET /api/v1/jira/analyses?limit=20` returns a bounded list of completed analysis summaries. Raw detector finding payloads are not returned.
 
 The existing Seepsight application now contains the pairing-code issuer. See [its linking guide](https://github.com/damolajalal/seepsight/blob/main/docs/JIRA_ACCOUNT_LINKING.md).
 
