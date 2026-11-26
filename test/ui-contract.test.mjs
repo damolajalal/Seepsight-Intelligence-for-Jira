@@ -67,3 +67,16 @@ test('issue panel supports comfortable touch targets and reduced-motion preferen
   assert.match(css, /#review-button\{min-height:40px/);
   assert.match(css, /@media\s*\(prefers-reduced-motion:reduce\)/);
 });
+
+test('dashboard provides keyboard skip navigation and a main landmark target', async () => {
+  const html = await read('../static/dashboard/index.html');
+  const css = await read('../static/dashboard/styles.css');
+  assert.match(html, /<a class="skip-link" href="#main-content">Skip to main content<\/a>/);
+  assert.match(html, /<main class="main" id="main-content" tabindex="-1">/);
+  assert.match(css, /\.skip-link:focus\{transform:translateY\(0\)/);
+});
+
+test('dashboard navigation glyphs are hidden from assistive technology', async () => {
+  const html = await read('../static/dashboard/index.html');
+  assert.equal((html.match(/<span aria-hidden="true">/g) || []).length, 5);
+});
