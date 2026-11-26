@@ -33,7 +33,10 @@ The current phase is the standalone Jira Forge experience. API deployment, Cloud
 - [ ] Add UI-focused tests for navigation, filtering, sample-only actions, and issue-panel review state.
 - [x] Add unit tests for evidence review state and completion rules.
 - [x] Add unit tests for sample workflow relationship resolution.
-- [ ] Review keyboard navigation, focus states, and accessible labels.
+- [x] Render dashboard table content with safe DOM APIs instead of interpolated HTML.
+- [x] Add accessible current-page navigation state and visible keyboard focus for evidence controls.
+- [ ] Add automated UI-focused tests for DOM interactions (current tests cover pure workflow and review helpers).
+- [ ] Complete final keyboard navigation, focus, and accessible-label review.
 - [ ] Review app presentation and demo flow for Codegeist.
 
 ## Blocked on Atlassian environment
