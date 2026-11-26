@@ -79,6 +79,8 @@ def redeem_pairing_code(
         company_id = user.get("company_id")
         if not isinstance(company_id, str) or not company_id.strip():
             raise PairingError("The Seepsight account has no active company workspace.")
+        if pairing.get("company_id") != company_id:
+            raise PairingError("The Seepsight company membership changed. Generate a new Jira code.")
 
         company_ref = db.collection("companies").document(company_id)
         member_ref = company_ref.collection("members").document(uid)
