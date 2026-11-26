@@ -30,13 +30,13 @@ The current phase is the standalone Jira Forge experience. API deployment, Cloud
 - [x] Add issue context loading, warning, and error states.
 - [x] Add responsive issue-panel styling, keyboard focus treatment, comfortable touch targets, and reduced-motion support.
 - [ ] Add empty, loading, error, and narrow-screen states.
-- [x] Add static UI contract tests for navigation semantics, accessible record dialog, sample-only disclosures, evidence progress semantics, safe DOM rendering, and issue-panel touch/motion accessibility.
+- [x] Add static UI contract tests for navigation semantics, accessible record dialog, sample-only disclosures, evidence progress semantics, safe DOM rendering, issue-panel touch/motion accessibility, and dashboard skip navigation.
 - [x] Add unit tests for evidence review state and completion rules.
 - [x] Add unit tests for sample workflow relationship resolution.
 - [x] Extract dashboard record filtering into pure helpers with unit coverage.
 - [x] Render dashboard table content with safe DOM APIs instead of interpolated HTML.
 - [x] Add accessible current-page navigation state and visible keyboard focus for evidence controls.
-- [x] Add visible keyboard focus across dashboard controls, responsive search layout, accessible record-dialog focus restoration, and an explicit accessible name for the refresh control.
+- [x] Add visible keyboard focus across dashboard controls, responsive search layout, accessible record-dialog focus restoration, an explicit accessible name for the refresh control, and skip navigation to the main landmark.
 - [x] Keep the record-details dialog open when following related records, preserving a continuous keyboard review flow.
 - [ ] Add browser-level UI tests for live DOM interactions (static UI contract tests and pure helper tests now provide a baseline; browser execution remains outstanding).
 - [ ] Complete final keyboard navigation, focus, and accessible-label review in a live Jira runtime.
