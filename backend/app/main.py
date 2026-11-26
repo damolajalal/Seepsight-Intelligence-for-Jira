@@ -12,6 +12,7 @@ from firebase_admin import firestore
 from .forge_auth import FitValidationError, ForgeIdentity, validate_forge_token
 from .tenant import TenantAccessError, resolve_active_membership
 from .pairing import PairingError, redeem_pairing_code, revoke_jira_link
+from .workspace import WorkspaceDataError, get_overview, list_analyses
 
 
 app = FastAPI(
@@ -141,3 +142,53 @@ def delete_jira_link(
         ) from exc
 
     return {"linked": False, "revoked": revoked}
+
+
+def _verified_membership(identity: ForgeIdentity) -> dict:
+    try:
+        return resolve_active_membership(
+            _firestore_client(),
+            _firebase_auth_client(),
+            identity.cloud_id,
+            identity.account_id,
+        )
+    except TenantAccessError as exc:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=str(exc)) from exc
+    except Exception as exc:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Seepsight identity verification is temporarily unavailable.",
+        ) from exc
+
+
+@app.get("/api/v1/jira/overview")
+def jira_overview(identity: ForgeIdentity = Depends(_identity)):
+    """Return the linked company's latest completed analysis summary."""
+    membership = _verified_membership(identity)
+    try:
+        return get_overview(_firestore_client(), membership, identity)
+    except WorkspaceDataError as exc:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(exc)) from exc
+    except Exception as exc:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="The Seepsight overview is temporarily unavailable.",
+        ) from exc
+
+
+@app.get("/api/v1/jira/analyses")
+def jira_analyses(
+    limit: int = 20,
+    identity: ForgeIdentity = Depends(_identity),
+):
+    """Return a bounded list of completed analysis summaries for this company."""
+    membership = _verified_membership(identity)
+    try:
+        return list_analyses(_firestore_client(), membership, identity, limit)
+    except ValueError as exc:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
+    except Exception as exc:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="The Seepsight analysis list is temporarily unavailable.",
+        ) from exc
