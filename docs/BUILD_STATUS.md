@@ -28,7 +28,9 @@ This register is separate from the existing Seepsight platform's master issue re
 
 ## Integration backlog
 
-- [ ] Define authenticated Seepsight API contract and tenant mapping.
+- [x] Inspect the existing Seepsight repository; no documented public HTTP API was identified in its Streamlit entry point/README.
+- [x] Draft the proposed secure Seepsight-to-Jira API contract and tenant-isolation requirements (`docs/SEEPSIGHT_INTEGRATION_CONTRACT.md`).
+- [ ] Approve and implement the actual Seepsight API, authentication, and tenant mapping.
 - [ ] Add Forge backend egress allowlist for the confirmed Seepsight API host.
 - [ ] Connect verified findings, exposure values, supplier records, and investigation data.
 - [ ] Add evidence references and traceability for every AI explanation.
@@ -43,5 +45,5 @@ This register is separate from the existing Seepsight platform's master issue re
 - The app ID in `manifest.yml` is intentionally a placeholder until Forge registration.
 - UI bundle files are generated locally by `npm run build:ui`; the committed build folders currently contain HTML/CSS only.
 - All displayed figures and records are illustrative sample content.
-- No Seepsight, Gemini, BigQuery, Firebase, NVIDIA NIM, or Rovo connection is active.
+- No Seepsight, Gemini, BigQuery, Firebase, NVIDIA NIM, or Rovo connection is active. The existing Seepsight app is Streamlit-based; a supported API must be implemented before Forge can connect safely.
 - Node dependency installation and Forge lint have not been run in this environment.
