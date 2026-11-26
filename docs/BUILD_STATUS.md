@@ -23,13 +23,14 @@ The current phase is the standalone Jira Forge experience. API deployment, Cloud
 
 ## Next Forge app work
 
-- [ ] Improve investigation and finding detail experiences using clearly labelled sample data.
+- [x] Add cross-linked investigation, finding, supplier, and action detail navigation using clearly labelled sample data.
 - [x] Add issue-panel evidence checklist with explicit sample-only labels.
 - [x] Add local review toggle with clear no-Jira-write messaging.
 - [x] Add issue context loading, warning, and error states.
 - [x] Add responsive issue-panel styling and keyboard focus treatment.
 - [ ] Add empty, loading, error, and narrow-screen states.
 - [ ] Add UI-focused tests for navigation, filtering, sample-only actions, and issue-panel review state.
+- [x] Add unit tests for sample workflow relationship resolution.
 - [ ] Review keyboard navigation, focus states, and accessible labels.
 - [ ] Review app presentation and demo flow for Codegeist.
 
