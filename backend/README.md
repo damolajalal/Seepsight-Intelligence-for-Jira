@@ -23,6 +23,8 @@ Not implemented yet:
 
 Until a Seepsight-issued pairing code is redeemed, `GET /api/v1/jira/context` correctly returns 403 for users without an active link.
 
+See [DEPLOYMENT.md](DEPLOYMENT.md) for the Cloud Run deployment runbook, runtime identity requirements, Forge Remote configuration sequence, and Firestore TTL cleanup for pairing codes.
+
 ## Local development
 
 Use Python 3.12 or later.
