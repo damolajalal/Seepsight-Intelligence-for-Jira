@@ -28,8 +28,10 @@ The current phase is the standalone Jira Forge experience. API deployment, Cloud
 - [x] Add per-document local review checkboxes, progress indicator, and completion-gated preview review action.
 - [x] Add local review toggle with clear no-Jira-write messaging.
 - [x] Add issue context loading, warning, and error states.
+- [x] Make dashboard refresh distinguish successful context refreshes from failures, prevent overlapping refresh requests, and announce connection-state changes to assistive technology.
 - [x] Add responsive issue-panel styling, keyboard focus treatment, comfortable touch targets, and reduced-motion support.
-- [ ] Add empty, loading, error, and narrow-screen states.
+- [x] Add dashboard and issue-panel narrow-screen layout contract checks; issue-panel loading, warning, and error states are implemented.
+- [ ] Add a true empty-data state when live data is introduced; current sample tables intentionally contain demonstration records.
 - [x] Add static UI contract tests for navigation semantics, accessible record dialog, sample-only disclosures, evidence progress semantics, safe DOM rendering, issue-panel touch/motion accessibility, and dashboard skip navigation.
 - [x] Add unit tests for evidence review state and completion rules.
 - [x] Add unit tests for sample workflow relationship resolution.
