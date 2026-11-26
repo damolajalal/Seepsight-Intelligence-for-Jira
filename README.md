@@ -40,6 +40,10 @@ The Forge-hosted resources are the `static/dashboard/build` and `static/issue-pa
 
 For a demo development site, Forge provides a CLI provisioning flow. Traditional cloud developer sites are also available through [Atlassian Cloud Developer](https://go.atlassian.com/cloud-dev).
 
+## Seepsight backend integration
+
+The existing Seepsight repository is currently a Streamlit application; no documented public HTTP API has been confirmed for this Jira app. The proposed secure API, evidence contract, tenant isolation, and decisions required before connecting are documented in [the integration contract](docs/SEEPSIGHT_INTEGRATION_CONTRACT.md). The Jira app remains in sample-data preview mode until that backend interface is implemented and approved.
+
 ## Security principles
 
 - Never expose API keys, service-account credentials, or database credentials in browser assets or Git.
