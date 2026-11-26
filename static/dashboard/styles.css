@@ -22,3 +22,5 @@
 .record-field b{display:block;color:#e2ebef;font-size:12px;overflow-wrap:anywhere}
 .record-dialog-note{font-size:10px;color:#718696;line-height:1.6;margin:17px 0 0}
 @media(max-width:420px){.record-dialog{padding:16px}.record-dialog-fields{grid-template-columns:1fr}}
+
+.record-dialog-related-section{margin-top:20px}.record-dialog-related-section h3{font-size:11px;color:#9aadb9;font-weight:650;margin:0 0 9px}.record-dialog-related{display:grid;grid-template-columns:1fr 1fr;gap:8px}.related-record{display:grid;gap:5px;text-align:left;padding:11px;background:#0d1720;border:1px solid #263743;border-radius:8px;color:#dce6eb;cursor:pointer;min-width:0}.related-record:hover,.related-record:focus-visible{border-color:#55d5ac;outline:none}.related-record span{font-size:9px;color:#70cdb0;text-transform:uppercase;letter-spacing:.7px}.related-record b{font-size:11px;overflow-wrap:anywhere}.related-record small{font-size:9px;color:#718696}@media(max-width:420px){.record-dialog-related{grid-template-columns:1fr}}
