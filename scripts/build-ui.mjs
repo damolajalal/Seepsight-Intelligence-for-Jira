@@ -1,4 +1,5 @@
 import { copyFile, mkdir } from 'node:fs/promises';
+import { resolve } from 'node:path';
 import { build } from 'esbuild';
 
 const resources = [
@@ -17,6 +18,7 @@ for (const resource of resources) {
     bundle: true,
     platform: 'browser',
     format: 'iife',
+    ...(process.env.FORGE_BRIDGE_MOCK === 'true' ? { alias: { '@forge/bridge': resolve('test/fixtures/forge-bridge.mjs') } } : {}),
     outfile: `${output}/app.bundle.js`
   });
   process.stdout.write(`Built ${resource.name} Custom UI resources.\\n`);
