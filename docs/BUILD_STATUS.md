@@ -41,12 +41,13 @@ This register is separate from the existing Seepsight platform's master issue re
 - [x] Add Python CI tests for FIT validation and Firestore tenant isolation.
 - [x] Add authenticated Seepsight sidebar pairing-code issuance (10-minute expiry, SHA-256 storage, 60-second issuance cooldown) in the existing Seepsight repository.
 - [x] Add API-side transactional pairing-code redemption, active membership revalidation, and link revocation endpoints.
+- [x] Add read-only company overview and completed-analysis summary endpoints with minimal audit events.
 - [ ] Wire the Jira Custom UI pairing-code entry and disconnect controls to the deployed Forge Remote.
 - [ ] Deploy the API to Cloud Run with a runtime service identity and verified HTTPS hostname.
 - [x] Select Forge Remote FIT verification as the Forge-to-API authentication direction and add its validator scaffold.
 - [ ] Configure the Forge Remote endpoint after a real API hostname and registered Forge app ID exist.
 - [ ] Complete end-to-end account linking after Forge Remote deployment and Jira UI wiring; no live pairing has been performed.
-- [ ] Normalise detector-specific finding dictionaries into a versioned, bounded API response schema.
+- [ ] Normalise detector-specific finding dictionaries into a versioned, bounded API response schema; raw finding payloads are intentionally not exposed yet.
 - [ ] Inspect the actual case/action field schema before implementing case or action endpoints.
 - [ ] Add Forge backend egress allowlist for the confirmed Seepsight API host.
 - [ ] Connect verified findings, exposure values, supplier records, and investigation data.
@@ -59,7 +60,7 @@ This register is separate from the existing Seepsight platform's master issue re
 
 ## Known limitations / risks
 
-- The Forge app is source-scaffolded but not deployed or runtime-tested. The separate FastAPI service has source and CI tests, but it is not deployed or connected to production Firestore. CI runs Node unit tests, both Custom UI builds, and Python backend tests; Forge lint remains conditional on optional GitHub Actions secrets. Forge lint is conditional on optional GitHub Actions secrets because the CLI requires Atlassian authentication.
+- The Forge app is source-scaffolded but not deployed or runtime-tested. The separate FastAPI service has source and CI tests, including pairing and safe analysis-summary tests, but it is not deployed or connected to production Firestore. CI runs Node unit tests, both Custom UI builds, and Python backend tests; Forge lint remains conditional on optional GitHub Actions secrets. Forge lint is conditional on optional GitHub Actions secrets because the CLI requires Atlassian authentication.
 - The app ID in `manifest.yml` is intentionally a placeholder until Forge registration.
 - UI JavaScript bundles are generated during CI by `npm run build:ui`; generated bundles are not committed to the repository.
 - All displayed figures and records are illustrative sample content.
