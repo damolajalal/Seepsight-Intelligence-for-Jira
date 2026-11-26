@@ -13,6 +13,7 @@ This register is separate from the existing Seepsight platform's master issue re
 - [x] Dashboard preview navigation for Overview, Investigations, Findings, Suppliers, and Actions.
 - [x] Sample-only action completion interaction.
 - [x] Clear sample-data labels.
+- [x] GitHub Actions workflow added for Node.js 24, unit tests, Custom UI bundling, and Forge lint.
 
 ## Blocked on Atlassian environment
 
@@ -20,9 +21,7 @@ This register is separate from the existing Seepsight platform's master issue re
 - [ ] Forge CLI authentication.
 - [ ] Register app and replace placeholder app ID.
 - [ ] Install dependencies and generate UI bundles.
-- [ ] Run `node --test` and confirm the new health tests pass.
-- [ ] Run `npm run build:ui` and confirm both JavaScript bundles are generated.
-- [ ] Run `forge lint`.
+- [ ] Confirm the GitHub Actions validation workflow passes (tests, UI build, and Forge lint).
 - [ ] Deploy to development environment.
 - [ ] Install on Jira Cloud development/demo site.
 - [ ] Verify project page and issue panel in Jira.
@@ -40,7 +39,7 @@ This register is separate from the existing Seepsight platform's master issue re
 
 ## Known limitations / risks
 
-- The app is source-scaffolded but not deployed or runtime-tested. The new tests have been committed but have not yet been executed in a Node.js environment.
+- The app is source-scaffolded but not deployed or runtime-tested. Unit tests and build/lint checks are now configured in GitHub Actions; their first run must be inspected before treating them as passing.
 - The app ID in `manifest.yml` is intentionally a placeholder until Forge registration.
 - UI bundle files are generated locally by `npm run build:ui`; the committed build folders currently contain HTML/CSS only.
 - All displayed figures and records are illustrative sample content.
