@@ -9,6 +9,7 @@ const connectionLabel = document.getElementById('connection-label');
 const secondaryView = document.getElementById('secondary-view');
 const overviewNodes = [...document.querySelectorAll('.metrics,.content-grid,.table-panel')];
 let dialogOpener = null;
+let dialogFallbackFocus = null;
 const labels = { overview: 'Overview', investigations: 'Investigations', findings: 'Findings', suppliers: 'Suppliers', actions: 'Actions' };
 
 const demoRows = {
@@ -163,7 +164,10 @@ function renderTable(viewName) {
 function openRecordDetails(viewName, record) {
   if (!record) return;
   const dialog = document.getElementById('record-dialog');
-  if (!dialog.open) dialogOpener = document.activeElement;
+  if (!dialog.open) {
+    dialogOpener = document.activeElement;
+    dialogFallbackFocus = document.querySelector('.nav-item[aria-current="page"]');
+  }
   const titleNode = document.getElementById('record-dialog-title');
   const referenceNode = document.getElementById('record-dialog-reference');
   const summaryNode = document.getElementById('record-dialog-summary');
@@ -215,6 +219,7 @@ function openRecordDetails(viewName, record) {
   const relatedSection = document.getElementById('record-dialog-related-section');
   relatedSection.hidden = relatedRecords.length === 0;
   if (!dialog.open) dialog.showModal();
+  else titleNode.focus();
 }
 
 function setView(nextView) {
@@ -239,8 +244,10 @@ document.querySelectorAll('[data-view]').forEach((button) => {
 const recordDialog = document.getElementById('record-dialog');
 recordDialog.addEventListener('close', () => {
   if (!recordDialog.open) {
-    if (dialogOpener?.isConnected) dialogOpener.focus();
+    const focusTarget = dialogOpener?.isConnected ? dialogOpener : dialogFallbackFocus;
+    focusTarget?.focus();
     dialogOpener = null;
+    dialogFallbackFocus = null;
   }
 });
 document.getElementById('record-dialog-close').addEventListener('click', () => {
@@ -255,6 +262,7 @@ document.getElementById('record-dialog-related').addEventListener('click', (even
   const record = demoRows[nextView]?.find((candidate) => candidate[0] === reference);
   if (!record) return;
   setView(nextView);
+  dialogFallbackFocus = document.querySelector(`.nav-item[data-view="${nextView}"]`);
   openRecordDetails(nextView, record);
 });
 
