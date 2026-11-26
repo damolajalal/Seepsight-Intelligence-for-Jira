@@ -1,27 +1,36 @@
 # Seepsight backend integration contract (draft)
 
-Status: proposal only — no live API endpoint or authentication contract has been confirmed.
+Status: source scaffold implemented; not deployed or connected to production Firestore. The Forge Remote FIT contract is selected and documented.
 
 ## What exists today
 
 The existing `damolajalal/seepsight` repository is a Streamlit application. Its current `app.py` configures Streamlit navigation and imports the Seepsight workspace modules. The repository README documents the Streamlit app and a separate Firebase-hosted Hybrid AI companion. This review did not identify a documented public HTTP API for the Jira app to call.
 
-The Jira Forge app must therefore remain in clearly labelled preview mode until a supported backend interface is deliberately implemented and secured. Do not point Forge at the Streamlit page and treat page scraping as an integration.
+The Jira Forge app must remain in clearly labelled preview mode until the API is deployed, the Forge Remote hostname is configured, and end-to-end tenant isolation is verified. Do not point Forge at the Streamlit page or treat page scraping as an integration.
 
-## Proposed server-to-server API
+## API routes implemented in source
 
-The following routes are a design proposal, not existing endpoints:
+| Method | Route | Purpose | Status |
+|---|---|---|---|
+| GET | `/healthz` | Static non-sensitive liveness check | Implemented; no FIT required |
+| GET | `/api/v1/jira/context` | Resolve linked company display context | Implemented; requires valid FIT and active account link |
+| POST | `/api/v1/jira/link` | Redeem Seepsight pairing code | Implemented; requires valid FIT and active Firebase membership |
+| DELETE | `/api/v1/jira/link` | Revoke current Jira identity link | Implemented; requires valid FIT |
+| GET | `/api/v1/jira/overview` | Return latest completed analysis summary | Implemented; audited and company-scoped |
+| GET | `/api/v1/jira/analyses?limit=20` | Return bounded newest-first completed analysis summaries | Implemented; audited and company-scoped |
 
-| Method | Proposed route | Purpose |
+The API source is in `backend/`. These are not live endpoints until the FastAPI service is deployed to Cloud Run and the Forge app is configured with its verified HTTPS hostname.
+
+## Planned API routes
+
+The following routes remain future work, not implemented endpoints:
+
+| Method | Planned route | Purpose |
 |---|---|---|
-| GET | `/api/v1/jira/health` | Verify backend reachability and integration version |
-| GET | `/api/v1/jira/projects/{projectKey}/summary` | Return aggregate procurement exposure and open-work counts |
-| GET | `/api/v1/jira/projects/{projectKey}/findings` | Return paginated, evidence-linked findings |
-| GET | `/api/v1/jira/projects/{projectKey}/suppliers` | Return supplier risk summaries |
-| GET | `/api/v1/jira/projects/{projectKey}/investigations` | Return investigation status and ownership |
-| POST | `/api/v1/jira/projects/{projectKey}/actions` | Create a follow-up action after user confirmation |
-
-The backend owner must approve the final route names, versioning, pagination, filtering, error format, and write semantics before implementation.
+| GET | `/api/v1/jira/findings` | Return paginated, evidence-linked findings after detector schema normalisation |
+| GET | `/api/v1/jira/suppliers` | Return supplier risk summaries after supplier data schema review |
+| GET | `/api/v1/jira/investigations` | Return investigation status and ownership after case schema review |
+| POST | `/api/v1/jira/actions` | Create a follow-up action after user confirmation and permission checks |
 
 ## Required record shape
 
@@ -41,8 +50,9 @@ A Jira view must distinguish potential exposure from confirmed loss, recovered s
 
 ## Authentication and tenant isolation
 
-- Use a server-to-server credential stored as a Forge environment variable/secret; never put it in Custom UI JavaScript, HTML, logs, or Git.
-- Authenticate each Forge request using trusted Forge context and a backend-approved identity mapping.
+- Authenticate every remote request with Atlassian's signed Forge Invocation Token (FIT), validating JWKS signature, issuer, audience, expiry, and trusted app ID.
+- Use `requestRemote` from the Custom UI; it sends the FIT but does not send Atlassian OAuth tokens. Keep the CORS allowlist restricted to Jira/Forge app origins.
+- Resolve `(cloudId, principal)` to a Firebase UID using a one-time pairing code; never trust identity or tenant fields supplied by the browser.
 - Derive tenant/workspace access on the server. Never trust a tenant ID supplied only by the browser.
 - Enforce least privilege, tenant isolation, request timeouts, rate limits, and audit logging.
 - Add only the confirmed backend hostname to Forge's outbound egress allowlist.
@@ -56,8 +66,8 @@ Rovo integration is a separate Atlassian-native workstream. It must use supporte
 
 ## Decisions required before connecting
 
-1. Confirm whether a backend API will be added to the existing Seepsight deployment or hosted as a separate service.
-2. Approve the API hostname, TLS, authentication method, and credential rotation process.
+1. Deploy the separate FastAPI service to Cloud Run and confirm its HTTPS hostname, region, and runtime service identity.
+2. Register the Forge app once, pin its app ID in Cloud Run configuration, and configure the Forge `remotes` entry.
 3. Define Jira site/project to Seepsight tenant/workspace mapping.
 4. Approve read and write permissions, including who may create or update Seepsight actions.
 5. Confirm which evidence links can be safely opened from Jira and how access is rechecked.
@@ -80,11 +90,11 @@ The existing Firebase Admin client reads Streamlit secrets, and access verificat
 
 ## Recommended implementation boundary
 
-Use a separate Cloud Run API service, leaving the existing Streamlit app unchanged. Start with health, aggregate project summary, and paginated read-only findings. The service should own Firebase Admin initialisation, Atlassian account-link resolution, tenant checks, response normalisation, rate limits, and audit events. Add supplier, case, and write endpoints only after their underlying source schemas and permissions are verified.
+Use a separate Cloud Run API service, leaving the existing Streamlit app unchanged. The FastAPI scaffold now owns Firebase Admin initialisation, FIT verification, Atlassian account linking, tenant revalidation, minimal overview/analysis summaries, and audit events. Detailed findings, suppliers, cases, and write endpoints remain blocked until their schemas and permissions are verified.
 
-This is an architecture recommendation, not an implemented or deployed service. No API hostname, Forge remote, service credential, or live identity link has been configured.
+The API and pairing code issuer exist in source, but no API hostname, Forge remote, Cloud Run deployment, live identity link, or production procurement-data connection has been configured.
 
 
 ## Forge-to-API authentication decision
 
-The selected implementation direction is Atlassian Forge Remote with signed Forge Invocation Token (FIT) verification, rather than a custom shared HMAC credential. The full decision, including trusted resolver context, JWKS validation, tenant checks, Cloud Run notes, and single-use Firebase account pairing, is recorded in [FORGE_REMOTE_AUTH_DECISION.md](FORGE_REMOTE_AUTH_DECISION.md). This is a design decision only; the remote and service are not yet configured.
+The selected implementation direction is Atlassian Forge Remote with signed Forge Invocation Token (FIT) verification, rather than a custom shared HMAC credential. The full decision, including trusted resolver context, JWKS validation, tenant checks, Cloud Run notes, and single-use Firebase account pairing, is recorded in [FORGE_REMOTE_AUTH_DECISION.md](FORGE_REMOTE_AUTH_DECISION.md). The FIT validator and requestRemote-compatible CORS policy exist in source; the Forge remote hostname and manifest configuration remain pending Cloud Run deployment.
