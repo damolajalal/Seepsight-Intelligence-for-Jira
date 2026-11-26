@@ -64,3 +64,22 @@ Rovo integration is a separate Atlassian-native workstream. It must use supporte
 6. Agree retention, audit, and data-minimisation requirements.
 
 Until these decisions are complete, Jira uses sample records only and must display the preview notice.
+
+
+## Verified source data model (2026-11-26)
+
+A source review of `damolajalal/seepsight` confirmed the tenant and workspace paths documented in [EXISTING_SEEPSIGHT_DATA_MODEL.md](EXISTING_SEEPSIGHT_DATA_MODEL.md).
+
+- Tenant identity resolves from `users/{uid}` to `company_id`, then validates `companies/{company_id}` and `companies/{company_id}/members/{uid}`. Company and member status must both be active, and UID/email consistency is checked.
+- Completed analysis metadata is stored at `companies/{company_id}/analyses/{analysis_id}`.
+- Findings are stored at `companies/{company_id}/analyses/{analysis_id}/findings/{finding_id}`; findings are detector-defined dictionaries, so a stable API response schema still needs a normalisation layer.
+- Dataset records and source records are stored under `companies/{company_id}/datasets/{dataset_id}`.
+- A company-scoped `cases` collection and `audit_events` collection exist. The case document field schema and lifecycle have not yet been verified.
+
+The existing Firebase Admin client reads Streamlit secrets, and access verification depends on Streamlit session state. A standalone API must use its own Firebase Admin initialisation (prefer Cloud Run service identity / Application Default Credentials) and must re-check the existing Firestore membership model. It must not import the Streamlit session-dependent access function as its API authorization boundary.
+
+## Recommended implementation boundary
+
+Use a separate Cloud Run API service, leaving the existing Streamlit app unchanged. Start with health, aggregate project summary, and paginated read-only findings. The service should own Firebase Admin initialisation, Atlassian account-link resolution, tenant checks, response normalisation, rate limits, and audit events. Add supplier, case, and write endpoints only after their underlying source schemas and permissions are verified.
+
+This is an architecture recommendation, not an implemented or deployed service. No API hostname, Forge remote, service credential, or live identity link has been configured.
