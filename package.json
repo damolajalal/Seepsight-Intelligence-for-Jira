@@ -7,7 +7,8 @@
     "build:ui": "esbuild static/dashboard/app.js --bundle --outfile=static/dashboard/build/app.bundle.js --format=iife && esbuild static/issue-panel/app.js --bundle --outfile=static/issue-panel/build/app.bundle.js --format=iife",
     "lint": "forge lint",
     "test": "node --test",
-    "start": "forge tunnel"
+    "start": "forge tunnel",
+    "test:browser": "playwright test"
   },
   "dependencies": {
     "@forge/api": "latest",
@@ -16,6 +17,7 @@
   },
   "devDependencies": {
     "@forge/cli": "latest",
-    "esbuild": "latest"
+    "esbuild": "latest",
+    "@playwright/test": "^1.56.1"
   }
 }
