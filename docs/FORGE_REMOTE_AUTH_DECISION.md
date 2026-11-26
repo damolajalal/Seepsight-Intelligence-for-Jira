@@ -5,14 +5,14 @@ Status: selected technical direction for implementation; not yet configured or t
 
 ## Decision
 
-Use **Atlassian Forge Remote** to call the separate Seepsight API. The Forge backend must use the supported `invokeRemote` API. The API must validate the signed Forge Invocation Token (FIT) on every request using Atlassian's published JWKS.
+Use **Atlassian Forge Remote** to call the separate Seepsight API. Use the frontend `requestRemote` bridge API for this remote because the Seepsight API does not need Atlassian REST OAuth tokens and the existing Forge UI modules already use local resolver functions. `requestRemote` sends the signed Forge Invocation Token (FIT), but calls the remote directly from the browser rather than proxying through Forge. The API must validate the FIT on every request using Atlassian's published JWKS.
 
 Do not invent a shared HMAC secret between Forge and Cloud Run as the primary proof of Atlassian origin. Forge already supplies a signed, short-lived invocation token designed for this purpose.
 
 ## Request flow
 
-1. A Jira Custom UI calls the Forge bridge `invokeRemote` directly. This is a UI-module invocation, so the signed FIT contains the trusted Jira `cloudId` and invoking Atlassian `principal` (account ID).
-2. Forge proxies the request and attaches the FIT. The remote verifies its signature against Atlassian's JWKS, expected issuer `forge/invocation-token`, expected audience equal to the registered Forge app ID, and expiry/time claims.
+1. A Jira Custom UI calls `requestRemote` using the configured remote key. The signed FIT contains the trusted Jira `context.cloudId` and invoking Atlassian `principal` (account ID) for UI-module invocations.
+2. The browser sends the request directly to the remote; Forge attaches the FIT. The remote verifies its signature against Atlassian's JWKS, expected issuer `forge/invocation-token`, expected audience equal to the registered Forge app ID, and expiry/time claims.
 3. The remote additionally checks that the FIT `app.id` matches the app ID configured from a trusted deployment setting.
 4. The remote extracts both `cloudId` and `principal` from the signed FIT. It must ignore any client-supplied account ID, Firebase UID, company ID, or role.
 5. The remote resolves the stored link `(cloudId, principal) -> Firebase UID`, then re-reads `users/{uid}`, `companies/{company_id}`, and `companies/{company_id}/members/{uid}` from Firestore. Both company and member must be active and identity/email fields consistent.
@@ -29,6 +29,10 @@ Do not invent a shared HMAC secret between Forge and Cloud Run as the primary pr
 - Re-check Firebase user and membership status on every protected API call. Revocation must take effect without waiting for a cached tenant role.
 - Add rate limits, bounded pagination, request size limits, timeouts, and audit logging.
 - If any route is directly callable from a Custom UI in future, it must independently validate all identity claims and must not trust a body accountId supplied by the browser. The current API scaffold expects direct UI-module FITs with a signed `principal` claim. If calls are later moved to a backend Forge function, redesign the identity handoff explicitly because backend-function FIT context differs and may contain only `cloudId`.
+
+## Frontend request considerations
+
+Because `requestRemote` bypasses the Forge proxy, the Cloud Run API must return a narrowly scoped CORS policy for Jira Cloud origins and permit the `Authorization` and `Content-Type` headers. CORS is not an authorization control: every protected request still requires a valid FIT. `requestRemote` does not include Atlassian app-user or app-system OAuth tokens; that is acceptable for the current Seepsight API, which derives its authorization only from the signed FIT and Firebase/Firestore membership. If future remote calls need Atlassian REST APIs, revisit the architecture and use the documented frontend `invokeRemote` endpoint chain with the appropriate scopes.
 
 ## Cloud Run hosting note
 
