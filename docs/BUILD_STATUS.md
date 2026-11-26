@@ -38,7 +38,7 @@ This register is separate from the existing Seepsight platform's master issue re
 - [x] Select Atlassian Forge Remote FIT verification as the Forge-to-API authentication direction and document account-linking safeguards (`docs/FORGE_REMOTE_AUTH_DECISION.md`).
 - [x] Add an isolated FastAPI backend scaffold with Cloud Run container definition, Firebase Admin/Firestore tenant revalidation, and health/context routes (`backend/`).
 - [x] Add Forge FIT validation against Atlassian JWKS, issuer, expected app audience, and trusted app ID.
-- [x] Add Python CI tests for FIT validation and Firestore tenant isolation.
+- [x] Add Python CI tests for FIT validation, Firestore tenant isolation, pairing-code hashing/redemption/replay rejection, and safe analysis summaries.
 - [x] Add authenticated Seepsight sidebar pairing-code issuance (10-minute expiry, SHA-256 storage, 60-second issuance cooldown) in the existing Seepsight repository.
 - [x] Add API-side transactional pairing-code redemption, active membership revalidation, and link revocation endpoints.
 - [x] Add read-only company overview and completed-analysis summary endpoints with minimal audit events.
