@@ -30,6 +30,7 @@ def redeem_pairing_code(
     account_id: str,
     installation_id: str,
     code: str,
+    actor_account_id: str | None = None,
 ) -> dict:
     """Atomically consume a pairing code and create the Atlassian identity link.
 
@@ -133,7 +134,7 @@ def redeem_pairing_code(
             "actor_email": user_email,
             "atlassian_cloud_id": cloud_id,
             "atlassian_account_id": account_id,
-            "atlassian_actor_account_id": getattr(identity, "actor_account_id", None),
+            "atlassian_actor_account_id": actor_account_id,
             "atlassian_installation_id": installation_id,
             "created_at": now,
         })
@@ -151,6 +152,7 @@ def revoke_jira_link(
     cloud_id: str,
     account_id: str,
     installation_id: str,
+    actor_account_id: str | None = None,
 ) -> bool:
     """Revoke the current Jira user link and write a company audit event."""
     link_ref = db.collection("_jira_account_links").document(
