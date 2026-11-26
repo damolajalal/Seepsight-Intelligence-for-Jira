@@ -37,6 +37,7 @@ The current phase is the standalone Jira Forge experience. API deployment, Cloud
 - [x] Render dashboard table content with safe DOM APIs instead of interpolated HTML.
 - [x] Add accessible current-page navigation state and visible keyboard focus for evidence controls.
 - [x] Add visible keyboard focus across dashboard controls, responsive search layout, accessible record-dialog focus restoration, and an explicit accessible name for the refresh control.
+- [x] Keep the record-details dialog open when following related records, preserving a continuous keyboard review flow.
 - [ ] Add browser-level UI tests for live DOM interactions (static UI contract tests and pure helper tests now provide a baseline; browser execution remains outstanding).
 - [ ] Complete final keyboard navigation, focus, and accessible-label review in a live Jira runtime.
 - [ ] Review app presentation and demo flow for Codegeist.
