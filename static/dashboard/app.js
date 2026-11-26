@@ -1,4 +1,5 @@
 import { view, invoke } from '@forge/bridge';
+import { getRelatedRecords } from './workflow-links.mjs';
 
 const title = document.getElementById('page-title');
 const toast = document.getElementById('toast');
@@ -97,7 +98,6 @@ function renderTable(viewName) {
   });
 }
 
-
 function openRecordDetails(viewName, record) {
   if (!record) return;
   const dialog = document.getElementById('record-dialog');
@@ -105,6 +105,7 @@ function openRecordDetails(viewName, record) {
   const referenceNode = document.getElementById('record-dialog-reference');
   const summaryNode = document.getElementById('record-dialog-summary');
   const detailNode = document.getElementById('record-dialog-fields');
+  const relatedNode = document.getElementById('record-dialog-related');
   const descriptions = {
     investigations: ['Investigation', 'Supplier', 'Risk level', 'Current status'],
     findings: ['Finding', 'Category', 'Risk level', 'Review status'],
@@ -130,6 +131,26 @@ function openRecordDetails(viewName, record) {
     item.append(key, value);
     detailNode.append(item);
   });
+
+  relatedNode.replaceChildren();
+  const relatedRecords = getRelatedRecords(viewName, record[0], demoRows);
+  relatedRecords.forEach((related) => {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'related-record';
+    button.dataset.relatedView = related.view;
+    button.dataset.relatedReference = related.reference;
+    const relation = document.createElement('span');
+    relation.textContent = related.relationship;
+    const name = document.createElement('b');
+    name.textContent = related.title;
+    const ref = document.createElement('small');
+    ref.textContent = related.reference;
+    button.append(relation, name, ref);
+    relatedNode.append(button);
+  });
+  const relatedSection = document.getElementById('record-dialog-related-section');
+  relatedSection.hidden = relatedRecords.length === 0;
   dialog.showModal();
 }
 
@@ -151,6 +172,18 @@ document.querySelectorAll('[data-view]').forEach((button) => {
 
 document.getElementById('record-dialog-close').addEventListener('click', () => {
   document.getElementById('record-dialog').close();
+});
+
+document.getElementById('record-dialog-related').addEventListener('click', (event) => {
+  const button = event.target.closest('[data-related-view]');
+  if (!button) return;
+  const nextView = button.dataset.relatedView;
+  const reference = button.dataset.relatedReference;
+  const record = demoRows[nextView]?.find((candidate) => candidate[0] === reference);
+  if (!record) return;
+  document.getElementById('record-dialog').close();
+  setView(nextView);
+  openRecordDetails(nextView, record);
 });
 
 document.getElementById('refresh').addEventListener('click', async () => {
