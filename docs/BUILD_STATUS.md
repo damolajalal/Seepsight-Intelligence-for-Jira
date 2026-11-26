@@ -36,8 +36,9 @@ The current phase is the standalone Jira Forge experience. API deployment, Cloud
 - [x] Extract dashboard record filtering into pure helpers with unit coverage.
 - [x] Render dashboard table content with safe DOM APIs instead of interpolated HTML.
 - [x] Add accessible current-page navigation state and visible keyboard focus for evidence controls.
+- [x] Add visible keyboard focus across dashboard controls, responsive search layout, and accessible record-dialog focus restoration.
 - [ ] Add browser-level UI tests for DOM interactions (pure filtering, workflow relationships, and review-state helpers have unit coverage).
-- [ ] Complete final keyboard navigation, focus, and accessible-label review.
+- [ ] Complete final keyboard navigation, focus, and accessible-label review in a live Jira runtime.
 - [ ] Review app presentation and demo flow for Codegeist.
 
 ## Blocked on Atlassian environment
