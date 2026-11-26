@@ -11,7 +11,7 @@ Implemented in this scaffold:
 - Firebase Authentication and Firestore re-validation of linked users and active company membership.
 - A safe liveness endpoint, linked-account context endpoint, account pairing/revocation routes, and audited overview/analysis summary routes.
 - Audited read-only company overview and completed-analysis summary endpoints with bounded results.
-- Unit tests for FIT claim checks and tenant isolation.
+- Unit tests for FIT claim checks, tenant isolation, pairing-code hashing/redemption/replay rejection, and safe analysis summaries.
 
 Not implemented yet:
 
