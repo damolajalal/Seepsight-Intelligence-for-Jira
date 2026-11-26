@@ -22,6 +22,7 @@ class ForgeIdentity:
     account_id: str
     installation_id: str
     environment_id: str | None
+    actor_account_id: str | None
 
 
 def validate_forge_token(
@@ -72,6 +73,7 @@ def validate_forge_token(
 
     environment = app_claim.get("environment")
     environment_id = environment.get("id") if isinstance(environment, dict) else None
+    actor_account_id = claims.get("actorAccountId")
 
     return ForgeIdentity(
         app_id=expected_app_id,
@@ -79,4 +81,5 @@ def validate_forge_token(
         account_id=account_id,
         installation_id=installation_id,
         environment_id=environment_id if isinstance(environment_id, str) else None,
+        actor_account_id=actor_account_id if isinstance(actor_account_id, str) else None,
     )
