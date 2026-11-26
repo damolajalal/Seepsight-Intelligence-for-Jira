@@ -31,3 +31,11 @@ h2{font-size:14px;margin:7px 0 11px}
 footer{font-size:9px;color:#6e8492;padding:4px 2px;line-height:1.5}
 [hidden]{display:none!important}
 @media(max-width:430px){body{padding:12px}.issue,.evidence,.next-step{padding:12px}.evidence-row{align-items:flex-start}.evidence-state{font-size:8px}.review-controls{align-items:flex-start;flex-direction:column;gap:8px}}
+
+
+/* Comfortable touch targets and reduced-motion support */
+.evidence-check input{width:18px;height:18px}
+#review-button{min-height:40px;padding-inline:14px}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
