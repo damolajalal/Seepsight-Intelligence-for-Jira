@@ -8,7 +8,8 @@
     "lint": "forge lint",
     "test": "node --test test/*.test.mjs",
     "start": "forge tunnel",
-    "test:browser": "playwright test"
+    "test:browser": "playwright test",
+    "build:ui:test": "FORGE_BRIDGE_MOCK=true node scripts/build-ui.mjs"
   },
   "dependencies": {
     "@forge/api": "latest",
