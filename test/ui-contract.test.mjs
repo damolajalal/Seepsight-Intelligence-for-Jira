@@ -60,3 +60,10 @@ test('interactive apps avoid injecting record content through innerHTML', async 
   assert.doesNotMatch(dashboard, /\.innerHTML\s*=/);
   assert.doesNotMatch(issuePanel, /\.innerHTML\s*=/);
 });
+
+test('issue panel supports comfortable touch targets and reduced-motion preferences', async () => {
+  const css = await read('../static/issue-panel/styles.css');
+  assert.match(css, /\.evidence-check input\{width:18px;height:18px\}/);
+  assert.match(css, /#review-button\{min-height:40px/);
+  assert.match(css, /@media\s*\(prefers-reduced-motion:reduce\)/);
+});
