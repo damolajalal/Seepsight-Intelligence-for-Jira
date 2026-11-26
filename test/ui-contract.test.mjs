@@ -99,3 +99,32 @@ test('record dialog title is a programmatic focus target', async () => {
   const html = await read('../static/dashboard/index.html');
   assert.match(html, /id="record-dialog-title" tabindex="-1"/);
 });
+
+
+test('dashboard refresh reports failures and prevents overlapping requests', async () => {
+  const app = await read('../static/dashboard/app.js');
+  assert.match(app, /const refreshed = await loadContext\(\)/);
+  assert.match(app, /Could not refresh Jira context/);
+  assert.match(app, /refreshButton\.disabled = true/);
+  assert.match(app, /refreshButton\.setAttribute\('aria-busy', 'true'\)/);
+  assert.match(app, /refreshButton\.disabled = false/);
+  assert.match(app, /refreshButton\.removeAttribute\('aria-busy'\)/);
+  assert.match(app, /return true;[\s\S]*catch \(error\)[\s\S]*return false;/);
+});
+
+test('dashboard connection state is announced to assistive technology', async () => {
+  const html = await read('../static/dashboard/index.html');
+  assert.match(html, /id="connection-label" role="status" aria-live="polite"/);
+});
+
+test('dashboard and issue panel define narrow-screen layouts', async () => {
+  const [dashboard, issuePanel] = await Promise.all([
+    read('../static/dashboard/styles.css'),
+    read('../static/issue-panel/styles.css')
+  ]);
+  assert.match(dashboard, /@media\(max-width:620px\)/);
+  assert.match(dashboard, /\.shell\{display:block\}/);
+  assert.match(dashboard, /\.nav\{display:flex;overflow-x:auto/);
+  assert.match(issuePanel, /@media\(max-width:430px\)/);
+  assert.match(issuePanel, /\.review-controls\{align-items:flex-start;flex-direction:column/);
+});
