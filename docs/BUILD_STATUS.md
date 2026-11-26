@@ -43,6 +43,7 @@ This register is separate from the existing Seepsight platform's master issue re
 - [x] Add API-side transactional pairing-code redemption, active membership revalidation, and link revocation endpoints.
 - [x] Add read-only company overview and completed-analysis summary endpoints with minimal audit events.
 - [x] Add restricted CORS support for Jira tenant and Forge app iframe origins used by `requestRemote`.
+- [x] Document Cloud Run deployment, runtime identity, Forge Remote setup, and Firestore pairing-code TTL cleanup (`backend/DEPLOYMENT.md`).
 - [x] Include optional Atlassian impersonation actor identity in link and read audit records.
 - [ ] Wire the Jira Custom UI pairing-code entry and disconnect controls to the deployed Forge Remote.
 - [ ] Deploy the API to Cloud Run with a runtime service identity and verified HTTPS hostname.
