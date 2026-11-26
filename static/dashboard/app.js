@@ -47,7 +47,7 @@ function renderTable(viewName) {
     suppliers: ['REFERENCE','SUPPLIER','OPEN ITEMS','EXPOSURE','STATUS'],
     actions: ['REFERENCE','ACTION','OWNER','DUE','STATUS']
   }[viewName];
-  const header = [...headings, 'DETAILS'].map((heading) => `<th>${heading}</th>`).join('');
+  const header = headings.map((heading) => `<th>${heading}</th>`).join('');
   const body = rows.map((row, index) => {
     const cells = row.map((cell, cellIndex) => {
       if (cellIndex === 3 && viewName !== 'actions') {
@@ -63,9 +63,10 @@ function renderTable(viewName) {
     return `<tr>${cells}${action}${detail}</tr>`;
   }).join('');
   const actionHeader = viewName === 'actions' ? '<th>UPDATE</th>' : '';
+  const detailHeader = '<th>DETAILS</th>';
   secondaryView.innerHTML = `
     <div class="panel-head"><div><span class="eyebrow">PREVIEW DATA · NOT LIVE</span><h2>${labels[viewName]}</h2></div><div class="table-tools"><input class="table-search" type="search" aria-label="Filter ${labels[viewName]}" placeholder="Filter records…"><span class="result-count">${rows.length} records</span></div></div>
-    <div class="table-wrap"><table><thead><tr>${header}${actionHeader}</tr></thead><tbody>${body}</tbody></table></div>
+    <div class="table-wrap"><table><thead><tr>${header}${actionHeader}${detailHeader}</tr></thead><tbody>${body}</tbody></table></div>
     <p class="empty-state" hidden>No matching sample records.</p>
     <p class="view-note">These sample records demonstrate the intended workflow. Verified Seepsight records will replace them after the secure backend connection is configured.</p>`;
   const searchInput = secondaryView.querySelector('.table-search');
@@ -89,7 +90,7 @@ function renderTable(viewName) {
   secondaryView.querySelectorAll('[data-complete]').forEach((button) => {
     button.addEventListener('click', () => {
       const row = button.closest('tr');
-      row.lastElementChild.innerHTML = '<span class="status">Completed locally</span>';
+      row.lastElementChild.previousElementSibling.innerHTML = '<span class="status">Completed locally</span>';
       button.remove();
       notify('Sample action marked complete in this preview only.');
     });
@@ -146,6 +147,10 @@ function setView(nextView) {
 
 document.querySelectorAll('[data-view]').forEach((button) => {
   button.addEventListener('click', () => setView(button.dataset.view));
+});
+
+document.getElementById('record-dialog-close').addEventListener('click', () => {
+  document.getElementById('record-dialog').close();
 });
 
 document.getElementById('refresh').addEventListener('click', async () => {
