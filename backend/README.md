@@ -18,7 +18,7 @@ Not implemented yet:
 - Jira Custom UI pairing-code entry and disconnect controls.
 - Live end-to-end pairing against deployed Cloud Run and production Firestore.
 - Detailed findings/supplier/case endpoints or detector-specific finding normalisation.
-- Company audit-event integration for Jira reads.
+- Audit events for linked-account context reads; overview and analysis-list reads are already audited.
 - A configured Forge Remote hostname, Forge manifest remote, app ID, or Cloud Run deployment.
 
 Until a Seepsight-issued pairing code is redeemed, `GET /api/v1/jira/context` correctly returns 403 for users without an active link.
