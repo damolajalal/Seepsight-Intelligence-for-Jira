@@ -14,6 +14,11 @@ The current phase is the standalone Jira Forge experience. API deployment, Cloud
 - [x] Forge project page and issue panel module declarations.
 - [x] Custom UI build directories and HTML/CSS entry points.
 - [x] Forge resolver for health, project context, and issue details.
+- [x] Validate Jira issue keys before making issue requests.
+- [x] Convert Jira permission, missing-issue, rate-limit, and service failures into safe user-facing messages.
+- [x] Normalise Jira issue responses to an explicit field allowlist and bound returned text.
+- [x] Handle network failures, unreadable JSON responses, and incomplete issue payloads without exposing raw exceptions.
+- [x] Add unit coverage for issue-key validation, safe error mapping, response allowlisting, malformed payloads, and text bounds.
 - [x] Dashboard preview navigation for Overview, Investigations, Findings, Suppliers, and Actions.
 - [x] Responsive, accessible client-side filtering for preview tables.
 - [x] Sample-only action completion interaction.
