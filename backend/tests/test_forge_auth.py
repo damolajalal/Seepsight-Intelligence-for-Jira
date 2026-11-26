@@ -24,6 +24,7 @@ def test_valid_fit_requires_signed_jira_context(monkeypatch):
         },
         "context": {"cloudId": "jira-cloud-123"},
         "principal": "atlassian-account-456",
+        "actorAccountId": "admin-account-789",
     }
 
     def fake_decode(token, key, **kwargs):
@@ -42,6 +43,7 @@ def test_valid_fit_requires_signed_jira_context(monkeypatch):
     assert identity.account_id == "atlassian-account-456"
     assert identity.installation_id == "installation-123"
     assert identity.app_id == "trusted-app-id"
+    assert identity.actor_account_id == "admin-account-789"
 
 
 def test_rejects_wrong_app_id(monkeypatch):
