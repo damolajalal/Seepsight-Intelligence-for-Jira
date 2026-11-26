@@ -35,13 +35,13 @@ jobs:
       - name: Build Custom UI bundles
         run: npm run build:ui
 
-      - name: Validate Forge manifest (requires optional Atlassian secrets)
-        if: ${{ env.FORGE_EMAIL != '' && env.FORGE_API_TOKEN != '' }}
+      - name: Validate Forge manifest when Atlassian secrets are configured
         env:
           FORGE_EMAIL: ${{ secrets.FORGE_EMAIL }}
           FORGE_API_TOKEN: ${{ secrets.FORGE_API_TOKEN }}
-        run: npx forge lint
-
-      - name: Explain skipped authenticated Forge lint
-        if: ${{ env.FORGE_EMAIL == '' || env.FORGE_API_TOKEN == '' }}
-        run: echo "Forge lint skipped. Add FORGE_EMAIL and FORGE_API_TOKEN as GitHub Actions secrets to enable authenticated manifest validation."
+        run: |
+          if [ -n "$FORGE_EMAIL" ] && [ -n "$FORGE_API_TOKEN" ]; then
+            npx forge lint
+          else
+            echo "Forge lint skipped. Add FORGE_EMAIL and FORGE_API_TOKEN as GitHub Actions secrets to enable authenticated manifest validation."
+          fi
