@@ -52,6 +52,10 @@ class Query:
     def __init__(self, snapshots):
         self.snapshots = snapshots
 
+    def order_by(self, field, direction=None):
+        assert field == "updated_at"
+        return self
+
     def limit(self, count):
         self.count = count
         return self
