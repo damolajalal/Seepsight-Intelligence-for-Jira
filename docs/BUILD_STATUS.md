@@ -20,6 +20,8 @@ This register is separate from the existing Seepsight platform's master issue re
 - [ ] Forge CLI authentication.
 - [ ] Register app and replace placeholder app ID.
 - [ ] Install dependencies and generate UI bundles.
+- [ ] Run `node --test` and confirm the new health tests pass.
+- [ ] Run `npm run build:ui` and confirm both JavaScript bundles are generated.
 - [ ] Run `forge lint`.
 - [ ] Deploy to development environment.
 - [ ] Install on Jira Cloud development/demo site.
@@ -38,7 +40,7 @@ This register is separate from the existing Seepsight platform's master issue re
 
 ## Known limitations / risks
 
-- The app is source-scaffolded but not deployed or runtime-tested.
+- The app is source-scaffolded but not deployed or runtime-tested. The new tests have been committed but have not yet been executed in a Node.js environment.
 - The app ID in `manifest.yml` is intentionally a placeholder until Forge registration.
 - UI bundle files are generated locally by `npm run build:ui`; the committed build folders currently contain HTML/CSS only.
 - All displayed figures and records are illustrative sample content.
