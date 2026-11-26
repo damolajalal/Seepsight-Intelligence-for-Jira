@@ -80,3 +80,9 @@ test('dashboard navigation glyphs are hidden from assistive technology', async (
   const html = await read('../static/dashboard/index.html');
   assert.equal((html.match(/<span aria-hidden="true">/g) || []).length, 5);
 });
+
+test('dashboard record dialog describes its content and focuses a clear close control', async () => {
+  const html = await read('../static/dashboard/index.html');
+  assert.match(html, /aria-describedby="record-dialog-summary"/);
+  assert.match(html, /id="record-dialog-close" type="button" aria-label="Close details" autofocus/);
+});
