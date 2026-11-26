@@ -6,3 +6,19 @@
 
 .table-tools{display:flex;align-items:center;gap:10px}.table-search{width:min(220px,42vw);background:#0d1720;border:1px solid #2a3b48;border-radius:7px;padding:8px 10px;color:#e4edf2;font:inherit;font-size:11px;outline:none}.table-search:focus{border-color:#55d5ac;box-shadow:0 0 0 2px #55d5ac22}.table-search::placeholder{color:#718696}.result-count{font-size:10px;color:#718696;white-space:nowrap}.empty-state{padding:18px 9px;color:#9aadb9;font-size:11px;text-align:center}.empty-state[hidden]{display:none}
 @media(max-width:620px){.table-tools{align-items:flex-end;flex-direction:column;gap:5px}.table-search{width:100%;max-width:190px;padding:7px 8px}.result-count{font-size:9px}}
+
+.detail-action{background:#172631;border:1px solid #304453;color:#b7d0dc;border-radius:5px;padding:6px 10px;font-size:9px;cursor:pointer}
+.detail-action:hover,.detail-action:focus-visible{border-color:#55d5ac;color:#8ee1c2;outline:none}
+.row-action:focus-visible,.icon-button:focus-visible,.nav-item:focus-visible,.text-button:focus-visible{outline:2px solid #55d5ac;outline-offset:2px}
+.record-dialog{width:min(520px,calc(100vw - 28px));max-width:none;padding:22px;background:#111b25;color:#edf3f7;border:1px solid #344957;border-radius:12px;box-shadow:0 24px 80px #0009}
+.record-dialog::backdrop{background:#050a10bb;backdrop-filter:blur(3px)}
+.record-dialog-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
+.record-dialog h2{font-size:18px;line-height:1.35;margin:8px 0 0}
+.dialog-close{width:32px;height:32px;border:1px solid #30414e;border-radius:7px;background:#17232e;color:#c7d6de;font-size:20px;cursor:pointer}
+.record-dialog-summary{font-size:12px;line-height:1.7;color:#9aadb9;margin:18px 0}
+.record-dialog-fields{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.record-field{padding:12px;background:#0d1720;border:1px solid #263743;border-radius:8px;min-width:0}
+.record-field span{display:block;color:#718696;font-size:9px;text-transform:uppercase;letter-spacing:1px;margin-bottom:7px}
+.record-field b{display:block;color:#e2ebef;font-size:12px;overflow-wrap:anywhere}
+.record-dialog-note{font-size:10px;color:#718696;line-height:1.6;margin:17px 0 0}
+@media(max-width:420px){.record-dialog{padding:16px}.record-dialog-fields{grid-template-columns:1fr}}
