@@ -207,7 +207,10 @@ function openRecordDetails(viewName, record) {
         ['Quantity recorded as received', '800 units'],
         ['Unmatched quantity', '200 units'],
         ['Illustrative unit price', '₦24,000'],
-        ['Illustrative exposure calculation', '200 × ₦24,000 = ₦4,800,000']
+        ['Illustrative exposure calculation', '200 × ₦24,000 = ₦4,800,000'],
+        ['Purchase order source reference', 'SAMPLE-PO-0142'],
+        ['Delivery confirmation reference', 'SAMPLE-DN-8821'],
+        ['Goods received note reference', 'SAMPLE-GRN-4418']
       ]
     },
     findings: {
@@ -215,7 +218,10 @@ function openRecordDetails(viewName, record) {
         ['Purchase order quantity', '1,000 units'],
         ['Receiving record quantity', '800 units'],
         ['Quantity variance', '200 units'],
-        ['Illustrative exposure', '₦4,800,000']
+        ['Illustrative exposure', '₦4,800,000'],
+        ['Purchase order source reference', 'SAMPLE-PO-0142'],
+        ['Delivery confirmation reference', 'SAMPLE-DN-8821'],
+        ['Goods received note reference', 'SAMPLE-GRN-4418']
       ]
     }
   };
