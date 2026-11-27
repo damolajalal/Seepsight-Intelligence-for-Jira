@@ -28,6 +28,11 @@ test('reviewers can follow a related record without closing the details dialog',
   const dialog = page.getByRole('dialog');
   await expect(dialog).toBeVisible();
   await expect(page.locator('#record-dialog-title')).toHaveText('Delivery quantity mismatch');
+  await expect(dialog).toContainText('1,000 units');
+  await expect(dialog).toContainText('800 units');
+  await expect(dialog).toContainText('200 units');
+  await expect(dialog).toContainText('200 × ₦24,000 = ₦4,800,000');
+  await expect(dialog).toContainText('must be verified against the signed purchase order');
   await page.locator('#record-dialog-related [data-related-reference="FND-108"]').click();
   await expect(dialog).toBeVisible();
   await expect(page.locator('#record-dialog-title')).toHaveText('Delivered quantity below purchase order');
