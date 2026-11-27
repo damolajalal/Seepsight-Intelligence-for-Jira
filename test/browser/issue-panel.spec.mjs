@@ -24,6 +24,12 @@ test('issue panel gates local review until every sample document is checked', as
   await expect(page.locator('.variance-callout')).toContainText('1,000 ordered − 800 received = 200 units to investigate');
   await expect(page.locator('.variance-callout')).toContainText('₦4,800,000');
   await expect(page.locator('.variance-callout')).toContainText('not a confirmed loss');
+  await expect(page.locator('#evidence-list')).toContainText('SAMPLE-PO-0142');
+  await expect(page.locator('#evidence-list')).toContainText('1,000 units ordered');
+  await expect(page.locator('#evidence-list')).toContainText('SAMPLE-DN-8821');
+  await expect(page.locator('#evidence-list')).toContainText('800 units delivered');
+  await expect(page.locator('#evidence-list')).toContainText('SAMPLE-GRN-4418');
+  await expect(page.locator('#evidence-list')).toContainText('800 units received');
   const reviewButton = page.getByRole('button', { name: 'Mark preview reviewed' });
   await expect(reviewButton).toBeDisabled();
 
