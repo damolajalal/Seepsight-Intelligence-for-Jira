@@ -8,10 +8,20 @@ const evidence = [
   { id: 'goods-received-note', name: 'Goods received note', description: 'Illustrative source document', reference: 'SAMPLE-GRN-4418', recordedQuantity: '800 units received' }
 ];
 let reviewedEvidence = [];
-let previewReviewed = false;
+let reviewCompleted = false;
+let issueLoaded = false;
+let saving = false;
 
-function setIssueValue(id, value) {
-  byId(id).textContent = value || '—';
+function setIssueValue(id, value) { byId(id).textContent = value || '—'; }
+
+function updateReviewSummary() {
+  const summary = getEvidenceSummary(evidence, reviewedEvidence);
+  byId('evidence-progress').textContent = `${summary.reviewed} of ${summary.total} documents checked`;
+  byId('evidence-progress-bar').style.width = `${summary.total ? (summary.reviewed / summary.total) * 100 : 0}%`;
+  byId('evidence-progress-bar').setAttribute('aria-valuenow', String(summary.reviewed));
+  byId('evidence-progress-bar').setAttribute('aria-valuemax', String(summary.total));
+  byId('review-button').disabled = !summary.complete || saving || !issueLoaded;
+  byId('save-state').textContent = saving ? 'Saving…' : 'Saved to this Jira app workspace';
 }
 
 function renderEvidencePreview() {
@@ -31,11 +41,13 @@ function renderEvidencePreview() {
     const checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
     checkbox.checked = reviewedEvidence.includes(item.id);
+    checkbox.disabled = !issueLoaded || saving;
     checkbox.setAttribute('aria-label', `Mark ${item.name} checked in sample review`);
-    checkbox.addEventListener('change', () => {
+    checkbox.addEventListener('change', async () => {
       reviewedEvidence = toggleEvidence(reviewedEvidence, item.id);
-      previewReviewed = false;
-      updateReviewSummary();
+      reviewCompleted = false;
+      await saveReview();
+      renderEvidencePreview();
       setReviewState();
     });
     const state = document.createElement('span');
@@ -47,29 +59,36 @@ function renderEvidencePreview() {
   updateReviewSummary();
 }
 
-function updateReviewSummary() {
-  const summary = getEvidenceSummary(evidence, reviewedEvidence);
-  byId('evidence-progress').textContent = `${summary.reviewed} of ${summary.total} documents checked`;
-  byId('evidence-progress-bar').style.width = `${summary.total ? (summary.reviewed / summary.total) * 100 : 0}%`;
-  byId('evidence-progress-bar').setAttribute('aria-valuenow', String(summary.reviewed));
-  byId('evidence-progress-bar').setAttribute('aria-valuemax', String(summary.total));
-  byId('review-button').disabled = !summary.complete;
-}
-
 function setReviewState() {
-  const button = byId('review-button');
-  const message = byId('review-message');
-  button.textContent = previewReviewed ? 'Undo local review' : 'Mark preview reviewed';
-  button.setAttribute('aria-pressed', String(previewReviewed));
-  message.textContent = previewReviewed
-    ? 'All sample documents checked. Preview marked reviewed on this screen only; no Jira issue or Seepsight record was changed.'
-    : 'Check all three sample documents to enable the local review action. Nothing is saved to Jira.';
+  byId('review-button').textContent = reviewCompleted ? 'Review completed' : 'Complete evidence review';
+  byId('review-button').setAttribute('aria-pressed', String(reviewCompleted));
+  byId('review-message').textContent = reviewCompleted
+    ? 'The sample checklist review is saved for this Jira issue. The source documents remain illustrative, not attached evidence.'
+    : 'Check all three illustrative documents, then complete the review. Your checklist progress is saved to this Jira app workspace.';
 }
 
-byId('review-button').addEventListener('click', () => {
+async function saveReview() {
+  saving = true;
+  updateReviewSummary();
+  try {
+    const result = await invoke('saveEvidenceReview', { reviewedEvidence, reviewCompleted });
+    if (!result?.success) throw new Error('save failed');
+    reviewedEvidence = result.reviewedEvidence;
+    reviewCompleted = result.reviewCompleted;
+    byId('save-state').textContent = 'Progress saved';
+  } catch {
+    byId('save-state').textContent = 'Save failed — your latest change may not be stored. Retry by changing a check.';
+  } finally {
+    saving = false;
+    updateReviewSummary();
+  }
+}
+
+byId('review-button').addEventListener('click', async () => {
   const summary = getEvidenceSummary(evidence, reviewedEvidence);
-  if (!summary.complete && !previewReviewed) return;
-  previewReviewed = !previewReviewed;
+  if (!summary.complete || !issueLoaded || saving) return;
+  reviewCompleted = true;
+  await saveReview();
   setReviewState();
 });
 
@@ -88,6 +107,17 @@ async function loadIssue() {
       state.dataset.state = 'success';
       state.textContent = 'Jira issue context loaded. Procurement evidence below is illustrative only.';
       byId('issue-context').hidden = false;
+      issueLoaded = true;
+      try {
+        const saved = await invoke('getEvidenceReview');
+        reviewedEvidence = Array.isArray(saved?.reviewedEvidence) ? saved.reviewedEvidence : [];
+        reviewCompleted = saved?.reviewCompleted === true;
+        if (saved?.error) byId('save-state').textContent = saved.error;
+      } catch {
+        byId('save-state').textContent = 'Could not load saved review progress.';
+      }
+      renderEvidencePreview();
+      setReviewState();
     } else {
       state.dataset.state = 'warning';
       state.textContent = result?.error || 'Open this panel from a Jira issue to load its context.';
