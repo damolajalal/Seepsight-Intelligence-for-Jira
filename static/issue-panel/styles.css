@@ -39,3 +39,5 @@ footer{font-size:9px;color:#6e8492;padding:4px 2px;line-height:1.5}
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
 }
+
+.variance-callout{display:grid;gap:6px;padding:12px;margin:12px 0;border:1px solid #59452b;border-radius:7px;background:#282219}.variance-callout b{font-size:11px;color:#e8c58b}.variance-callout span{font-size:12px;color:#f0dfc1;font-weight:650}.variance-callout small{font-size:9px;line-height:1.55;color:#bca985}
