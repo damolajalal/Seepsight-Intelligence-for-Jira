@@ -47,6 +47,14 @@ test('normalises only the supported Jira issue fields', () => {
   assert.equal('secret' in result, false);
 });
 
+test('keeps the requested Jira issue key if the response contains a different key', () => {
+  const result = normaliseJiraIssue({
+    key: 'OTHER-999',
+    fields: { summary: 'Review procurement evidence' }
+  }, 'DEMO-101');
+  assert.equal(result.key, 'DEMO-101');
+});
+
 test('uses safe fallbacks for missing or malformed Jira fields', () => {
   assert.deepEqual(normaliseJiraIssue({ fields: {} }, 'DEMO-101'), {
     key: 'DEMO-101',
