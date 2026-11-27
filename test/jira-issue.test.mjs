@@ -9,6 +9,7 @@ import {
 test('accepts standard Jira issue keys and rejects malformed values', () => {
   assert.equal(isValidJiraIssueKey('DEMO-101'), true);
   assert.equal(isValidJiraIssueKey('PROCUREMENT_2-7'), true);
+  assert.equal(isValidJiraIssueKey(`${'A'.repeat(253)}-1`), true);
   for (const value of ['', 'demo-1', 'DEMO', 'DEMO-1/path', 'A-'.concat('1'.repeat(254)), null, 101]) {
     assert.equal(isValidJiraIssueKey(value), false);
   }
