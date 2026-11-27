@@ -3,9 +3,9 @@ import { getEvidenceSummary, toggleEvidence } from './evidence-review.mjs';
 
 const byId = (id) => document.getElementById(id);
 const evidence = [
-  { id: 'purchase-order', name: 'Purchase order', description: 'Illustrative source document · PO reference' },
-  { id: 'delivery-confirmation', name: 'Delivery confirmation', description: 'Illustrative source document · received quantity' },
-  { id: 'goods-received-note', name: 'Goods received note', description: 'Illustrative source document · receiving record' }
+  { id: 'purchase-order', name: 'Purchase order', description: 'Illustrative source document', reference: 'SAMPLE-PO-0142', recordedQuantity: '1,000 units ordered' },
+  { id: 'delivery-confirmation', name: 'Delivery confirmation', description: 'Illustrative source document', reference: 'SAMPLE-DN-8821', recordedQuantity: '800 units delivered' },
+  { id: 'goods-received-note', name: 'Goods received note', description: 'Illustrative source document', reference: 'SAMPLE-GRN-4418', recordedQuantity: '800 units received' }
 ];
 let reviewedEvidence = [];
 let previewReviewed = false;
@@ -24,7 +24,7 @@ function renderEvidencePreview() {
     const name = document.createElement('b');
     name.textContent = item.name;
     const description = document.createElement('small');
-    description.textContent = item.description;
+    description.textContent = `${item.description} · Ref ${item.reference} · ${item.recordedQuantity}`;
     copy.append(name, description);
     const label = document.createElement('label');
     label.className = 'evidence-check';
