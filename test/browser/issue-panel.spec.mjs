@@ -4,6 +4,12 @@ import { pathToFileURL } from 'node:url';
 
 const issuePanelUrl = pathToFileURL(resolve('static/issue-panel/build/index.html')).href;
 
+async function openIssuePanelScenario(page, scenario) {
+  const url = new URL(issuePanelUrl);
+  url.searchParams.set('issueState', scenario);
+  await page.goto(url.href);
+}
+
 test('issue panel gates local review until every sample document is checked', async ({ page }) => {
   page.on('pageerror', (error) => console.log('BROWSER PAGE ERROR:', error.message));
   page.on('console', (message) => { if (message.type() === 'error') console.log('BROWSER CONSOLE ERROR:', message.text()); });
@@ -33,6 +39,28 @@ test('issue panel gates local review until every sample document is checked', as
   await expect(page.locator('#review-button')).toHaveAttribute('aria-pressed', 'true');
   await page.getByRole('button', { name: 'Undo local review' }).click();
   await expect(page.locator('#review-button')).toHaveAttribute('aria-pressed', 'false');
+});
+
+test('issue panel explains when the Jira issue is missing', async ({ page }) => {
+  await openIssuePanelScenario(page, 'missing');
+  await expect(page.locator('#state')).toHaveAttribute('data-state', 'warning');
+  await expect(page.locator('#state')).toContainText('could not be found');
+  await expect(page.locator('#issue-context')).toBeHidden();
+});
+
+test('issue panel explains when the user lacks Jira issue permission', async ({ page }) => {
+  await openIssuePanelScenario(page, 'forbidden');
+  await expect(page.locator('#state')).toHaveAttribute('data-state', 'warning');
+  await expect(page.locator('#state')).toContainText('permission');
+  await expect(page.locator('#issue-context')).toBeHidden();
+});
+
+test('issue panel handles Jira unavailability without exposing raw errors', async ({ page }) => {
+  await openIssuePanelScenario(page, 'unavailable');
+  await expect(page.locator('#state')).toHaveAttribute('data-state', 'error');
+  await expect(page.locator('#state')).toContainText('Could not load Jira issue context');
+  await expect(page.locator('#state')).not.toContainText('SIMULATED_INTERNAL_FAILURE_SECRET');
+  await expect(page.locator('#issue-context')).toBeHidden();
 });
 
 test('issue panel stacks review controls on a narrow mobile viewport', async ({ page }) => {
