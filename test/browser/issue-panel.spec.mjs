@@ -43,7 +43,7 @@ test('issue panel saves review progress and gates completion until every sample 
   await reviewButton.click();
   await expect(page.locator('#review-message')).toContainText('saved for this Jira issue');
   await expect(page.locator('#review-button')).toHaveAttribute('aria-pressed', 'true');
-  await expect(page.locator('#save-state')).toContainText('Progress saved');
+  await expect(page.locator('#save-state')).toContainText('Saved to this Jira app workspace');
   await page.getByRole('button', { name: 'Create Jira follow-up task' }).click();
   await expect(page.locator('#task-message')).toContainText('DEMO-202 was created and linked');
   await expect(page.getByRole('button', { name: 'Jira task created' })).toBeDisabled();
