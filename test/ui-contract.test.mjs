@@ -109,7 +109,7 @@ test('dashboard refresh reports failures and prevents overlapping requests', asy
   assert.match(app, /refreshButton\.setAttribute\('aria-busy', 'true'\)/);
   assert.match(app, /refreshButton\.disabled = false/);
   assert.match(app, /refreshButton\.removeAttribute\('aria-busy'\)/);
-  assert.match(app, /return true;[\s\S]*catch \(error\)[\s\S]*return false;/);
+  assert.match(app, /return true;[\s\S]*catch \{[\s\S]*return false;/);
 });
 
 test('dashboard connection state is announced to assistive technology', async () => {
