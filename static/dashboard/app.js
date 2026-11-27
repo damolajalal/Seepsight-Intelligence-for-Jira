@@ -337,10 +337,9 @@ async function loadContext() {
     const project = await invoke('getProjectContext');
     if (project?.projectKey) projectChip.textContent = `Jira project · ${project.projectKey}`;
     return true;
-  } catch (error) {
+  } catch {
     connectionLabel.textContent = 'Open inside Jira to connect';
     connectionLabel.dataset.state = 'warning';
-    console.info('Forge/Jira context is unavailable outside Forge.', error);
     return false;
   }
 }
