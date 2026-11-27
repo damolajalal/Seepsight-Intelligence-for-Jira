@@ -88,6 +88,20 @@ resolver.define('createFollowUpTask', async ({ context }) => {
     const projectId = sourceIssue?.fields?.project?.id;
     if (!projectId) return { success: false, error: 'The Jira project could not be identified.' };
 
+    const typesResponse = await api.asUser().requestJira(
+      route`/rest/api/3/issuetype/project?projectId=${projectId}`
+    );
+    if (!typesResponse?.ok) {
+      return { success: false, error: 'Could not check which task types are available in this Jira project.' };
+    }
+    const projectIssueTypes = await typesResponse.json();
+    const taskType = Array.isArray(projectIssueTypes)
+      ? projectIssueTypes.find((item) => item?.name?.toLowerCase() === 'task' && item?.id)
+      : null;
+    if (!taskType) {
+      return { success: false, error: 'This Jira project does not have the standard Task issue type available.' };
+    }
+
     const description = {
       type: 'doc',
       version: 1,
@@ -103,7 +117,7 @@ resolver.define('createFollowUpTask', async ({ context }) => {
       body: JSON.stringify({
         fields: {
           project: { id: String(projectId) },
-          issuetype: { name: 'Task' },
+          issuetype: { id: String(taskType.id) },
           summary: `Procurement evidence follow-up for ${issueKey}`,
           description
         }
