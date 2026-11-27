@@ -55,6 +55,10 @@ The identity-linking flow between Atlassian accounts and Seepsight's existing Fi
 - Do not connect to a production data source until the API contract, tenant authorization, and data-minimization rules are agreed.
 - Keep sample data visibly labelled until connected to verified source data.
 
+## Demo and release preparation
+
+The [Codegeist demo runbook](docs/CODEGEIST_DEMO_RUNBOOK.md) contains a five-minute presentation outline, sample investigation walkthrough, release checklist, and claims that must remain clearly labelled as future work until implemented and verified.
+
 ## Roadmap
 
 1. Complete Forge registration, validation, and first Jira installation.
