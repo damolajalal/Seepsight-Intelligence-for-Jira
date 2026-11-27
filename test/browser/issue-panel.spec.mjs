@@ -8,6 +8,9 @@ test('issue panel gates local review until every sample document is checked', as
   page.on('pageerror', (error) => console.log('BROWSER PAGE ERROR:', error.message));
   page.on('console', (message) => { if (message.type() === 'error') console.log('BROWSER CONSOLE ERROR:', message.text()); });
   await page.goto(issuePanelUrl);
+  await expect(page.locator('.variance-callout')).toContainText('1,000 ordered − 800 received = 200 units to investigate');
+  await expect(page.locator('.variance-callout')).toContainText('₦4,800,000');
+  await expect(page.locator('.variance-callout')).toContainText('not a confirmed loss');
   const reviewButton = page.getByRole('button', { name: 'Mark preview reviewed' });
   await expect(reviewButton).toBeDisabled();
 
