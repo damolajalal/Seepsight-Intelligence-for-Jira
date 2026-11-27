@@ -36,6 +36,26 @@ test('dashboard does not claim the Forge integration is ready when health is una
   await expect(page.locator('#connection-label')).toHaveText('Forge status unavailable');
 });
 
+
+test('dashboard handles an unexpected Forge health failure without exposing internal errors', async ({ page }) => {
+  const url = new URL(dashboardUrl);
+  url.searchParams.set('dashboardState', 'health-failure');
+  await page.goto(url.href);
+  await expect(page.locator('#connection-label')).toHaveAttribute('data-state', 'warning');
+  await expect(page.locator('#connection-label')).toHaveText('Open inside Jira to connect');
+  await expect(page.locator('body')).not.toContainText('SIMULATED_HEALTH_FAILURE_SECRET');
+});
+
+test('dashboard handles a project resolver failure without exposing internal errors', async ({ page }) => {
+  const url = new URL(dashboardUrl);
+  url.searchParams.set('dashboardState', 'project-failure');
+  await page.goto(url.href);
+  await expect(page.locator('#connection-label')).toHaveAttribute('data-state', 'warning');
+  await expect(page.locator('#connection-label')).toHaveText('Open inside Jira to connect');
+  await expect(page.locator('#project-chip')).toHaveText('Jira project · DEMO');
+  await expect(page.locator('body')).not.toContainText('SIMULATED_PROJECT_FAILURE_SECRET');
+});
+
 test('dashboard navigation renders the investigations table and filters records', async ({ page }) => {
   await page.locator('.nav-item[data-view="investigations"]').click();
   await expect(page.locator('#page-title')).toHaveText('Investigations');
