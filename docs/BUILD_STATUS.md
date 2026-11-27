@@ -53,7 +53,8 @@ The current phase is the standalone Jira Forge experience. API deployment, Cloud
 - [x] Keep focus within the dialog when switching related records and restore focus to the current navigation section when closing after a view change.
 - [x] Add browser-level UI tests for live DOM interactions using Chromium in GitHub Actions, with a deterministic test-only Forge bridge fixture. The production bundle is built separately without the fixture.
 - [ ] Complete final keyboard navigation, focus, and accessible-label review in a live Jira runtime.
-- [ ] Review app presentation and demo flow for Codegeist.
+- [x] Add a five-minute Codegeist demo runbook with a truthful sample workflow, release checklist, and prohibited unverified integration claims.
+- [ ] Review app presentation and demo flow in a live Jira runtime for Codegeist.
 
 ## Blocked on Atlassian environment
 
