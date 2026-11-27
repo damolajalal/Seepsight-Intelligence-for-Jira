@@ -1,6 +1,6 @@
 # Jira app build register
 
-Last updated: 2026-11-26
+Last updated: 2026-11-27
 
 This register is separate from the existing Seepsight platform's master issue register.
 
@@ -19,6 +19,7 @@ The current phase is the standalone Jira Forge experience. API deployment, Cloud
 - [x] Normalise Jira issue responses to an explicit field allowlist and bound returned text.
 - [x] Handle network failures, unreadable JSON responses, and incomplete issue payloads without exposing raw exceptions.
 - [x] Add unit coverage for issue-key validation, safe error mapping, response allowlisting, malformed payloads, and text bounds.
+- [x] Add security contract tests for least-privilege Jira scopes, current-user issue access, minimal requested fields, safe error handling, test-only bridge mocking, and sample-data disclosures.
 - [x] Dashboard preview navigation for Overview, Investigations, Findings, Suppliers, and Actions.
 - [x] Responsive, accessible client-side filtering for preview tables.
 - [x] Sample-only action completion interaction.
