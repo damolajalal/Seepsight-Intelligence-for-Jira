@@ -1,6 +1,7 @@
 const params = new URLSearchParams(globalThis.location?.search || '');
 const issueState = params.get('issueState');
 const dashboardState = params.get('dashboardState');
+const savedReviews = new Map();
 
 export const view = {
   async getContext() {
@@ -9,7 +10,7 @@ export const view = {
   }
 };
 
-export async function invoke(resolverName) {
+export async function invoke(resolverName, payload = {}) {
   if (resolverName === 'getHealth') {
     if (dashboardState === 'health-failure') throw new Error('SIMULATED_HEALTH_FAILURE_SECRET');
     if (dashboardState === 'health-warning') return { status: 'unavailable' };
@@ -18,6 +19,12 @@ export async function invoke(resolverName) {
   if (resolverName === 'getProjectContext') {
     if (dashboardState === 'project-failure') throw new Error('SIMULATED_PROJECT_FAILURE_SECRET');
     return { projectKey: 'DEMO' };
+  }
+  if (resolverName === 'getEvidenceReview') return savedReviews.get('DEMO-101') || { reviewedEvidence: [], reviewCompleted: false };
+  if (resolverName === 'saveEvidenceReview') {
+    const value = { reviewedEvidence: payload.reviewedEvidence || [], reviewCompleted: payload.reviewCompleted === true };
+    savedReviews.set('DEMO-101', value);
+    return { success: true, ...value };
   }
   if (resolverName === 'getCurrentIssue') {
     if (issueState === 'missing') {
