@@ -156,7 +156,9 @@ test('Jira follow-up creation is explicitly scoped and user-triggered', async ()
   const [source, manifest] = await Promise.all([read('../src/index.js'), read('../manifest.yml')]);
   assert.ok(source.includes("resolver.define('createFollowUpTask'"));
   assert.match(source, /method: 'POST'/);
-  assert.ok(source.includes("issuetype: { name: 'Task' }"));
+  assert.ok(source.includes("issuetype: { id: String(taskType.id) }"));
+  assert.match(source, /issuetype\/project\?projectId=/);
+  assert.match(source, /standard Task issue type available/);
   assert.ok(source.includes('api.asUser()'));
   assert.match(manifest, /- write:jira-work/);
 });
