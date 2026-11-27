@@ -47,6 +47,17 @@ test('issue panel gates local review until every sample document is checked', as
   await expect(page.locator('#review-button')).toHaveAttribute('aria-pressed', 'false');
 });
 
+test('evidence review checkboxes are operable with the keyboard', async ({ page }) => {
+  await page.goto(issuePanelUrl);
+  const purchaseOrder = page.getByRole('checkbox', { name: 'Mark Purchase order checked in sample review' });
+  await purchaseOrder.focus();
+  await expect(purchaseOrder).toBeFocused();
+  await page.keyboard.press('Space');
+  await expect(purchaseOrder).toBeChecked();
+  await expect(page.locator('#evidence-progress')).toHaveText('1 of 3 documents checked');
+  await expect(page.getByRole('button', { name: 'Mark preview reviewed' })).toBeDisabled();
+});
+
 test('issue panel explains when the Jira issue is missing', async ({ page }) => {
   await openIssuePanelScenario(page, 'missing');
   await expect(page.locator('#state')).toHaveAttribute('data-state', 'warning');
