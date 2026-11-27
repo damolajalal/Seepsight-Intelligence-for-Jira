@@ -26,7 +26,7 @@ Explicitly state that this is a demonstration calculation, not a confirmed loss.
 Navigate from the investigation to the linked finding and related sample records. Open the Jira issue panel and walk through its evidence checklist. Mark each sample document as reviewed; explain that the review control is local preview state and does not change a Jira issue or a Seepsight record.
 
 ### 3:10–4:10 — Show workflow value
-Move through Suppliers and Actions. Explain the intended handoff: assign an owner, record a due date, request missing evidence, and track resolution. Do not describe sample actions as persisted or completed in Jira.
+From finding **FND-108**, open the linked action **ACT-032 — Confirm delivery note and received quantity**. Show its linked investigation (**INV-024**), linked finding (**FND-108**), accountable owner (Procurement team), three source references, and required reconciliation step. Explain the closure condition: obtain signed source documents and confirm whether an approved partial delivery, adjustment, or quality hold accounts for the 200-unit variance. Then move through Suppliers and Actions to show how the owner and due date sit alongside the evidence trail. Do not describe sample actions as persisted or completed in Jira.
 
 ### 4:10–5:00 — Architecture and roadmap
 Explain the current Forge project page/issue panel, least-privilege Jira read scope, current-user issue context, and automated UI tests. Then distinguish future work: secure Seepsight API connection, verified evidence retrieval, grounded Gemini explanations, and Rovo actions. Do not claim these integrations are live.
