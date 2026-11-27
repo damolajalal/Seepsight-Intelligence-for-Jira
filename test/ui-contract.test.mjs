@@ -40,7 +40,7 @@ test('dashboard and issue panel explicitly identify preview-only content', async
   assert.match(dashboard, /Preview workspace/);
   assert.match(dashboard, /illustrative sample data, not live procurement findings/);
   assert.match(issuePanel, /SAMPLE ONLY/);
-  assert.match(issuePanel, /No live procurement evidence · No Jira changes made/);
+  assert.match(issuePanel, /Forge app workspace · Checklist progress persists per Jira issue · Sample source documents only/);
 });
 
 test('issue panel exposes accessible evidence progress and review status', async () => {
@@ -136,4 +136,17 @@ test('issue panel presents a quantified sample variance with a verification cave
   assert.match(html, /₦4,800,000/);
   assert.match(html, /not a confirmed loss/);
   assert.match(html, /verify signed source documents/);
+});
+
+
+test('evidence review is persisted through tenant-scoped Forge storage', async () => {
+  const [source, manifest, pkg] = await Promise.all([
+    read('../src/index.js'), read('../manifest.yml'), read('../package.json')
+  ]);
+  assert.match(source, /import \{ kvs \} from '@forge\/kvs'/);
+  assert.match(source, /resolver\.define\('getEvidenceReview'/);
+  assert.match(source, /resolver\.define\('saveEvidenceReview'/);
+  assert.match(source, /evidence-review:\$\{cloudId\}:\$\{issueKey\}/);
+  assert.match(manifest, /- storage:app/);
+  assert.equal(pkg.dependencies['@forge/kvs'], 'latest');
 });
