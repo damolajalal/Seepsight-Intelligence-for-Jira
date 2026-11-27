@@ -20,7 +20,7 @@ The current phase is the standalone Jira Forge experience. API deployment, Cloud
 - [x] Preserve the requested Jira issue key as the canonical displayed key, even if an unexpected response payload contains a different key; covered by a regression test.
 - [x] Handle network failures, unreadable JSON responses, and incomplete issue payloads without exposing raw exceptions.
 - [x] Add unit coverage for issue-key validation, safe error mapping, response allowlisting, malformed payloads, and text bounds.
-- [x] Add security contract tests for least-privilege Jira scopes, current-user issue access, minimal requested fields, safe error handling, test-only bridge mocking, and sample-data disclosures.
+- [x] Add security contract tests for least-privilege Jira scopes, current-user issue access, minimal requested fields, safe error handling, test-only bridge mocking, sample-data disclosures, and the Jira write-scope boundary.
 - [x] Add a connected sample delivery-variance scenario showing 1,000 ordered units, 800 received, a 200-unit discrepancy, and illustrative ₦4.8M exposure, with an explicit source-document verification warning.
 - [x] Dashboard preview navigation for Overview, Investigations, Findings, Suppliers, and Actions.
 - [x] Responsive, accessible client-side filtering for preview tables.
@@ -36,8 +36,10 @@ The current phase is the standalone Jira Forge experience. API deployment, Cloud
 - [x] Show fictional sample source references and the quantity recorded by each document (PO 1,000; delivery confirmation 800; GRN 800), with browser assertions for the provenance details.
 - [x] Cross-link the same fictional PO, delivery-confirmation, and GRN references from the investigation/finding detail views, with browser assertions to keep dashboard and issue-panel evidence references consistent.
 - [x] Extend the sample reviewer journey from investigation to finding to corrective action, showing linked record IDs, accountable owner, evidence references, required reconciliation step, and explicit closure conditions; browser-tested as one continuous details-dialog workflow.
-- [x] Add per-document local review checkboxes, progress indicator, and completion-gated preview review action.
-- [x] Add local review toggle with clear no-Jira-write messaging.
+- [x] Add per-document evidence-review checkboxes, progress indicator, and completion-gated review action.
+- [x] Persist evidence-review progress per Jira tenant and issue using Forge KVS; save/load is exercised by browser tests using a deterministic storage mock.
+- [x] Add an explicit issue-panel action to create a Jira Task using the current user's Jira permissions; attempt to relate it to the source issue and store a per-issue task reference to reduce duplicate creation.
+- [x] Replace local-only evidence review with Forge app storage; live persistence still requires installation and runtime verification.
 - [x] Add issue context loading, warning, and error states, with browser coverage for missing issues, permission denial, and unexpected Jira failures.
 - [x] Make dashboard refresh distinguish successful context refreshes from failures, prevent overlapping refresh requests, announce connection-state changes to assistive technology, and keep unexpected resolver exceptions out of console logs.
 - [x] Add browser coverage for unexpected Forge health and project resolver failures, including safe UI messaging and preservation of the Jira project key from Forge context.
@@ -61,8 +63,15 @@ The current phase is the standalone Jira Forge experience. API deployment, Cloud
 - [x] Keep focus within the dialog when switching related records and restore focus to the current navigation section when closing after a view change.
 - [x] Add browser-level UI tests for live DOM interactions using Chromium in GitHub Actions, with a deterministic test-only Forge bridge fixture. The production bundle is built separately without the fixture.
 - [ ] Complete final keyboard navigation, focus, and accessible-label review in a live Jira runtime.
+- [ ] Verify Jira Task creation, issue linking, and per-issue KVS persistence in the installed Jira app.
 - [x] Add a five-minute Codegeist demo runbook with a truthful sample workflow, release checklist, and prohibited unverified integration claims.
 - [ ] Review app presentation and demo flow in a live Jira runtime for Codegeist.
+
+## Latest automated verification
+
+- [x] GitHub Actions run `46047367965` completed successfully on 2026-11-27: dependency installation, unit tests, production Custom UI build, test-bridge build, Chromium browser interaction tests, and workflow validation step.
+- [ ] Authenticated Forge lint remains skipped until Atlassian credentials are configured in the authorised development environment.
+- [ ] Live Jira deployment and runtime tests remain blocked on Forge registration and installation.
 
 ## Blocked on Atlassian environment
 
