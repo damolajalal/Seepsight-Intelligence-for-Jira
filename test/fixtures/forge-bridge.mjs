@@ -20,6 +20,7 @@ export async function invoke(resolverName, payload = {}) {
     if (dashboardState === 'project-failure') throw new Error('SIMULATED_PROJECT_FAILURE_SECRET');
     return { projectKey: 'DEMO' };
   }
+  if (resolverName === 'createFollowUpTask') return { success: true, taskKey: 'DEMO-202', linked: true, message: 'Jira task DEMO-202 was created and linked to DEMO-101.' };
   if (resolverName === 'getEvidenceReview') return savedReviews.get('DEMO-101') || { reviewedEvidence: [], reviewCompleted: false };
   if (resolverName === 'saveEvidenceReview') {
     const value = { reviewedEvidence: payload.reviewedEvidence || [], reviewCompleted: payload.reviewCompleted === true };
