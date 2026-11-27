@@ -11,6 +11,7 @@ let reviewedEvidence = [];
 let reviewCompleted = false;
 let issueLoaded = false;
 let saving = false;
+let creatingTask = false;
 
 function setIssueValue(id, value) { byId(id).textContent = value || '—'; }
 
@@ -108,6 +109,8 @@ async function loadIssue() {
       state.textContent = 'Jira issue context loaded. Procurement evidence below is illustrative only.';
       byId('issue-context').hidden = false;
       issueLoaded = true;
+      byId('create-follow-up').disabled = false;
+      byId('task-message').textContent = 'This action creates a real Jira Task in the current project.';
       try {
         const saved = await invoke('getEvidenceReview');
         reviewedEvidence = Array.isArray(saved?.reviewedEvidence) ? saved.reviewedEvidence : [];
@@ -129,6 +132,32 @@ async function loadIssue() {
     byId('issue-context').hidden = true;
   }
 }
+
+byId('create-follow-up').addEventListener('click', async () => {
+  const button = byId('create-follow-up');
+  if (!issueLoaded || creatingTask) return;
+  creatingTask = true;
+  button.disabled = true;
+  button.textContent = 'Creating Jira task…';
+  byId('task-message').textContent = 'Sending the task creation request to Jira.';
+  try {
+    const result = await invoke('createFollowUpTask');
+    if (!result?.success) {
+      byId('task-message').textContent = result?.error || 'Jira task creation failed.';
+      return;
+    }
+    button.textContent = 'Jira task created';
+    byId('task-message').textContent = result.message;
+  } catch {
+    byId('task-message').textContent = 'Could not create the Jira task. Please retry.';
+  } finally {
+    creatingTask = false;
+    if (button.textContent !== 'Jira task created') {
+      button.disabled = false;
+      button.textContent = 'Create Jira follow-up task';
+    }
+  }
+});
 
 renderEvidencePreview();
 setReviewState();
