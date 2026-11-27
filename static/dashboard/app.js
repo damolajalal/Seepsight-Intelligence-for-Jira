@@ -223,6 +223,17 @@ function openRecordDetails(viewName, record) {
         ['Delivery confirmation reference', 'SAMPLE-DN-8821'],
         ['Goods received note reference', 'SAMPLE-GRN-4418']
       ]
+    },
+    actions: {
+      'ACT-032': [
+        ['Linked investigation', 'INV-024'],
+        ['Linked finding', 'FND-108'],
+        ['Accountable owner', 'Procurement team'],
+        ['Required next step', 'Reconcile the 1,000-unit purchase order against the 800-unit delivery and goods-received records.'],
+        ['Evidence to confirm', 'SAMPLE-PO-0142 · SAMPLE-DN-8821 · SAMPLE-GRN-4418'],
+        ['Closure condition', 'Obtain signed source documents and confirm whether any approved partial delivery, adjustment, or quality hold explains the 200-unit variance.'],
+        ['Preview status', 'Open · sample workflow only']
+      ]
     }
   };
   const scenarioFields = deliveryScenario[viewName]?.[record[0]] || [];
