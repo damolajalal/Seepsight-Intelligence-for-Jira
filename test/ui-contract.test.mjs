@@ -128,3 +128,12 @@ test('dashboard and issue panel define narrow-screen layouts', async () => {
   assert.match(issuePanel, /@media\(max-width:430px\)/);
   assert.match(issuePanel, /\.review-controls\{align-items:flex-start;flex-direction:column/);
 });
+
+
+test('issue panel presents a quantified sample variance with a verification caveat', async () => {
+  const html = await read('../static/issue-panel/index.html');
+  assert.match(html, /1,000 ordered − 800 received = 200 units to investigate/);
+  assert.match(html, /₦4,800,000/);
+  assert.match(html, /not a confirmed loss/);
+  assert.match(html, /verify signed source documents/);
+});
