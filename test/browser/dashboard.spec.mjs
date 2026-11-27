@@ -100,7 +100,7 @@ test('reviewers can follow a related record without closing the details dialog',
   await expect(dialog).toContainText('Open · sample workflow only');
   await page.getByRole('button', { name: 'Close details' }).click();
   await expect(dialog).not.toBeVisible();
-  await expect(page.locator('.nav-item[data-view="findings"]')).toBeFocused();
+  await expect(page.locator('.nav-item[data-view="actions"]')).toBeFocused();
 });
 
 test('sample action completion is local and visibly updates its row', async ({ page }) => {
