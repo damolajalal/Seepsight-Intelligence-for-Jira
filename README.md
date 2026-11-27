@@ -13,6 +13,8 @@ Implemented in source:
 - Clearly labelled illustrative records and metrics (not live procurement data)
 - A connected sample reviewer journey from investigation to finding to corrective action, with shared source-document references, accountable ownership, reconciliation steps, and closure conditions
 - Issue panel displaying Jira issue summary, type, status, and assignee
+- Per-issue evidence-review checklist progress persisted through Forge KVS
+- Explicit user-triggered Jira follow-up Task creation, with an attempt to relate it to the originating issue and an idempotency record
 - Separate Custom UI build directories for Forge-hosted static resources
 - Frontend bundling command using esbuild and the official Forge bridge
 
@@ -62,7 +64,7 @@ The [Codegeist demo runbook](docs/CODEGEIST_DEMO_RUNBOOK.md) contains a five-min
 
 ## Roadmap
 
-1. Complete Forge registration, validation, and first Jira installation.
+1. Complete Forge registration, authenticated validation, and first Jira installation.
 2. Verify project-page and issue-panel rendering in a real Jira development site.
 3. Agree the Seepsight API contract and connect through a secure server-side integration.
 4. Replace sample content with evidence-linked investigations, findings, suppliers, and Jira actions.
