@@ -78,6 +78,9 @@ test('reviewers can follow a related record without closing the details dialog',
   await expect(dialog).toContainText('800 units');
   await expect(dialog).toContainText('200 units');
   await expect(dialog).toContainText('200 × ₦24,000 = ₦4,800,000');
+  await expect(dialog).toContainText('SAMPLE-PO-0142');
+  await expect(dialog).toContainText('SAMPLE-DN-8821');
+  await expect(dialog).toContainText('SAMPLE-GRN-4418');
   await expect(dialog).toContainText('must be verified against the signed purchase order');
   await page.locator('#record-dialog-related [data-related-reference="FND-108"]').click();
   await expect(dialog).toBeVisible();
