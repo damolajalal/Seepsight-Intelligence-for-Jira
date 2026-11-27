@@ -37,6 +37,7 @@ The current phase is the standalone Jira Forge experience. API deployment, Cloud
 - [x] Add issue context loading, warning, and error states, with browser coverage for missing issues, permission denial, and unexpected Jira failures.
 - [x] Make dashboard refresh distinguish successful context refreshes from failures, prevent overlapping refresh requests, announce connection-state changes to assistive technology, and keep unexpected resolver exceptions out of console logs.
 - [x] Add browser coverage for unexpected Forge health and project resolver failures, including safe UI messaging and preservation of the Jira project key from Forge context.
+- [x] Keep unexpected issue-panel resolver exceptions out of browser console output; browser tests verify raw internal error details are absent from both the UI and console.
 - [x] Keep the dashboard UI contract aligned with exception-safe resolver handling after raw error logging was removed.
 - [x] Add responsive issue-panel styling, keyboard focus treatment, comfortable touch targets, and reduced-motion support.
 - [x] Add dashboard and issue-panel narrow-screen layout contract checks; issue-panel loading, warning, and error states are implemented and browser-tested across missing-issue, permission-denied, and unavailable-Jira scenarios.
