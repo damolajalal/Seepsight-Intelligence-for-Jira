@@ -17,6 +17,7 @@ The current phase is the standalone Jira Forge experience. API deployment, Cloud
 - [x] Validate Jira issue keys before making issue requests, including a 255-character upper bound to prevent oversized request paths.
 - [x] Convert Jira permission, missing-issue, rate-limit, and service failures into safe user-facing messages.
 - [x] Normalise Jira issue responses to an explicit field allowlist and bound returned text.
+- [x] Preserve the requested Jira issue key as the canonical displayed key, even if an unexpected response payload contains a different key; covered by a regression test.
 - [x] Handle network failures, unreadable JSON responses, and incomplete issue payloads without exposing raw exceptions.
 - [x] Add unit coverage for issue-key validation, safe error mapping, response allowlisting, malformed payloads, and text bounds.
 - [x] Add security contract tests for least-privilege Jira scopes, current-user issue access, minimal requested fields, safe error handling, test-only bridge mocking, and sample-data disclosures.
