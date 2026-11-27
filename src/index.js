@@ -62,7 +62,22 @@ resolver.define('createFollowUpTask', async ({ context }) => {
     return { success: false, error: 'Open this action from a valid Jira issue.' };
   }
 
+  const cloudId = context?.cloudId;
+  if (!cloudId) return { success: false, error: 'The Jira workspace context is unavailable.' };
+  const taskKeyStorage = `follow-up-task:${cloudId}:${issueKey}`;
+
   try {
+    const existingTask = await kvs.get(taskKeyStorage);
+    if (existingTask?.taskKey && isValidJiraIssueKey(existingTask.taskKey)) {
+      return {
+        success: true,
+        taskKey: existingTask.taskKey,
+        linked: existingTask.linked === true,
+        existing: true,
+        message: `Jira follow-up task ${existingTask.taskKey} already exists for ${issueKey}.`
+      };
+    }
+
     const sourceResponse = await api.asUser().requestJira(
       route`/rest/api/3/issue/${issueKey}?fields=project`
     );
@@ -119,6 +134,11 @@ resolver.define('createFollowUpTask', async ({ context }) => {
       linked = linkResponse?.ok === true;
     } catch {
       linked = false;
+    }
+    try {
+      await kvs.set(taskKeyStorage, { taskKey, linked, createdAt: new Date().toISOString() });
+    } catch {
+      // Jira task creation succeeded; return its key even if the idempotency record cannot be saved.
     }
     return {
       success: true,
