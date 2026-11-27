@@ -37,7 +37,7 @@ export function normaliseJiraIssue(issue, requestedIssueKey) {
   }
 
   return {
-    key: safeText(issue.key, requestedIssueKey, 100),
+    key: requestedIssueKey,
     summary: safeText(fields.summary, 'No summary available'),
     status: safeText(fields.status?.name, 'Unknown', 100),
     issueType: safeText(fields.issuetype?.name, 'Unknown', 100),
