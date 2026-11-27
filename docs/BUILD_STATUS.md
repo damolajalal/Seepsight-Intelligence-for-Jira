@@ -50,6 +50,7 @@ The current phase is the standalone Jira Forge experience. API deployment, Cloud
 - [ ] Add a true empty-data state when live data is introduced; current sample tables intentionally contain demonstration records.
 - [x] Add static UI contract tests for navigation semantics, accessible record dialog, sample-only disclosures, evidence progress semantics, safe DOM rendering, issue-panel touch/motion accessibility, and dashboard skip navigation.
 - [x] Add unit tests for evidence review state and completion rules.
+- [x] Add a Chromium keyboard interaction check confirming evidence review checkboxes respond to Space and preserve the incomplete-review gate.
 - [x] Add unit tests for sample workflow relationship resolution.
 - [x] Extract dashboard record filtering into pure helpers with unit coverage.
 - [x] Render dashboard table content with safe DOM APIs instead of interpolated HTML.
