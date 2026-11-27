@@ -148,7 +148,7 @@ test('evidence review is persisted through tenant-scoped Forge storage', async (
   assert.match(source, /resolver\.define\('saveEvidenceReview'/);
   assert.match(source, /evidence-review:\$\{cloudId\}:\$\{issueKey\}/);
   assert.match(manifest, /- storage:app/);
-  assert.equal(pkg.dependencies['@forge/kvs'], 'latest');
+  assert.equal(JSON.parse(pkg).dependencies['@forge/kvs'], 'latest');
 });
 
 
