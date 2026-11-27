@@ -10,7 +10,7 @@ async function openIssuePanelScenario(page, scenario) {
   await page.goto(url.href);
 }
 
-test('issue panel gates local review until every sample document is checked', async ({ page }) => {
+test('issue panel saves review progress and gates completion until every sample document is checked', async ({ page }) => {
   page.on('pageerror', (error) => console.log('BROWSER PAGE ERROR:', error.message));
   page.on('console', (message) => { if (message.type() === 'error') console.log('BROWSER CONSOLE ERROR:', message.text()); });
   await page.goto(issuePanelUrl);
@@ -30,7 +30,7 @@ test('issue panel gates local review until every sample document is checked', as
   await expect(page.locator('#evidence-list')).toContainText('800 units delivered');
   await expect(page.locator('#evidence-list')).toContainText('SAMPLE-GRN-4418');
   await expect(page.locator('#evidence-list')).toContainText('800 units received');
-  const reviewButton = page.getByRole('button', { name: 'Mark preview reviewed' });
+  const reviewButton = page.getByRole('button', { name: 'Complete evidence review' });
   await expect(reviewButton).toBeDisabled();
 
   await page.getByRole('checkbox', { name: 'Mark Purchase order checked in sample review' }).check();
@@ -41,10 +41,9 @@ test('issue panel gates local review until every sample document is checked', as
   await expect(page.locator('#evidence-progress')).toHaveText('3 of 3 documents checked');
   await expect(reviewButton).toBeEnabled();
   await reviewButton.click();
-  await expect(page.locator('#review-message')).toContainText('no Jira issue or Seepsight record was changed');
+  await expect(page.locator('#review-message')).toContainText('saved for this Jira issue');
   await expect(page.locator('#review-button')).toHaveAttribute('aria-pressed', 'true');
-  await page.getByRole('button', { name: 'Undo local review' }).click();
-  await expect(page.locator('#review-button')).toHaveAttribute('aria-pressed', 'false');
+  await expect(page.locator('#save-state')).toContainText('Progress saved');
 });
 
 test('evidence review checkboxes are operable with the keyboard', async ({ page }) => {
@@ -55,7 +54,7 @@ test('evidence review checkboxes are operable with the keyboard', async ({ page 
   await page.keyboard.press('Space');
   await expect(purchaseOrder).toBeChecked();
   await expect(page.locator('#evidence-progress')).toHaveText('1 of 3 documents checked');
-  await expect(page.getByRole('button', { name: 'Mark preview reviewed' })).toBeDisabled();
+  await expect(page.getByRole('button', { name: 'Complete evidence review' })).toBeDisabled();
 });
 
 test('issue panel explains when the Jira issue is missing', async ({ page }) => {
