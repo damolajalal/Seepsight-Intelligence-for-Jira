@@ -13,10 +13,9 @@ const EVIDENCE_IDS = new Set(['purchase-order', 'delivery-confirmation', 'goods-
 
 function getReviewKey(context) {
   const cloudId = context?.cloudId;
-  const projectId = context?.extension?.project?.id;
   const issueKey = context?.extension?.issue?.key;
-  if (!cloudId || !projectId || !isValidJiraIssueKey(issueKey)) return null;
-  return `evidence-review:${cloudId}:${projectId}:${issueKey}`;
+  if (!cloudId || !isValidJiraIssueKey(issueKey)) return null;
+  return `evidence-review:${cloudId}:${issueKey}`;
 }
 
 resolver.define('getHealth', async () => createHealthPayload());
