@@ -7,7 +7,7 @@ function safeText(value, fallback, maxLength = 300) {
 }
 
 export function isValidJiraIssueKey(value) {
-  return typeof value === 'string' && ISSUE_KEY_PATTERN.test(value);
+  return typeof value === 'string' && value.length <= 255 && ISSUE_KEY_PATTERN.test(value);
 }
 
 export function getIssueLoadError(status) {
