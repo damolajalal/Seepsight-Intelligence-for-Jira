@@ -11,6 +11,7 @@ Implemented in source:
 - Forge resolver for app health, project context, and current Jira issue details
 - Responsive dashboard with Overview, Investigations, Findings, Suppliers, and Actions views
 - Clearly labelled illustrative records and metrics (not live procurement data)
+- A connected sample reviewer journey from investigation to finding to corrective action, with shared source-document references, accountable ownership, reconciliation steps, and closure conditions
 - Issue panel displaying Jira issue summary, type, status, and assignee
 - Separate Custom UI build directories for Forge-hosted static resources
 - Frontend bundling command using esbuild and the official Forge bridge
