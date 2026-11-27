@@ -93,11 +93,10 @@ async function loadIssue() {
       state.textContent = result?.error || 'Open this panel from a Jira issue to load its context.';
       byId('issue-context').hidden = true;
     }
-  } catch (error) {
+  } catch {
     state.dataset.state = 'error';
     state.textContent = 'Could not load Jira issue context. Reopen the panel or confirm the Forge deployment and permissions.';
     byId('issue-context').hidden = true;
-    console.error('Unable to load Jira issue context.', error);
   }
 }
 
