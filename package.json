@@ -14,7 +14,8 @@
   "dependencies": {
     "@forge/api": "latest",
     "@forge/bridge": "latest",
-    "@forge/resolver": "latest"
+    "@forge/resolver": "latest",
+    "@forge/kvs": "latest"
   },
   "devDependencies": {
     "@forge/cli": "latest",
