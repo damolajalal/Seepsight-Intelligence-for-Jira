@@ -200,6 +200,43 @@ function openRecordDetails(viewName, record) {
     detailNode.append(item);
   });
 
+  const deliveryScenario = {
+    investigations: {
+      'INV-024': [
+        ['Quantity on purchase order', '1,000 units'],
+        ['Quantity recorded as received', '800 units'],
+        ['Unmatched quantity', '200 units'],
+        ['Illustrative unit price', '₦24,000'],
+        ['Illustrative exposure calculation', '200 × ₦24,000 = ₦4,800,000']
+      ]
+    },
+    findings: {
+      'FND-108': [
+        ['Purchase order quantity', '1,000 units'],
+        ['Receiving record quantity', '800 units'],
+        ['Quantity variance', '200 units'],
+        ['Illustrative exposure', '₦4,800,000']
+      ]
+    }
+  };
+  const scenarioFields = deliveryScenario[viewName]?.[record[0]] || [];
+  scenarioFields.forEach(([label, value]) => {
+    const item = document.createElement('div');
+    item.className = 'record-field';
+    const key = document.createElement('span');
+    key.textContent = label;
+    const detail = document.createElement('b');
+    detail.textContent = value;
+    item.append(key, detail);
+    detailNode.append(item);
+  });
+  if (scenarioFields.length) {
+    const note = document.createElement('p');
+    note.className = 'view-note';
+    note.textContent = 'Illustrative scenario only. The quantity and exposure must be verified against the signed purchase order, delivery confirmation, goods-received note, and applicable price before a finding is confirmed.';
+    detailNode.append(note);
+  }
+
   relatedNode.replaceChildren();
   const relatedRecords = getRelatedRecords(viewName, record[0], demoRows);
   relatedRecords.forEach((related) => {
