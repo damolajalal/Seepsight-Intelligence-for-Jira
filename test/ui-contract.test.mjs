@@ -150,3 +150,13 @@ test('evidence review is persisted through tenant-scoped Forge storage', async (
   assert.match(manifest, /- storage:app/);
   assert.equal(pkg.dependencies['@forge/kvs'], 'latest');
 });
+
+
+test('Jira follow-up creation is explicitly scoped and user-triggered', async () => {
+  const [source, manifest] = await Promise.all([read('../src/index.js'), read('../manifest.yml')]);
+  assert.match(source, /resolver\\.define\\('createFollowUpTask'/);
+  assert.match(source, /method: 'POST'/);
+  assert.match(source, /issuetype: \\{ name: 'Task' \\}/);
+  assert.match(source, /api\\.asUser\\(\\)/);
+  assert.match(manifest, /- write:jira-work/);
+});
