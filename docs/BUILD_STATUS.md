@@ -38,7 +38,7 @@ The current phase is the standalone Jira Forge experience. API deployment, Cloud
 - [x] Extend the sample reviewer journey from investigation to finding to corrective action, showing linked record IDs, accountable owner, evidence references, required reconciliation step, and explicit closure conditions; browser-tested as one continuous details-dialog workflow.
 - [x] Add per-document evidence-review checkboxes, progress indicator, and completion-gated review action.
 - [x] Persist evidence-review progress per Jira tenant and issue using Forge KVS; save/load is exercised by browser tests using a deterministic storage mock.
-- [x] Add an explicit issue-panel action to create a Jira Task using the current user's Jira permissions; attempt to relate it to the source issue and store a per-issue task reference to reduce duplicate creation.
+- [x] Add an explicit issue-panel action to create a Jira Task using the current user's Jira permissions; first inspect the project's available issue types and use its Task ID, attempt to relate it to the source issue, and store a per-issue task reference to reduce repeat creation.
 - [x] Replace local-only evidence review with Forge app storage; live persistence still requires installation and runtime verification.
 - [x] Add issue context loading, warning, and error states, with browser coverage for missing issues, permission denial, and unexpected Jira failures.
 - [x] Make dashboard refresh distinguish successful context refreshes from failures, prevent overlapping refresh requests, announce connection-state changes to assistive technology, and keep unexpected resolver exceptions out of console logs.
