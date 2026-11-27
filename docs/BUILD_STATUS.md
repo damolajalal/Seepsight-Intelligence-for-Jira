@@ -35,6 +35,7 @@ The current phase is the standalone Jira Forge experience. API deployment, Cloud
 - [x] Add issue-panel evidence checklist with explicit sample-only labels.
 - [x] Show fictional sample source references and the quantity recorded by each document (PO 1,000; delivery confirmation 800; GRN 800), with browser assertions for the provenance details.
 - [x] Cross-link the same fictional PO, delivery-confirmation, and GRN references from the investigation/finding detail views, with browser assertions to keep dashboard and issue-panel evidence references consistent.
+- [x] Extend the sample reviewer journey from investigation to finding to corrective action, showing linked record IDs, accountable owner, evidence references, required reconciliation step, and explicit closure conditions; browser-tested as one continuous details-dialog workflow.
 - [x] Add per-document local review checkboxes, progress indicator, and completion-gated preview review action.
 - [x] Add local review toggle with clear no-Jira-write messaging.
 - [x] Add issue context loading, warning, and error states, with browser coverage for missing issues, permission denial, and unexpected Jira failures.
