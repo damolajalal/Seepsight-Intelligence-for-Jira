@@ -34,12 +34,12 @@ The current phase is the standalone Jira Forge experience. API deployment, Cloud
 - [x] Add issue-panel evidence checklist with explicit sample-only labels.
 - [x] Add per-document local review checkboxes, progress indicator, and completion-gated preview review action.
 - [x] Add local review toggle with clear no-Jira-write messaging.
-- [x] Add issue context loading, warning, and error states.
+- [x] Add issue context loading, warning, and error states, with browser coverage for missing issues, permission denial, and unexpected Jira failures.
 - [x] Make dashboard refresh distinguish successful context refreshes from failures, prevent overlapping refresh requests, and announce connection-state changes to assistive technology.
 - [x] Add responsive issue-panel styling, keyboard focus treatment, comfortable touch targets, and reduced-motion support.
-- [x] Add dashboard and issue-panel narrow-screen layout contract checks; issue-panel loading, warning, and error states are implemented.
+- [x] Add dashboard and issue-panel narrow-screen layout contract checks; issue-panel loading, warning, and error states are implemented and browser-tested across missing-issue, permission-denied, and unavailable-Jira scenarios.
 - [x] Make the UI build copy the current HTML and CSS into Forge resource directories as well as bundling JavaScript, preventing stale deployed UI assets.
-- [x] Add Chromium-based dashboard and issue-panel interaction tests to CI for filtering, empty search results, related-record dialog navigation, local action completion, evidence review gating, mobile viewport overflow, and visible Jira issue-context fields (summary, key, status, and assignee).
+- [x] Add Chromium-based dashboard and issue-panel interaction tests to CI for filtering, empty search results, related-record dialog navigation, local action completion, evidence review gating, mobile viewport overflow, visible Jira issue-context fields (summary, key, status, and assignee), and missing-issue, permission-denied, and unavailable-Jira states.
 - [ ] Add a true empty-data state when live data is introduced; current sample tables intentionally contain demonstration records.
 - [x] Add static UI contract tests for navigation semantics, accessible record dialog, sample-only disclosures, evidence progress semantics, safe DOM rendering, issue-panel touch/motion accessibility, and dashboard skip navigation.
 - [x] Add unit tests for evidence review state and completion rules.
