@@ -10,7 +10,33 @@ test.beforeEach(async ({ page }) => {
   await page.goto(dashboardUrl);
 });
 
-test('dashboard navigation renders the investigations table and filters records', async ({ page }) => {
+test('dashboard shows the resolved Jira project and Forge connection state', async ({ page }) => {
+  await expect(page.locator('#connection-label')).toHaveAttribute('data-state', 'connected');
+  await expect(page.locator('#connection-label')).toContainText('Forge connected');
+  await expect(page.locator('#project-chip')).toHaveText('Jira project · DEMO');
+});
+
+test('dashboard reports a failed context refresh and re-enables the control', async ({ page }) => {
+  const url = new URL(dashboardUrl);
+  url.searchParams.set('dashboardState', 'context-failure');
+  await page.goto(url.href);
+  await expect(page.locator('#connection-label')).toHaveAttribute('data-state', 'warning');
+  const refresh = page.getByRole('button', { name: 'Refresh Jira project context' });
+  await refresh.click();
+  await expect(page.locator('#toast')).toContainText('Could not refresh Jira context');
+  await expect(refresh).toBeEnabled();
+  await expect(refresh).not.toHaveAttribute('aria-busy', 'true');
+});
+
+test('dashboard does not claim the Forge integration is ready when health is unavailable', async ({ page }) => {
+  const url = new URL(dashboardUrl);
+  url.searchParams.set('dashboardState', 'health-warning');
+  await page.goto(url.href);
+  await expect(page.locator('#connection-label')).toHaveAttribute('data-state', 'warning');
+  await expect(page.locator('#connection-label')).toHaveText('Forge status unavailable');
+});
+
+test('dashboard navigation renders the investigations table and filters records', async ({ page }) =>
   await page.locator('.nav-item[data-view="investigations"]').click();
   await expect(page.locator('#page-title')).toHaveText('Investigations');
   const search = page.getByRole('searchbox', { name: 'Filter Investigations' });
