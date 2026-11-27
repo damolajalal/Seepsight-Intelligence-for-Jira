@@ -55,12 +55,15 @@ test('issue panel explains when the user lacks Jira issue permission', async ({ 
   await expect(page.locator('#issue-context')).toBeHidden();
 });
 
-test('issue panel handles Jira unavailability without exposing raw errors', async ({ page }) => {
+test('issue panel handles Jira unavailability without exposing raw errors in the UI or console', async ({ page }) => {
+  const consoleMessages = [];
+  page.on('console', (message) => consoleMessages.push(message.text()));
   await openIssuePanelScenario(page, 'unavailable');
   await expect(page.locator('#state')).toHaveAttribute('data-state', 'error');
   await expect(page.locator('#state')).toContainText('Could not load Jira issue context');
   await expect(page.locator('#state')).not.toContainText('SIMULATED_INTERNAL_FAILURE_SECRET');
   await expect(page.locator('#issue-context')).toBeHidden();
+  await expect.poll(() => consoleMessages.join(' ')).not.toContain('SIMULATED_INTERNAL_FAILURE_SECRET');
 });
 
 test('issue panel stacks review controls on a narrow mobile viewport', async ({ page }) => {
