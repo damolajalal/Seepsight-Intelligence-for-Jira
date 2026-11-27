@@ -56,6 +56,83 @@ resolver.define('getCurrentIssue', async ({ context }) => {
   }
 });
 
+resolver.define('createFollowUpTask', async ({ context }) => {
+  const issueKey = context?.extension?.issue?.key;
+  if (!isValidJiraIssueKey(issueKey)) {
+    return { success: false, error: 'Open this action from a valid Jira issue.' };
+  }
+
+  try {
+    const sourceResponse = await api.asUser().requestJira(
+      route`/rest/api/3/issue/${issueKey}?fields=project`
+    );
+    if (!sourceResponse?.ok) {
+      return { success: false, error: getIssueLoadError(sourceResponse?.status) };
+    }
+    const sourceIssue = await sourceResponse.json();
+    const projectId = sourceIssue?.fields?.project?.id;
+    if (!projectId) return { success: false, error: 'The Jira project could not be identified.' };
+
+    const description = {
+      type: 'doc',
+      version: 1,
+      content: [
+        { type: 'paragraph', content: [{ type: 'text', text: `Follow-up created from procurement review of Jira issue ${issueKey}.` }] },
+        { type: 'paragraph', content: [{ type: 'text', text: 'Reconcile the purchase order quantity (1,000 units) against the illustrative delivery and goods-received quantities (800 units). Verify signed source documents, approved partial deliveries, adjustments and quality holds before confirming any loss.' }] },
+        { type: 'paragraph', content: [{ type: 'text', text: 'Demo references only: SAMPLE-PO-0142, SAMPLE-DN-8821, SAMPLE-GRN-4418. These are fictional and are not attached evidence.' }] }
+      ]
+    };
+    const createResponse = await api.asUser().requestJira(route`/rest/api/3/issue`, {
+      method: 'POST',
+      headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        fields: {
+          project: { id: String(projectId) },
+          issuetype: { name: 'Task' },
+          summary: `Procurement evidence follow-up for ${issueKey}`,
+          description
+        }
+      })
+    });
+    if (!createResponse?.ok) {
+      return { success: false, error: createResponse?.status === 403
+        ? 'You do not have permission to create Jira tasks in this project.'
+        : 'Jira could not create the follow-up task. Check that this project supports the Task issue type and try again.' };
+    }
+    const created = await createResponse.json();
+    const taskKey = created?.key;
+    if (!isValidJiraIssueKey(taskKey)) {
+      return { success: false, error: 'Jira accepted the request but did not return a valid task reference.' };
+    }
+
+    let linked = false;
+    try {
+      const linkResponse = await api.asUser().requestJira(route`/rest/api/3/issueLink`, {
+        method: 'POST',
+        headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: { name: 'Relates' },
+          inwardIssue: { key: issueKey },
+          outwardIssue: { key: taskKey }
+        })
+      });
+      linked = linkResponse?.ok === true;
+    } catch {
+      linked = false;
+    }
+    return {
+      success: true,
+      taskKey,
+      linked,
+      message: linked
+        ? `Jira task ${taskKey} was created and linked to ${issueKey}.`
+        : `Jira task ${taskKey} was created. Jira did not confirm the issue link; you can link it manually.`
+    };
+  } catch {
+    return { success: false, error: 'Unable to create the Jira follow-up right now. Please try again.' };
+  }
+});
+
 resolver.define('getEvidenceReview', async ({ context }) => {
   const key = getReviewKey(context);
   if (!key) return { reviewedEvidence: [], reviewCompleted: false, error: 'A valid Jira issue context is required.' };
