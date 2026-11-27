@@ -44,6 +44,9 @@ test('issue panel saves review progress and gates completion until every sample 
   await expect(page.locator('#review-message')).toContainText('saved for this Jira issue');
   await expect(page.locator('#review-button')).toHaveAttribute('aria-pressed', 'true');
   await expect(page.locator('#save-state')).toContainText('Progress saved');
+  await page.getByRole('button', { name: 'Create Jira follow-up task' }).click();
+  await expect(page.locator('#task-message')).toContainText('DEMO-202 was created and linked');
+  await expect(page.getByRole('button', { name: 'Jira task created' })).toBeDisabled();
 });
 
 test('evidence review checkboxes are operable with the keyboard', async ({ page }) => {
@@ -91,4 +94,10 @@ test('issue panel stacks review controls on a narrow mobile viewport', async ({ 
     content: document.documentElement.scrollWidth
   }));
   expect(dimensions.content).toBeLessThanOrEqual(dimensions.viewport);
+});
+
+
+test('follow-up task creation stays disabled until Jira issue context loads', async ({ page }) => {
+  await openIssuePanelScenario(page, 'missing');
+  await expect(page.getByRole('button', { name: 'Create Jira follow-up task' })).toBeDisabled();
 });
