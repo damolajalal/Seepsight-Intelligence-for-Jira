@@ -36,7 +36,7 @@ test('dashboard does not claim the Forge integration is ready when health is una
   await expect(page.locator('#connection-label')).toHaveText('Forge status unavailable');
 });
 
-test('dashboard navigation renders the investigations table and filters records', async ({ page }) =>
+test('dashboard navigation renders the investigations table and filters records', async ({ page }) => {
   await page.locator('.nav-item[data-view="investigations"]').click();
   await expect(page.locator('#page-title')).toHaveText('Investigations');
   const search = page.getByRole('searchbox', { name: 'Filter Investigations' });
